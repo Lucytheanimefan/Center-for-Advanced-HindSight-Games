@@ -13,10 +13,11 @@ WHITE=(255,255,255)
 FPS=30
 fpsClock=pygame.time.Clock()
 
-#setup
+#setup background 
 DISPLAYSURF=pygame.display.set_mode((WIDTH,HEIGHT))
 pygame.display.set_caption('Bowling game')
 DISPLAYSURF.fill(LIGHT_BLUE)
+pygame.draw.rect(DISPLAYSURF,WHITE,(0,620,600,80))
 
 #graphics/images
 alpha=128
@@ -31,9 +32,9 @@ BALL_X=30
 
 #buttons
 throwball=pygame.image.load('throwballbutton.png')
-THROWBALL=pygame.transform.scale(throwball, (30, 250))
+THROWBALL=pygame.transform.scale(throwball, (300, 50))
 nextround=pygame.image.load('nextroundbutton.png')
-NEXTROUND=pygame.transform.scale(nextround, (30, 250))
+NEXTROUND=pygame.transform.scale(nextround, (300, 50))
 
 #initialize game
 pygame.init()
@@ -43,6 +44,10 @@ myfont=pygame.font.Font(None,30)
 ballsleft_label="Balls left"
 round_label=myfont.render("Round",1,WHITE)
 points_label=myfont.render("Points",1,WHITE)
+
+
+def createButton(button,x,y,mousePos):
+	DISPLAYSURF.blit(button,(x,y))
 
 def lineBreakText(text,x,y):
 	lines=text.split()
@@ -90,9 +95,14 @@ while True:
     	displayRound()
 
     	#display text
-    	lineBreakText(ballsleft_label,40,510)
+    	lineBreakText(ballsleft_label,50,510)
     	DISPLAYSURF.blit(round_label,(10,10))
     	DISPLAYSURF.blit(points_label,(500,550))
+
+    	#display buttons
+    	mouse=pygame.mouse.get_pos()
+    	createButton(THROWBALL,0,635,mouse)
+    	createButton(NEXTROUND,300,635,mouse)
 
         if event.type==QUIT:
             pygame.quit()
