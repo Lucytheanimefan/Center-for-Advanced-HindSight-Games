@@ -1,8 +1,12 @@
 import random, pygame, sys
+from random import randint, shuffle
 from pygame.locals import *
 import pygbutton
 
-(WIDTH,HEIGHT)=(600,700)
+#game variables
+BALL_COUNT=15
+PINS=10
+ROUNDS=10
 
 # colors
 RED=(255,0,0)
@@ -13,13 +17,14 @@ WHITE=(255,255,255)
 FPS=30
 fpsClock=pygame.time.Clock()
 
-#setup background 
+#setup background
+(WIDTH,HEIGHT)=(600,700) 
 DISPLAYSURF=pygame.display.set_mode((WIDTH,HEIGHT))
 pygame.display.set_caption('Bowling game')
 DISPLAYSURF.fill(LIGHT_BLUE)
 pygame.draw.rect(DISPLAYSURF,WHITE,(0,620,600,80))
 
-#graphics/images
+#graphics/image variables
 alpha=128
 PIN_Y=50 #uppermost left pin y-coordinate
 PIN_X=20 #uppermost left pin x-coordinate
@@ -29,6 +34,7 @@ pin_knocked=pygame.image.load('bowling_pin_transparent.png')
 PIN_KNOCKED=pygame.transform.scale(pin_knocked, (55,129))
 BALL_Y=570
 BALL_X=30
+PIN_POSITIONS=[]
 
 #buttons
 throwball=pygame.image.load('throwballbutton.png')
@@ -46,8 +52,14 @@ round_label=myfont.render("Round",1,WHITE)
 points_label=myfont.render("Points",1,WHITE)
 
 
-def createButton(button,x,y,mousePos):
+def createButton(button,x,y,width, height, mousePos):
+	clicked=False 
 	DISPLAYSURF.blit(button,(x,y))
+	click=pygame.mouse.get_pressed()
+	if click[0]==1:
+		if x+width>mousePos[0]>x and y+height>mousePos[1]>y:
+			clicked=True
+	return clicked
 
 def lineBreakText(text,x,y):
 	lines=text.split()
@@ -58,20 +70,62 @@ def lineBreakText(text,x,y):
 		dy=dy+20
 		y=y+dy
 
+randnums=random.sample(xrange(0,10),10)
+print randnums
+
+#update pins GUI after a certain number are knocked down
+def updatePins(pinsLeft, randnums):
+	num_knocked=10-pinsLeft
+	if num_knocked==0:
+		print 'None knocked down'
+	else:
+		print "Range: "
+		print range(num_knocked)
+		for i in range(num_knocked):
+			print "Randnums: "
+			print randnums
+			DISPLAYSURF.blit(PIN_KNOCKED,PIN_POSITIONS[randnums.pop()])
+
 def displayPins():
 	dx=0
 	for i in range(4):
 		DISPLAYSURF.blit(PIN_SOLID,(PIN_X+dx,PIN_Y))
+		PIN_POSITIONS.append((PIN_X+dx,PIN_Y))
 		dx=dx+160
 	dx=0
 	for j in range(3):
 		DISPLAYSURF.blit(PIN_SOLID,(PIN_X+90+dx,PIN_Y+90))
+		PIN_POSITIONS.append((PIN_X+90+dx,PIN_Y+90))
 		dx=dx+150
 	dx=0
 	for k in range(2):
 		DISPLAYSURF.blit(PIN_SOLID,(PIN_X+160+dx,PIN_Y+190))
+		PIN_POSITIONS.append((PIN_X+160+dx,PIN_Y+190))
 		dx=dx+140
 	DISPLAYSURF.blit(PIN_SOLID,(PIN_X+230,PIN_Y+290))
+	PIN_POSITIONS.append((PIN_X+230,PIN_Y+290))
+	print PIN_POSITIONS
+	return PIN_POSITIONS
+
+def resetPins():
+	randnums=random.sample(xrange(0,10),10)
+	dx=0
+	for i in range(4):
+		DISPLAYSURF.blit(PIN_SOLID,(PIN_X+dx,PIN_Y))
+		PIN_POSITIONS.append((PIN_X+dx,PIN_Y))
+		dx=dx+160
+	dx=0
+	for j in range(3):
+		DISPLAYSURF.blit(PIN_SOLID,(PIN_X+90+dx,PIN_Y+90))
+		PIN_POSITIONS.append((PIN_X+90+dx,PIN_Y+90))
+		dx=dx+150
+	dx=0
+	for k in range(2):
+		DISPLAYSURF.blit(PIN_SOLID,(PIN_X+160+dx,PIN_Y+190))
+		PIN_POSITIONS.append((PIN_X+160+dx,PIN_Y+190))
+		dx=dx+140
+	DISPLAYSURF.blit(PIN_SOLID,(PIN_X+230,PIN_Y+290))
+	return randnums
 
 def displayBallsLeft():
 	dx=0
@@ -86,11 +140,32 @@ def displayRound():
 		DISPLAYSURF.blit(number,(100+dx, 10))
 		dx=dx+45
 
-#main game loop
+def throwBall(ballcount, pinsLeft, roundsLeft, randnums):
+	print "Ball count: "
+	print ballcount
+	if ballcount<=0:
+		print 'Not enough balls'		
+		#Add some GUI later
+	if roundsLeft<=0:
+		print 'Out of rounds'
+	if pinsLeft<=0:
+		print 'No more pins to knock down'
+	print 'Rounds left: '
+	print roundsLeft
+	knocked_down=randint(0,pinsLeft);
+	print 'pins knocked down: '+str(knocked_down)
+	pinsLeft=pinsLeft-knocked_down
+	print 'pins left'+str(pinsLeft)
+	updatePins(pinsLeft, randnums) #update GUI
+	#mouse=pygame.mouse.get_pos()
+	return knocked_down
+
+displayPins()
+#--------------------------Main game loop-------------------------------------
+
 while True:
     for event in pygame.event.get():
     	#display pins to knock down
-    	displayPins()
     	displayBallsLeft()
     	displayRound()
 
@@ -99,13 +174,17 @@ while True:
     	DISPLAYSURF.blit(round_label,(10,10))
     	DISPLAYSURF.blit(points_label,(500,550))
 
-    	#display buttons
+    	#buttons
     	mouse=pygame.mouse.get_pos()
-    	createButton(THROWBALL,0,635,mouse)
-    	createButton(NEXTROUND,300,635,mouse)
-
+    	if createButton(THROWBALL,0,635,300,50,mouse)==True:
+    		print '2nd randnums: '
+    		print randnums
+    		throwBall(BALL_COUNT, PINS, ROUNDS, randnums)
+    		BALL_COUNT-=1
+    	elif createButton(NEXTROUND,300,635,300,50,mouse)==True:
+			ROUNDS-=1
+			throwBall(BALL_COUNT,10, ROUNDS, resetPins())
         if event.type==QUIT:
             pygame.quit()
             sys.exit()
     pygame.display.update()
-    
