@@ -35,6 +35,8 @@ PIN_KNOCKED=pygame.transform.scale(pin_knocked, (55,129))
 BALL_Y=570
 BALL_X=30
 PIN_POSITIONS=[]
+blue_cover=pygame.image.load('blue.png')
+blue_cover=pygame.transform.scale(blue_cover, (30,30))
 
 #buttons
 throwball=pygame.image.load('throwballbutton.png')
@@ -107,6 +109,11 @@ def displayPins():
 	print PIN_POSITIONS
 	return PIN_POSITIONS
 
+def displayScore(score):
+	DISPLAYSURF.blit(blue_cover, (500,500))
+	dispScore=myfont.render(str(score),5,WHITE)
+	DISPLAYSURF.blit(dispScore, (500,500))
+
 def resetPins():
 	randnums=random.sample(xrange(0,10),10)
 	dx=0
@@ -140,6 +147,7 @@ def displayRound():
 		DISPLAYSURF.blit(number,(100+dx, 10))
 		dx=dx+45
 
+CURRENT_SCORE=0;
 def throwBall(ballcount, pinsLeft, roundsLeft, randnums):
 	print "Ball count: "
 	print ballcount
@@ -159,6 +167,7 @@ def throwBall(ballcount, pinsLeft, roundsLeft, randnums):
 	updatePins(pinsLeft, randnums) #update GUI
 	#mouse=pygame.mouse.get_pos()
 	return knocked_down
+	
 
 displayPins()
 #--------------------------Main game loop-------------------------------------
@@ -179,11 +188,13 @@ while True:
     	if createButton(THROWBALL,0,635,300,50,mouse)==True:
     		print '2nd randnums: '
     		print randnums
-    		throwBall(BALL_COUNT, PINS, ROUNDS, randnums)
+    		CURRENT_SCORE=CURRENT_SCORE+throwBall(BALL_COUNT, PINS, ROUNDS, randnums)
+    		displayScore(CURRENT_SCORE)
     		BALL_COUNT-=1
     	elif createButton(NEXTROUND,300,635,300,50,mouse)==True:
 			ROUNDS-=1
-			throwBall(BALL_COUNT,10, ROUNDS, resetPins())
+			CURRENT_SCORE=CURRENT_SCORE+throwBall(BALL_COUNT,10, ROUNDS, resetPins())
+			displayScore(CURRENT_SCORE)
         if event.type==QUIT:
             pygame.quit()
             sys.exit()
