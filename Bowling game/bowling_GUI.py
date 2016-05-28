@@ -193,7 +193,8 @@ while True:
     		BALL_COUNT-=1
     	elif createButton(NEXTROUND,300,635,300,50,mouse)==True:
 			ROUNDS-=1
-			CURRENT_SCORE=CURRENT_SCORE+throwBall(BALL_COUNT,10, ROUNDS, resetPins())
+			#CURRENT_SCORE=CURRENT_SCORE+throwBall(BALL_COUNT,10, ROUNDS, resetPins())
+			randnums=resetPins()
 			displayScore(CURRENT_SCORE)
         if event.type==QUIT:
             pygame.quit()
