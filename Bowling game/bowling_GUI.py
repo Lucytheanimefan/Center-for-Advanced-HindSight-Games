@@ -57,7 +57,7 @@ myfont=pygame.font.Font(None,30)
 ballsleft_label="Balls left"
 round_label=myfont.render("Round",1,WHITE)
 points_label=myfont.render("Points",1,WHITE)
-
+GAMEOVER=myfont.render("Game Over", True, WHITE)
 
 def createButton(button,x,y,width, height, mousePos):
 	clicked=False 
@@ -173,22 +173,24 @@ def throwBall(ballcount, pinsLeft, roundsLeft, randnums):
 	#mouse=pygame.mouse.get_pos()
 	return knocked_down
 	
+text_rect=Rect(0,0,0,0)
+def gameover():
+	if ROUNDS==0 or BALL_COUNT==0:
+		return True
+	else: return False
 
 displayPins()
 #--------------------------Main game loop-------------------------------------
 
 while True:
     for event in pygame.event.get():
-    	#display pins to knock down
     	displayBallsLeft()
     	displayRound()
 
-    	#display text
     	lineBreakText(ballsleft_label,50,510)
     	DISPLAYSURF.blit(round_label,(10,10))
     	DISPLAYSURF.blit(points_label,(500,550))
 
-    	#buttons
     	mouse=pygame.mouse.get_pos()
     	if createButton(THROWBALL,0,635,300,50,mouse)==True:
     		DISPLAYSURF.blit(THROWBALL_CLICKED,(0,635))
@@ -197,13 +199,19 @@ while True:
     		CURRENT_SCORE=CURRENT_SCORE+throwBall(BALL_COUNT, PINS, ROUNDS, randnums)
     		displayScore(CURRENT_SCORE)
     		BALL_COUNT-=1
+    		if gameover(): #Game over!
+    			DISPLAYSURF.blit(GAMEOVER, (300,500))
     	elif createButton(NEXTROUND,300,635,300,50,mouse)==True:
-			ROUNDS-=1
-			DISPLAYSURF.blit(NEXTROUND_CLICKED,(300,635))
-			#CURRENT_SCORE=CURRENT_SCORE+throwBall(BALL_COUNT,10, ROUNDS, resetPins())
-			randnums=resetPins()
-			displayScore(CURRENT_SCORE)
+    		ROUNDS=ROUNDS-1;
+    		DISPLAYSURF.blit(NEXTROUND_CLICKED,(300,635))
+    		randnums=resetPins()
+    		displayScore(CURRENT_SCORE)
+    		if gameover(): #Game over!
+    			DISPLAYSURF.blit(GAMEOVER, (300,500))
+
         if event.type==QUIT:
             pygame.quit()
             sys.exit()
+
     pygame.display.update()
+
