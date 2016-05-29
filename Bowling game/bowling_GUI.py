@@ -128,6 +128,17 @@ def displayBallsLeft():
 		BALL=pygame.draw.circle(DISPLAYSURF, WHITE, (BALL_X+dx,BALL_Y),10,0)
 		dx=dx+30
 
+def updateBalls(ballcount):
+	DISPLAYSURF.blit(blue_cover,(20,520))
+	dx=30
+	count=15-ballcount
+	if count>15:
+		raise ValueError('Out of balls')
+	ballsleft=myfont.render(str(ballcount),1,WHITE)
+	DISPLAYSURF.blit(ballsleft,(20, 520))
+	for i in range(count):
+		pygame.draw.circle(DISPLAYSURF, DARK_BLUE, (BALL_X+dx*i, BALL_Y), 10, 0)
+
 def displayRound():
 	dx=0
 	for i in range(10):
@@ -143,8 +154,7 @@ def updateRound(round):
 		raise ValueError('Out of rounds')
 	pygame.draw.circle(DISPLAYSURF, WHITE, (106+dx*round, 6+r), r)
 	number=myfont.render(str(round+1),1,DARK_BLUE)
-	DISPLAYSURF.blit(number,(100+dx*round, 10))
-
+	DISPLAYSURF.blit(number,(100+dx*round, 10))	
 
 #update pins GUI after a certain number are knocked down
 def updatePins(knocked_down, randnums):
@@ -199,6 +209,7 @@ while True:
     	DISPLAYSURF.blit(points_label,(500,550))
 
     	updateRound(10-ROUNDS)
+    	updateBalls(BALL_COUNT)
     	mouse=pygame.mouse.get_pos()
     	if createButton(THROWBALL,0,635,300,50,mouse)==True:
     		DISPLAYSURF.blit(THROWBALL_CLICKED,(0,635))
