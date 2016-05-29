@@ -12,10 +12,7 @@ ROUNDS=10
 RED=(255,0,0)
 LIGHT_BLUE=(142,180,215)#background color
 WHITE=(255,255,255)
-
-#frames per second
-FPS=30
-fpsClock=pygame.time.Clock()
+DARK_BLUE=(0,0,128)
 
 #setup background
 (WIDTH,HEIGHT)=(600,700) 
@@ -49,6 +46,8 @@ THROWBALL_CLICKED=pygame.transform.scale(throwball_clicked, (300, 50))
 nextround_clicked=pygame.image.load('nextroundbutton_clicked.png')
 NEXTROUND_CLICKED=pygame.transform.scale(nextround_clicked, (300, 50))
 
+randnums=random.sample(xrange(0,10),10)
+
 #initialize game
 pygame.init()
 
@@ -57,7 +56,8 @@ myfont=pygame.font.Font(None,30)
 ballsleft_label="Balls left"
 round_label=myfont.render("Round",1,WHITE)
 points_label=myfont.render("Points",1,WHITE)
-GAMEOVER=myfont.render("Game Over", True, WHITE)
+endfont=pygame.font.Font(None, 70)
+GAMEOVER=endfont.render("Game Over", True, WHITE)
 
 def createButton(button,x,y,width, height, mousePos):
 	clicked=False 
@@ -77,22 +77,6 @@ def lineBreakText(text,x,y):
 		dy=dy+20
 		y=y+dy
 
-randnums=random.sample(xrange(0,10),10)
-print randnums
-
-#update pins GUI after a certain number are knocked down
-def updatePins(pinsLeft, randnums):
-	num_knocked=10-pinsLeft
-	if num_knocked==0:
-		print 'None knocked down'
-	else:
-		print "Range: "
-		print range(num_knocked)
-		for i in range(num_knocked):
-			print "Randnums: "
-			print randnums
-			DISPLAYSURF.blit(PIN_KNOCKED,PIN_POSITIONS[randnums.pop()])
-
 def displayPins():
 	dx=0
 	for i in range(4):
@@ -111,7 +95,6 @@ def displayPins():
 		dx=dx+140
 	DISPLAYSURF.blit(PIN_SOLID,(PIN_X+230,PIN_Y+290))
 	PIN_POSITIONS.append((PIN_X+230,PIN_Y+290))
-	print PIN_POSITIONS
 	return PIN_POSITIONS
 
 def displayScore(score):
@@ -152,32 +135,56 @@ def displayRound():
 		DISPLAYSURF.blit(number,(100+dx, 10))
 		dx=dx+45
 
+#update rounds GUI
+def updateRound(round):
+	r=15
+	dx=45
+	if round>=10:
+		raise ValueError('Out of rounds')
+	pygame.draw.circle(DISPLAYSURF, WHITE, (106+dx*round, 6+r), r)
+	number=myfont.render(str(round+1),1,DARK_BLUE)
+	DISPLAYSURF.blit(number,(100+dx*round, 10))
+
+
+#update pins GUI after a certain number are knocked down
+def updatePins(knocked_down, randnums):
+	#num_knocked=10-pinsLeft
+	if knocked_down==0:
+		print 'None knocked down'
+	else:
+		for i in range(min(knocked_down, len(randnums))):
+			DISPLAYSURF.blit(PIN_KNOCKED,PIN_POSITIONS[randnums.pop()])
+
+
 CURRENT_SCORE=0;
 def throwBall(ballcount, pinsLeft, roundsLeft, randnums):
 	print "Ball count: "
 	print ballcount
 	if ballcount<=0:
-		print 'Not enough balls'		
+		print 'Not enough balls'
+		return 0		
 		#Add some GUI later
-	if roundsLeft<=0:
+	elif roundsLeft<=0:
 		print 'Out of rounds'
-	if pinsLeft<=0:
+		return 0
+	elif pinsLeft<=0:
 		print 'No more pins to knock down'
-	print 'Rounds left: '
-	print roundsLeft
-	knocked_down=randint(0,pinsLeft);
-	print 'pins knocked down: '+str(knocked_down)
-	pinsLeft=pinsLeft-knocked_down
-	print 'pins left'+str(pinsLeft)
-	updatePins(pinsLeft, randnums) #update GUI
-	#mouse=pygame.mouse.get_pos()
-	return knocked_down
+		return 0
+	else:
+		print 'Rounds left: '
+		print roundsLeft
+		knocked_down=randint(0,pinsLeft);
+		print 'pins knocked down: '+str(knocked_down)
+		pinsLeft=pinsLeft-knocked_down
+		print 'pins left'+str(pinsLeft)
+		updatePins(knocked_down, randnums) #update GUI
+		return knocked_down
 	
-text_rect=Rect(0,0,0,0)
 def gameover():
-	if ROUNDS==0 or BALL_COUNT==0:
-		return True
-	else: return False
+	if ROUNDS<=0 or BALL_COUNT<=0:
+		pygame.draw.rect(DISPLAYSURF,LIGHT_BLUE, (200,500,100,50))
+		DISPLAYSURF.blit(GAMEOVER, (200,500))
+
 
 displayPins()
 #--------------------------Main game loop-------------------------------------
@@ -191,25 +198,28 @@ while True:
     	DISPLAYSURF.blit(round_label,(10,10))
     	DISPLAYSURF.blit(points_label,(500,550))
 
+    	updateRound(10-ROUNDS)
     	mouse=pygame.mouse.get_pos()
     	if createButton(THROWBALL,0,635,300,50,mouse)==True:
     		DISPLAYSURF.blit(THROWBALL_CLICKED,(0,635))
-    		print '2nd randnums: '
     		print randnums
-    		CURRENT_SCORE=CURRENT_SCORE+throwBall(BALL_COUNT, PINS, ROUNDS, randnums)
+    		knocked_down=throwBall(BALL_COUNT, PINS, ROUNDS, randnums)
+    		CURRENT_SCORE=CURRENT_SCORE+knocked_down
     		displayScore(CURRENT_SCORE)
     		BALL_COUNT-=1
-    		if gameover(): #Game over!
-    			DISPLAYSURF.blit(GAMEOVER, (300,500))
-    	elif createButton(NEXTROUND,300,635,300,50,mouse)==True:
-    		ROUNDS=ROUNDS-1;
-    		DISPLAYSURF.blit(NEXTROUND_CLICKED,(300,635))
-    		randnums=resetPins()
-    		displayScore(CURRENT_SCORE)
-    		if gameover(): #Game over!
-    			DISPLAYSURF.blit(GAMEOVER, (300,500))
+    		PINS=PINS-knocked_down
 
-        if event.type==QUIT:
+    		gameover()
+    	elif createButton(NEXTROUND,300,635,300,50,mouse)==True:
+    		print 'NEW ROUND'
+    		ROUNDS=ROUNDS-1;
+    		PINS=10;
+    		DISPLAYSURF.blit(NEXTROUND_CLICKED,(300,635))
+    		randnums=resetPins() #reset randnums
+    		displayScore(CURRENT_SCORE)
+    		gameover()#Game over!
+
+    	if event.type==QUIT:
             pygame.quit()
             sys.exit()
 
