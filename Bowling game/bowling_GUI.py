@@ -1,7 +1,7 @@
 import random, pygame, sys
 from random import randint, shuffle
 from pygame.locals import *
-import pygbutton
+import pyjs
 
 #game variables
 BALL_COUNT=15
