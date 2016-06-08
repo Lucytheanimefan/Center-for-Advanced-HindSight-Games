@@ -1,0 +1,23 @@
+Pyjs 1.8.1-dev - Changes required for IE9+ compatibility
+(Reference: http://blogs-pyjeon.rhcloud.com/?p=312)
+
+Changes allow applications using the Pyjsdl module to run properly in IE9+ browsers. Edit home.nocache.html and browser.py to properly detect IE browsers, see comments in edited files included. Add <!DOCTYPE html> to top of main program html in Pyjs output for standard HTML5 mode. Have not done extensive tests to confirm that changes are completely compatible with Pyjs functionality, therefore verify with the usual application testing. Pyjs can be obtained from its git development page https://github.com/pyjs/pyjs/ and previous builds tested with this module can be obtained from https://github.com/jggatc/pyjs/releases/. 
+
+Pyjs 13-06-12 git build:
+    Files to change:
+        <pyjsroot>/pyjs/src/pyjs/boilerplate/home.nocache.html
+        <pyjsroot>/pyjs/src/pyjs/browser.py
+    Install Pyjs as described and edit these files or replace with the edited files included.
+
+Pyjs 14-02-07 git build:
+    Files to change:
+        <pyjsroot>/pyjs/boilerplate/home.nocache.html
+        <pyjsroot>/pyjs/browser.py
+    These changes work with this build. Edit these files or replace with the edited files included. Install as described, if files are changed after an installation, remove virtual python sandbox and reinstall. Alternatively, after installing into sandbox, change files under the sandbox path /site-packages/pyjs/.
+
+Pyjs 14-06-20 git build:
+    Files to change:
+        /site-packages/pyjs/boilerplate/home.nocache.html
+        /site-packages/pyjs/browser.py
+    These changes work with this build. The changes continue to work for the current git build (15-04-12). Following installation using pip, edit these files or replace with the edited files included.
+

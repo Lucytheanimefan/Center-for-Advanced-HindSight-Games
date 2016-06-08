@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="main.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+</head>
+<body>
+<div id="game">
+    <div id="gameUI">
+        <div id="gameStats">
+            <p>Hits: <span id="gameRemaining"></span></p>
+            <p>Balls: <span class="gameScore"></span></p>
+            <p><a class="gameReset" href="http://rawkes.com/experiments/foundation-canvas/space-bowling/">Reset</a></p>
+        </div>
+        <div id="gameComplete">
+            <h1>You win!</h1>
+            <p>Congratulations, you completed the game in <span class="gameScore"></span> balls.</p>
+            <p><a class="gameReset button" href="http://rawkes.com/experiments/foundation-canvas/space-bowling/">Play again</a></p>
+        </div>
+    </div>
+    <canvas id="gameCanvas">
+        <!-- Insert fallback content here -->
+    </canvas>
+</div>
+<script src="script.js"></script>
+</body>
+
+</html>
