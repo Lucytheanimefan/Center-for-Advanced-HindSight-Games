@@ -50,9 +50,16 @@ html, body {
 }
 
 #gameStats {
+    width: 500px;
     display: none;
-    font-size: 14px;
+    font-size: 20px;
+    fill: white;
     margin: 20px 0;
+}
+
+p{
+    text-align: center;
+    color: white;
 }
 
 #gameStats .gameReset {

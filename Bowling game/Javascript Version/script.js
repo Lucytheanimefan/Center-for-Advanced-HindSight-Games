@@ -32,8 +32,8 @@ var uiReset = $(".gameReset");
 var uiRemaining = $("#gameRemaining");
 var uiScore = $(".gameScore");
 
-// Class that defines new asteroids to draw
-var Asteroid = function(x, y, radius, mass, friction) {
+// Class that defines new bowling balls to draw
+var Ball = function(x, y, radius, mass, friction) {
     this.x = x;
     this.y = y;
     this.radius = radius;
@@ -62,7 +62,7 @@ function startGame() {
     
     // Set up initial game settings
     score = 0;
-    asteroids = [];
+    balls = [];
     playGame = false;
     playerSelected = false;
     playerMaxAbsVelocity = 30;
@@ -76,29 +76,29 @@ function startGame() {
     platformOuterRadius = 100;
     platformInnerRadius = 75;
     
-    // Set up player asteroid
+    // Set up player ball
     var pX = playerOriginalX;
     var pY = playerOriginalY;
     var pRadius = 15;
     var mass = 10;
     var friction = 0.97;
-    player = new Asteroid(pX, pY, pRadius, mass, friction);
+    player = new Ball(pX, pY, pRadius, mass, friction);
     player.player = true;
-    asteroids.push(player);
+    balls.push(player);
     
-    // Set up other asteroids
-    var outerRing = 8; // Asteroids around outer ring
+    // Set up other balls
+    var outerRing = 8; // balls around outer ring
     var ringCount = 3; // Number of rings
     
     for (var r = 0; r < ringCount; r++) {
-        var currentRing = 0; // Asteroids around current ring
+        var currentRing = 0; // balls around current ring
         
         // Is this the innermost ring?
         if (r === ringCount-1) {
             currentRing = 1;
         } else {
             currentRing = outerRing-(r*3);
-            var angle = 360/currentRing; // Angle between each asteroid
+            var angle = 360/currentRing; // Angle between each ball
             var ringRadius = platformInnerRadius-((platformInnerRadius/(ringCount-1))*r);
         };
         
@@ -119,11 +119,11 @@ function startGame() {
             var mass = 5;
             var friction = 0.95;
             
-            asteroids.push(new Asteroid(x, y, radius, mass, friction));
+            balls.push(new Ball(x, y, radius, mass, friction));
         };
     };
     
-    uiRemaining.html(asteroids.length-1);
+    uiRemaining.html(balls.length-1);
     
     // Code from Chapter 5 (Accessing pixel values)
     $(document).on('mousedown', function(e) {
@@ -247,14 +247,14 @@ function animate() {
     context.fillStyle = "white";
     
     
-    // Loop through every asteroid
+    // Loop through every ball
     var deadAsteroids = [];
-    var asteroidsLength = asteroids.length;
+    var asteroidsLength = balls.length;
     for (var i = 0; i < asteroidsLength; i++) {
-        var tmpAsteroid = asteroids[i];
+        var tmpAsteroid = balls[i];
         
         for (var j = i+1; j < asteroidsLength; j++) {
-            var tmpAsteroidB = asteroids[j];
+            var tmpAsteroidB = balls[j];
             
             var dX = tmpAsteroidB.x - tmpAsteroid.x;
             var dY = tmpAsteroidB.y - tmpAsteroid.y;
@@ -265,19 +265,19 @@ function animate() {
                 var sine = Math.sin(angle);
                 var cosine = Math.cos(angle);
                 
-                // Rotate asteroid position
+                // Rotate ball position
                 var x = 0;
                 var y = 0;
                 
-                // Rotate asteroidB position
+                // Rotate ballB position
                 var xB = dX * cosine + dY * sine;
                 var yB = dY * cosine - dX * sine;
                 
-                // Rotate asteroid velocity
+                // Rotate ball velocity
                 var vX = tmpAsteroid.vX * cosine + tmpAsteroid.vY * sine;
                 var vY = tmpAsteroid.vY * cosine - tmpAsteroid.vX * sine;
                 
-                // Rotate asteroidB velocity
+                // Rotate ballB velocity
                 var vXb = tmpAsteroidB.vX * cosine + tmpAsteroidB.vY * sine;
                 var vYb = tmpAsteroidB.vY * cosine - tmpAsteroidB.vX * sine;
                 
@@ -286,7 +286,7 @@ function animate() {
                 vX = ((tmpAsteroid.mass - tmpAsteroidB.mass) * vX + 2 * tmpAsteroidB.mass * vXb) / (tmpAsteroid.mass + tmpAsteroidB.mass);
                 vXb = vTotal + vX;
                 
-                // Move asteroids apart
+                // Move balls apart
                 xB = x + (tmpAsteroid.radius + tmpAsteroidB.radius);
                 
                 // Rotate asteroid positions back
@@ -368,10 +368,10 @@ function animate() {
     if (deadAsteroidsLength > 0) {
         for (var di = 0; di < deadAsteroidsLength; di++) {
             var tmpDeadAsteroid = deadAsteroids[di];
-            asteroids.splice(asteroids.indexOf(tmpDeadAsteroid), 1);
+            balls.splice(balls.indexOf(tmpDeadAsteroid), 1);
         }
         
-        var remaining = asteroids.length - 1; // Remove player from asteroid count
+        var remaining = balls.length - 1; // Remove player from asteroid count
         uiRemaining.html(remaining);
         
         if (!remaining) {
