@@ -1,6 +1,7 @@
 var totalRounds = 10; //global
 var totalBalls = 15; //global
 var totalPins = 10; //changes
+var totalScore = 0;
 
 var circlePositions = [];
 var margin = {
@@ -16,11 +17,9 @@ for (var i = 0; i < 10; i++) {
     circlePositions.push(i);
 }
 
-console.log(circlePositions);
+drawPins(circlePositions, 'blue');
 
-
-
-function drawPins(dataset) { //currently just circles
+function drawPins(dataset, ballcolor) { //currently just circles
 
     var svgContainer = d3.select("#balls").append("svg")
         .attr("width", 600)
@@ -48,11 +47,9 @@ function drawPins(dataset) { //currently just circles
             }
         })
         .attr("r", 5)
-        .style("fill", "green");
+        .style("fill", ballcolor);
 
 }
-
-drawPins(circlePositions);
 
 function RollBall() {
     //update balls left
@@ -67,12 +64,15 @@ function RollBall() {
 
 function generatePinsKnockedDown(pinsLeft) {
     //generate random number of pins knocked down
-    var knockedDown = Math.floor((Math.random() * (pinsLeft+1)) );
-    console.log("Knocked down: "+knockedDown);
+    var knockedDown = Math.floor((Math.random() * (pinsLeft + 1)));
+    console.log("Knocked down: " + knockedDown);
     if (totalPins >= knockedDown) { //can't knock down more pins than are still standing
         totalPins = totalPins - knockedDown; //update total Pins count
         console.log("Pins left: " + totalPins);
-    } else {//do it again
+
+        updateTotalScore(knockedDown);
+        updateGUI(totalPins);
+    } else { //do it again
         console.log("You did something wrong in your code");
     }
     if (totalPins == 0) {
@@ -87,4 +87,21 @@ function NextRound() {
 
     var roundsLeft = document.getElementById("RoundsLeft");
     roundsLeft.innerHTML = "Rounds Left: " + totalRounds.toString();
+}
+
+function updateTotalScore(knockedDown) {
+    totalScore=totalScore+knockedDown;
+    var score=document.getElementById("TotalScore");
+    score.innerHTML="Total Score: "+totalScore.toString();
+}
+
+function updateGUI(pinsLeft){
+    circlePositions=[];
+    for (var i=0; i<10-pinsLeft; i++){
+        circlePositions.push(i);
+    }
+
+    drawPins(circlePositions, 'grey');
+
+
 }
