@@ -1,3 +1,4 @@
+
 var game = $("#game");
 var canvas = document.getElementById("gameCanvas");
 var context = canvas.getContext("2d");
@@ -131,6 +132,8 @@ function startGame() {
         if (!playerSelected &&
             player.x == playerOriginalX && 
             player.y == playerOriginalY) {
+            console.log("x: "+e.pageX);
+            console.log("y: "+e.pageY);
             var canvasX = Math.floor(e.pageX);
             var canvasY = Math.floor(e.pageY);
             
@@ -156,8 +159,10 @@ function startGame() {
     
     $(document).on('mouseup', function(e) {
         if (playerSelected) {
-            var canvasX = Math.floor(e.pageX);
+            var canvasX = Math.floor(e.pageX); //want to randomly generate this instead
+            //var canvasX=getRandomArbitrary(min, max)
             var canvasY = Math.floor(e.pageY);
+            //var canvasY=getRandomArbitrary(min, max)
             
             if (player) {
                 var dX = canvasX-player.x;
@@ -207,6 +212,12 @@ function startGame() {
     // Start the animation loop
     animate();
 };
+
+
+//get random number
+function getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min;
+}
 
 // Inititialise the game environment
 function init() {
