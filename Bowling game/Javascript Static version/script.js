@@ -35,8 +35,8 @@ function drawPins(dataset) { //currently just circles
         .attr("cx", function(d) {
             if (d < 5) {
                 return d * 20 + margin.left;
-            }else{
-                return (d-5)*20+margin.left;
+            } else {
+                return (d - 5) * 20 + margin.left;
             }
 
         })
@@ -53,3 +53,38 @@ function drawPins(dataset) { //currently just circles
 }
 
 drawPins(circlePositions);
+
+function RollBall() {
+    //update balls left
+    totalBalls = totalBalls - 1;
+    console.log(totalBalls);
+    var ballsLeft = document.getElementById("BallsLeft");
+    ballsLeft.innerHTML = "Balls Left: " + totalBalls.toString();
+
+    generatePinsKnockedDown(totalPins);
+
+}
+
+function generatePinsKnockedDown(pinsLeft) {
+    //generate random number of pins knocked down
+    var knockedDown = Math.floor((Math.random() * (pinsLeft+1)) );
+    console.log("Knocked down: "+knockedDown);
+    if (totalPins >= knockedDown) { //can't knock down more pins than are still standing
+        totalPins = totalPins - knockedDown; //update total Pins count
+        console.log("Pins left: " + totalPins);
+    } else {//do it again
+        console.log("You did something wrong in your code");
+    }
+    if (totalPins == 0) {
+        alert("You've knocked down all the pins, please proceed to the next round");
+    }
+}
+
+function NextRound() {
+    totalRounds = totalRounds - 1;
+    console.log(totalRounds);
+    totalPins = 10; //reset total number of pins
+
+    var roundsLeft = document.getElementById("RoundsLeft");
+    roundsLeft.innerHTML = "Rounds Left: " + totalRounds.toString();
+}
