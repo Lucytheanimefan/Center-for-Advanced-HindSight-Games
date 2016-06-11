@@ -1,7 +1,9 @@
+//VARIABLES
 var totalRounds = 10; //global
 var totalBalls = 15; //global
 var totalPins = 10; //changes
 var totalScore = 0;
+var currentMonth = 1;
 
 var circlePositions = [];
 var margin = {
@@ -16,6 +18,14 @@ var margin = {
 for (var i = 0; i < 10; i++) {
     circlePositions.push(i);
 }
+/*---------------------------------------FUNCTIONS--------------------------------------*/
+
+function popitup(url) {
+    newwindow=window.open(url,'name','height=200,width=150');
+    if (window.focus) {newwindow.focus()}
+    return false;
+}
+
 
 drawPins(circlePositions, 'blue');
 
@@ -56,7 +66,7 @@ function RollBall() {
     totalBalls = totalBalls - 1;
     console.log(totalBalls);
     var ballsLeft = document.getElementById("BallsLeft");
-    ballsLeft.innerHTML = "Balls Left: " + totalBalls.toString();
+    ballsLeft.innerHTML = "My Income (in Francs): " + totalBalls.toString();
 
     generatePinsKnockedDown(totalPins);
 
@@ -85,23 +95,76 @@ function NextRound() {
     console.log(totalRounds);
     totalPins = 10; //reset total number of pins
 
+    //reset GUI
+    circlePositions = [];
+    for (var i = 0; i < 10; i++) {
+        circlePositions.push(i);
+    }
+    drawPins(circlePositions, 'blue');
+
     var roundsLeft = document.getElementById("RoundsLeft");
     roundsLeft.innerHTML = "Rounds Left: " + totalRounds.toString();
+
+    //out of rounds for the month
+    if (totalRounds == 0) {
+        alert("You have reached 10 games. The month is now over");
+        currentMonth = currentMonth + 1;
+        var current_month = document.getElementById("month");
+        current_month.innerHTML = "Month: " + currentMonth.toString();
+
+        //reset total balls and rounds
+        totalBalls = 15;
+        totalRounds = 10;
+    }
+
+    if (current_month>4){
+        alert("Game over");
+    }
 }
 
 function updateTotalScore(knockedDown) {
-    totalScore=totalScore+knockedDown;
-    var score=document.getElementById("TotalScore");
-    score.innerHTML="Total Score: "+totalScore.toString();
+    totalScore = totalScore + knockedDown;
+    var score = document.getElementById("TotalScore");
+    score.innerHTML = "Bowling Score: " + totalScore.toString();
 }
 
-function updateGUI(pinsLeft){
-    circlePositions=[];
-    for (var i=0; i<10-pinsLeft; i++){
+function updateGUI(pinsLeft) {
+    circlePositions = [];
+    for (var i = 0; i < 10 - pinsLeft; i++) {
         circlePositions.push(i);
     }
 
     drawPins(circlePositions, 'grey');
+
+
+}
+
+//unused FUNCTIONS
+function createInitialDivs(){
+    var game=document.getElementById("game");
+
+    var month=document.createElement("div");
+    month.id="month";
+    game.appendChild(month);
+
+    var gameGUI=document.createElement("div");
+    gameGUI.id="gameGUI";
+    var svg=document.createElement("svg");
+    svg.id="balls";
+    gameGUI.appendChild(svg);
+    game.appendChild(gameGUI);
+
+    var roundsleft=document.createElement("div");
+    roundsleft.id="RoundsLeft";
+    game.appendChild(roundsleft);
+
+    var ballsleft=document.createElement("div");
+    ballsleft.id="BallsLeft";
+    game.appendChild(ballsleft);
+
+    var totalscore=document.createElement("div");
+    totalscore.id="TotalScore";
+    game.appendChild(totalscore);
 
 
 }
