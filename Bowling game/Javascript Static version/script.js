@@ -103,9 +103,9 @@ function drawPins(dataset, ballcolor) { //currently just circles
     var circleAttributes = circles
         .attr("cx", function(d) {
             if (d < 5) {
-                return d * 20 + margin.left;
+                return d * 30 + margin.left;
             } else {
-                return (d - 5) * 20 + margin.left;
+                return (d - 5) * 30 + margin.left;
             }
 
         })
@@ -116,7 +116,7 @@ function drawPins(dataset, ballcolor) { //currently just circles
                 return 80;
             }
         })
-        .attr("r", 5)
+        .attr("r", 10)
         .style("fill", ballcolor);
 
 }
@@ -268,15 +268,21 @@ function createInitialDivs() {
     totalScore.innerHTML = "Money earned: ";
     game.appendChild(totalScore);
 
+    var gameButtons = document.createElement("div")
+    gameButtons.id = "gameButtons";
+    game.appendChild(gameButtons)
+
     var rollBall = document.createElement("button");
     rollBall.id = "rollBall";
+    rollBall.className = "btn";
     rollBall.innerHTML = 'Roll ball'
-    game.appendChild(rollBall);
+    gameButtons.appendChild(rollBall);
 
     var nextRound = document.createElement("button");
     nextRound.id = "nextRound";
+    nextRound.className = "btn";
     nextRound.innerHTML = "Next round";
-    game.appendChild(nextRound);
+    gameButtons.appendChild(nextRound);
 
 
 }
