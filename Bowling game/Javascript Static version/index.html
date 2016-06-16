@@ -11,17 +11,15 @@
     <div id="game">
 
         <a href="gameRules.html" onclick="return popitup('gameRules.html')">Rules</a>
-        
-        <div id="month">Month: 1</div>
+        <button onclick="payFirst()">Pay first</button>
+        <button onclick="spendFirst()">Spend first</button>
+        <div id="upperStuff"></div>
+
+
         <div id="gameGUI">
             <svg id="balls"></svg>
         </div>
-        <div id="RoundsLeft">Rounds Left: 10</div>
-        <div id="BallsLeft">My Income (in Francs): 15</div>
-        <div id="TotalScore">Bowling Score: </div>
-    
-        <button onclick="RollBall()">Roll Ball</button>
-        <button onclick="NextRound()">Next Round</button>
+       
     </div>
     <script src="script.js"></script>
 </body>
