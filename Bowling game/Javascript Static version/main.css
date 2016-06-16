@@ -23,8 +23,34 @@
 
 /* Buttons */
 
-#rollBall,
-#nextRound {}
+button {
+    background: #d3e6f2;
+    background-image: -webkit-linear-gradient(top, #d3e6f2, #8bc4e8);
+    background-image: -moz-linear-gradient(top, #d3e6f2, #8bc4e8);
+    background-image: -ms-linear-gradient(top, #d3e6f2, #8bc4e8);
+    background-image: -o-linear-gradient(top, #d3e6f2, #8bc4e8);
+    background-image: linear-gradient(to bottom, #d3e6f2, #8bc4e8);
+    -webkit-border-radius: 11;
+    -moz-border-radius: 11;
+    border-radius: 11px;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 22px;
+    padding: 4px 13px 4px 15px;
+    border: solid #1f628d 2px;
+    text-decoration: none;
+    margin-left: 15px;
+}
+
+button:hover {
+  background: #076aa8;
+  background-image: -webkit-linear-gradient(top, #076aa8, #3498db);
+  background-image: -moz-linear-gradient(top, #076aa8, #3498db);
+  background-image: -ms-linear-gradient(top, #076aa8, #3498db);
+  background-image: -o-linear-gradient(top, #076aa8, #3498db);
+  background-image: linear-gradient(to bottom, #076aa8, #3498db);
+  text-decoration: none;
+}
 
 .btn {
     background: #aed1e8;
@@ -57,6 +83,14 @@
 
 
 /*Text*/
+a{
+	font-family: Arial;
+    font-size: 15px;
+}
+
+#rules{
+	margin: 10px;
+}
 
 #month,
 #wealth,
@@ -73,7 +107,8 @@
     text-shadow: #7a7a7a 4px 3px 0;
 }
 
-#wealth, #TotalScore {
+#wealth,
+#TotalScore {
     font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
     color: #000000;
     font-size: 30px;
@@ -82,8 +117,8 @@
 }
 
 #RoundsLeft {
-	font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-	font-size: 20px;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    font-size: 20px;
 }
 
 #TotalScore {}
