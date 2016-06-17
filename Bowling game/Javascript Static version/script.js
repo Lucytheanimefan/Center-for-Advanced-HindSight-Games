@@ -6,6 +6,10 @@ var totalScore = 0;
 var currentMonth = 1;
 var myWealth = 0;
 
+//storage variables for data keeping purposes
+var monthlyWealth = []
+var moneyEarned = [];
+
 
 var circlePositions = [];
 //var originalCirclePositions = [];
@@ -180,6 +184,9 @@ function NextRound(payFirst) {
         var current_month = document.getElementById("month");
 
         if (currentMonth == 2) {
+            monthlyWealth.push(myWealth); //store the data
+            moneyEarned.push(totalScore);
+
             current_month.innerHTML = "Month: September - <b>October</b> - November - December";
             if (payFirst) {
                 firstPayments();
@@ -187,6 +194,9 @@ function NextRound(payFirst) {
                 spendFirstIncome();
             };
         } else if (currentMonth == 3) {
+            monthlyWealth.push(myWealth);
+            moneyEarned.push(totalScore);
+
             current_month.innerHTML = "Month: September - October - <b>November</b> - December";
             if (payFirst) {
                 firstPayments();
@@ -194,12 +204,20 @@ function NextRound(payFirst) {
                 spendFirstIncome();
             };
         } else if (currentMonth == 4) {
+            monthlyWealth.push(myWealth);
+            moneyEarned.push(totalScore);
+
             current_month.innerHTML = "Month: September - October - November - <b>December</b>";
             if (payFirst) {
                 firstPayments();
             } else {
                 spendFirstIncome();
             };
+        } else if (currentMonth > 4) {
+            alert("GAME OVER");
+            monthlyWealth.push(myWealth);
+            moneyEarned.push(totalScore);
+            createFile();
         }
 
 
@@ -208,9 +226,7 @@ function NextRound(payFirst) {
         totalRounds = 10;
     }
 
-    if (current_month > 4) {
-        alert("Game over");
-    }
+
 }
 
 
@@ -284,5 +300,18 @@ function createInitialDivs() {
     nextRound.innerHTML = "Next round";
     gameButtons.appendChild(nextRound);
 
+
+}
+
+/*------------------Write results to a file---------------------*/
+function createFile() {
+    var textToSave = 'this is a test';
+
+    var hiddenElement = document.createElement('a');
+
+    hiddenElement.href = 'data:attachment/text,' + encodeURI("Monthly wealth: "+monthlyWealth) + "\n"+encodeURI("Money earned: "+moneyEarned);
+    hiddenElement.target = '_blank';
+    hiddenElement.download = 'bowlingInfo2.txt';
+    hiddenElement.click();
 
 }
