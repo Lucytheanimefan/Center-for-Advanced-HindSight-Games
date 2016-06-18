@@ -9,6 +9,7 @@ var myWealth = 0;
 //storage variables for data keeping purposes
 var monthlyWealth = []
 var moneyEarned = [];
+var option="";
 
 
 var circlePositions = [];
@@ -56,6 +57,7 @@ function spendFirstIncome() {
 }
 
 function payFirst() {
+    option = "pay first";
     createInitialDivs();
     //drawPins(originalCirclePositions, 'blue');
     firstPayments();
@@ -74,6 +76,7 @@ function payFirst() {
 }
 
 function spendFirst() {
+    option = "spend first";
     createInitialDivs();
 
     spendFirstIncome();
@@ -309,7 +312,7 @@ function createFile() {
 
     var hiddenElement = document.createElement('a');
 
-    hiddenElement.href = 'data:attachment/text,' + encodeURI("Monthly wealth: "+monthlyWealth) + "\n"+encodeURI("Money earned: "+moneyEarned);
+    hiddenElement.href = 'data:attachment/text,' + encodeURI(option+": \n")+encodeURI("Monthly wealth: "+monthlyWealth) + "\n"+encodeURI("Money earned: "+moneyEarned);
     hiddenElement.target = '_blank';
     hiddenElement.download = 'bowlingInfo2.txt';
     hiddenElement.click();
