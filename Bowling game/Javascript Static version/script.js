@@ -9,7 +9,7 @@ var myWealth = 0;
 //storage variables for data keeping purposes
 var monthlyWealth = []
 var moneyEarned = [];
-var option="";
+var option = "";
 
 
 var circlePositions = [];
@@ -28,6 +28,15 @@ for (var i = 0; i < 10; i++) {
 }
 /*---------------------------------------FUNCTIONS--------------------------------------*/
 
+function fontFlash(color) {
+    wealth.style.color = color;
+    setTimeout(function() {
+        wealth.style.color = "black";
+    }, 1000);
+
+
+}
+
 function popitup(url) {
     newwindow = window.open(url, 'name', 'height=200,width=150');
     if (window.focus) {
@@ -43,11 +52,15 @@ function firstPayments() {
     alert("You receive 23 Francs in income this month");
     myWealth = myWealth + 23;
     wealth.innerHTML = "Wealth: " + myWealth + " Francs";
+    fontFlash("green");
 
-    alert('You pay 8 Francs for your bowling membership bill')
+    setTimeout(function() {
+        alert('You pay 8 Francs for your bowling membership bill')
+        myWealth = myWealth - 8;
+        wealth.innerHTML = "Wealth: " + myWealth + " Francs";
+        fontFlash("red");
+    }, 3000);
 
-    myWealth = myWealth - 8;
-    wealth.innerHTML = "Wealth: " + myWealth + " Francs";
 }
 
 function spendFirstIncome() {
@@ -312,7 +325,7 @@ function createFile() {
 
     var hiddenElement = document.createElement('a');
 
-    hiddenElement.href = 'data:attachment/text,' + encodeURI(option+": \n")+encodeURI("Monthly wealth: "+monthlyWealth) + "\n"+encodeURI("Money earned: "+moneyEarned);
+    hiddenElement.href = 'data:attachment/text,' + encodeURI(option + ": \n") + encodeURI("Monthly wealth: " + monthlyWealth) + "\n" + encodeURI("Money earned: " + moneyEarned);
     hiddenElement.target = '_blank';
     hiddenElement.download = 'bowlingInfo2.txt';
     hiddenElement.click();
