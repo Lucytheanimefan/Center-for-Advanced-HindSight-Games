@@ -3,7 +3,7 @@ var totalRounds = 10; //global
 var totalBalls = 15; //global
 var totalPins = 10; //changes
 var totalScore = 0;
-var currentMonth = 1;
+var currentMonth = 0;
 var myWealth = 0;
 
 //storage variables for data keeping purposes
@@ -28,13 +28,14 @@ for (var i = 0; i < 10; i++) {
 }
 /*---------------------------------------FUNCTIONS--------------------------------------*/
 
+
 function fontFlash(targetText, color, fontWeight) {
     targetText.style.color = color;
     targetText.style.fontWeight = fontWeight;
     setTimeout(function() {
         targetText.style.color = "black";
         targetText.style.fontWeight = "normal";
-    }, 1000);
+    }, 1500);
 
 
 }
@@ -61,7 +62,7 @@ function firstPayments() {
         myWealth = myWealth - 8;
         wealth.innerHTML = "Wealth: " + myWealth + " Francs";
         fontFlash(wealth, "red", "bold");
-    }, 3000);
+    }, 2500);
 
 }
 
@@ -158,10 +159,10 @@ function RollBall() {
 function generatePinsKnockedDown(pinsLeft) {
     //generate random number of pins knocked down
     var knockedDown = Math.floor((Math.random() * (pinsLeft + 1)));
-    console.log("Knocked down: " + knockedDown);
+    //console.log("Knocked down: " + knockedDown);
     if (totalPins >= knockedDown) { //can't knock down more pins than are still standing
         totalPins = totalPins - knockedDown; //update total Pins count
-        console.log("Pins left: " + totalPins);
+        //console.log("Pins left: " + totalPins);
 
         updateTotalScore(knockedDown);
         updateGUI(totalPins);
@@ -175,7 +176,7 @@ function generatePinsKnockedDown(pinsLeft) {
 
 function NextRound(payFirst) {
     totalRounds = totalRounds - 1;
-    console.log(totalRounds);
+    //console.log(totalRounds);
     totalPins = 10; //reset total number of pins
 
     //reset GUI
@@ -192,9 +193,16 @@ function NextRound(payFirst) {
     //out of rounds for the month
     if (totalRounds == 0) {
         createCustomAlert("You have reached 10 games. The month is now over");
+
+        console.log("MONTHLY UPDATE")
+        console.log(myWealth);
+        //monthlyUpdate(currentMonth, myWealth);
+
         currentMonth = currentMonth + 1;
 
+        //spend first option
         if (!payFirst) {
+            console.log("Spend first");
             createCustomAlert('You pay 8 Francs for your bowling membership bill');
             myWealth = myWealth - 8;
             wealth.innerHTML = "Wealth: " + myWealth + " Francs";
@@ -202,17 +210,20 @@ function NextRound(payFirst) {
 
         var current_month = document.getElementById("month");
 
-        if (currentMonth == 2) {
+        if (currentMonth == 1) {
             monthlyWealth.push(myWealth); //store the data
             moneyEarned.push(totalScore);
+            monthlyUpdate(currentMonth, myWealth); //NOT WORKING?
 
             current_month.innerHTML = "Month: September - <b>October</b> - November - December";
             if (payFirst) {
+                console.log("pay first!");
                 firstPayments();
             } else {
+                console.log("spend first");
                 spendFirstIncome();
             };
-        } else if (currentMonth == 3) {
+        } else if (currentMonth == 2) {
             monthlyWealth.push(myWealth);
             moneyEarned.push(totalScore);
 
@@ -222,7 +233,7 @@ function NextRound(payFirst) {
             } else {
                 spendFirstIncome();
             };
-        } else if (currentMonth == 4) {
+        } else if (currentMonth == 3) {
             monthlyWealth.push(myWealth);
             moneyEarned.push(totalScore);
 
@@ -239,12 +250,23 @@ function NextRound(payFirst) {
             createFile();
         }
 
-
         //reset total balls and rounds
         totalBalls = 15;
         totalRounds = 10;
     }
 
+}
+
+function monthlyUpdate(month, wealth){
+    var currentWealth = monthlyWealth[month];
+    var currentEarning = moneyEarned[month];
+    for (var i=0; i<month; i++){
+        currentWealth = currentWealth - monthlyWealth[i];
+        currentEarning = currentEarning - moneyEarned[i];
+    }
+    var spent = 23 - currentWealth;
+    
+    createCustomAlert("This month you spent a total of "+spent+ " and earned a total of" +currentEarning+ "Total earnings so far: "+totalScore+" Total wealth so far: "+myWealth);
 
 }
 
@@ -319,6 +341,12 @@ function createInitialDivs() {
     nextRound.innerHTML = "Next round";
     gameButtons.appendChild(nextRound);
 
+    var nextMonth = document.createElement("button");
+    nextMonth.id = "nextMonth";
+    nextMonth.className = "btn";
+    nextMonth.innerHTML = "Next month";
+    gameButtons.appendChild(nextMonth);
+
 
 }
 
@@ -336,7 +364,7 @@ function createFile() {
 }
 
 /*---------------------Custom alert box------------------------*/
-var ALERT_TITLE = "Oops!";
+var ALERT_TITLE = "Wealth update!";
 var ALERT_BUTTON_TEXT = "Ok";
 
 function createCustomAlert(txt) {
