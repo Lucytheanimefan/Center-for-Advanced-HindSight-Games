@@ -28,10 +28,12 @@ for (var i = 0; i < 10; i++) {
 }
 /*---------------------------------------FUNCTIONS--------------------------------------*/
 
-function fontFlash(color) {
-    wealth.style.color = color;
+function fontFlash(targetText, color, fontWeight) {
+    targetText.style.color = color;
+    targetText.style.fontWeight = fontWeight;
     setTimeout(function() {
-        wealth.style.color = "black";
+        targetText.style.color = "black";
+        targetText.style.fontWeight = "normal";
     }, 1000);
 
 
@@ -49,24 +51,25 @@ function popitup(url) {
 drawPins(circlePositions, 'blue');
 
 function firstPayments() {
-    alert("You receive 23 Francs in income this month");
+    createCustomAlert("You receive 23 Francs in income this month");
     myWealth = myWealth + 23;
     wealth.innerHTML = "Wealth: " + myWealth + " Francs";
-    fontFlash("green");
+    fontFlash(wealth, "green", "bold");
 
     setTimeout(function() {
-        alert('You pay 8 Francs for your bowling membership bill')
+        createCustomAlert('You pay 8 Francs for your bowling membership bill')
         myWealth = myWealth - 8;
         wealth.innerHTML = "Wealth: " + myWealth + " Francs";
-        fontFlash("red");
+        fontFlash(wealth, "red", "bold");
     }, 3000);
 
 }
 
 function spendFirstIncome() {
-    alert("You receive 23 Francs in income this month");
+    createCustomAlert("You receive 23 Francs in income this month");
     myWealth = myWealth + 23;
     wealth.innerHTML = "Wealth: " + myWealth + " Francs";
+    fontFlash(wealth, "green", "bold");
 }
 
 function payFirst() {
@@ -166,7 +169,7 @@ function generatePinsKnockedDown(pinsLeft) {
         console.log("You did something wrong in your code");
     }
     if (totalPins == 0) {
-        alert("You've knocked down all the pins, please proceed to the next round");
+        createCustomAlert("You've knocked down all the pins, please proceed to the next round");
     }
 }
 
@@ -188,11 +191,11 @@ function NextRound(payFirst) {
 
     //out of rounds for the month
     if (totalRounds == 0) {
-        alert("You have reached 10 games. The month is now over");
+        createCustomAlert("You have reached 10 games. The month is now over");
         currentMonth = currentMonth + 1;
 
         if (!payFirst) {
-            alert('You pay 8 Francs for your bowling membership bill');
+            createCustomAlert('You pay 8 Francs for your bowling membership bill');
             myWealth = myWealth - 8;
             wealth.innerHTML = "Wealth: " + myWealth + " Francs";
         }
@@ -230,7 +233,7 @@ function NextRound(payFirst) {
                 spendFirstIncome();
             };
         } else if (currentMonth > 4) {
-            alert("GAME OVER");
+            createCustomAlert("GAME OVER");
             monthlyWealth.push(myWealth);
             moneyEarned.push(totalScore);
             createFile();
@@ -330,4 +333,45 @@ function createFile() {
     hiddenElement.download = 'bowlingInfo2.txt';
     hiddenElement.click();
 
+}
+
+/*---------------------Custom alert box------------------------*/
+var ALERT_TITLE = "Oops!";
+var ALERT_BUTTON_TEXT = "Ok";
+
+function createCustomAlert(txt) {
+    d = document;
+
+    if(d.getElementById("modalContainer")) return;
+
+    mObj = d.getElementsByTagName("body")[0].appendChild(d.createElement("div"));
+    mObj.id = "modalContainer";
+    mObj.style.height = d.documentElement.scrollHeight + "px";
+
+    alertObj = mObj.appendChild(d.createElement("div"));
+    alertObj.id = "alertBox";
+    if(d.all && !window.opera) alertObj.style.top = document.documentElement.scrollTop + "px";
+    alertObj.style.left = (d.documentElement.scrollWidth - alertObj.offsetWidth)/2 + "px";
+    alertObj.style.visiblity="visible";
+
+    h1 = alertObj.appendChild(d.createElement("h1"));
+    h1.appendChild(d.createTextNode(ALERT_TITLE));
+
+    msg = alertObj.appendChild(d.createElement("p"));
+    //msg.appendChild(d.createTextNode(txt));
+    msg.innerHTML = txt;
+
+    btn = alertObj.appendChild(d.createElement("a"));
+    btn.id = "closeBtn";
+    btn.appendChild(d.createTextNode(ALERT_BUTTON_TEXT));
+    btn.href = "#";
+    btn.focus();
+    btn.onclick = function() { removeCustomAlert();return false; }
+
+    alertObj.style.display = "block";
+
+}
+
+function removeCustomAlert() {
+    document.getElementsByTagName("body")[0].removeChild(document.getElementById("modalContainer"));
 }
