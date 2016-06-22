@@ -29,14 +29,26 @@ for (var i = 0; i < 10; i++) {
 /*---------------------------------------FUNCTIONS--------------------------------------*/
 
 
-function fontFlash(targetText, color, fontWeight) {
+function fontFlash(targetText, color, fontWeight, callback) {
     targetText.style.color = color;
     targetText.style.fontWeight = fontWeight;
+    $("#closeBtn").click(function() {
+        targetText.style.color = "black";
+        targetText.style.fontWeight = "normal";
+
+        setTimeout(function() {
+            if (callback) {
+                callback();
+            }
+        }, 1500);
+
+    });
+    /*
     setTimeout(function() {
         targetText.style.color = "black";
         targetText.style.fontWeight = "normal";
     }, 1500);
-
+    */
 
 }
 
@@ -55,14 +67,15 @@ function firstPayments() {
     createCustomAlert("You receive 23 Francs in income this month");
     myWealth = myWealth + 23;
     wealth.innerHTML = "Wealth: " + myWealth + " Francs";
-    fontFlash(wealth, "green", "bold");
+    fontFlash(wealth, "green", "bold", function() {
 
-    setTimeout(function() {
+        //setTimeout(function() {
         createCustomAlert('You pay 8 Francs for your bowling membership bill')
         myWealth = myWealth - 8;
         wealth.innerHTML = "Wealth: " + myWealth + " Francs";
         fontFlash(wealth, "red", "bold");
-    }, 2500);
+        //}, 2500);
+    });
 
 }
 
@@ -200,73 +213,78 @@ function NextRound(payFirst) {
 
         currentMonth = currentMonth + 1;
 
-        //spend first option
-        if (!payFirst) {
-            console.log("Spend first");
-            createCustomAlert('You pay 8 Francs for your bowling membership bill');
-            myWealth = myWealth - 8;
-            wealth.innerHTML = "Wealth: " + myWealth + " Francs";
-        }
+        NextMonthButton();
 
-        var current_month = document.getElementById("month");
+        $("#nextMonth").click(function() {
 
-        if (currentMonth == 1) {
-            monthlyWealth.push(myWealth); //store the data
-            moneyEarned.push(totalScore);
-            monthlyUpdate(currentMonth, myWealth); //NOT WORKING?
+            //spend first option
+            if (!payFirst) {
+                console.log("Spend first");
+                createCustomAlert('You pay 8 Francs for your bowling membership bill');
+                myWealth = myWealth - 8;
+                wealth.innerHTML = "Wealth: " + myWealth + " Francs";
+            }
 
-            current_month.innerHTML = "Month: September - <b>October</b> - November - December";
-            if (payFirst) {
-                console.log("pay first!");
-                firstPayments();
-            } else {
-                console.log("spend first");
-                spendFirstIncome();
-            };
-        } else if (currentMonth == 2) {
-            monthlyWealth.push(myWealth);
-            moneyEarned.push(totalScore);
+            var current_month = document.getElementById("month");
 
-            current_month.innerHTML = "Month: September - October - <b>November</b> - December";
-            if (payFirst) {
-                firstPayments();
-            } else {
-                spendFirstIncome();
-            };
-        } else if (currentMonth == 3) {
-            monthlyWealth.push(myWealth);
-            moneyEarned.push(totalScore);
+            if (currentMonth == 1) {
+                monthlyWealth.push(myWealth); //store the data
+                moneyEarned.push(totalScore);
+                //monthlyUpdate(currentMonth, myWealth); //NOT WORKING?
 
-            current_month.innerHTML = "Month: September - October - November - <b>December</b>";
-            if (payFirst) {
-                firstPayments();
-            } else {
-                spendFirstIncome();
-            };
-        } else if (currentMonth > 4) {
-            createCustomAlert("GAME OVER");
-            monthlyWealth.push(myWealth);
-            moneyEarned.push(totalScore);
-            createFile();
-        }
+                current_month.innerHTML = "Month: September - <b>October</b> - November - December";
+                if (payFirst) {
+                    console.log("pay first!");
+                    firstPayments();
+                } else {
+                    console.log("spend first");
+                    spendFirstIncome();
+                };
+            } else if (currentMonth == 2) {
+                monthlyWealth.push(myWealth);
+                moneyEarned.push(totalScore);
 
-        //reset total balls and rounds
-        totalBalls = 15;
-        totalRounds = 10;
+                current_month.innerHTML = "Month: September - October - <b>November</b> - December";
+                if (payFirst) {
+                    firstPayments();
+                } else {
+                    spendFirstIncome();
+                };
+            } else if (currentMonth == 3) {
+                monthlyWealth.push(myWealth);
+                moneyEarned.push(totalScore);
+
+                current_month.innerHTML = "Month: September - October - November - <b>December</b>";
+                if (payFirst) {
+                    firstPayments();
+                } else {
+                    spendFirstIncome();
+                };
+            } else if (currentMonth > 4) {
+                createCustomAlert("GAME OVER");
+                monthlyWealth.push(myWealth);
+                moneyEarned.push(totalScore);
+                createFile();
+            }
+
+            //reset total balls and rounds
+            totalBalls = 15;
+            totalRounds = 10;
+        });
     }
 
 }
 
-function monthlyUpdate(month, wealth){
+function monthlyUpdate(month, wealth) {
     var currentWealth = monthlyWealth[month];
     var currentEarning = moneyEarned[month];
-    for (var i=0; i<month; i++){
+    for (var i = 0; i < month; i++) {
         currentWealth = currentWealth - monthlyWealth[i];
         currentEarning = currentEarning - moneyEarned[i];
     }
     var spent = 23 - currentWealth;
-    
-    createCustomAlert("This month you spent a total of "+spent+ " and earned a total of" +currentEarning+ "Total earnings so far: "+totalScore+" Total wealth so far: "+myWealth);
+
+    createCustomAlert("This month you spent a total of " + spent + " and earned a total of" + currentEarning + "Total earnings so far: " + totalScore + " Total wealth so far: " + myWealth);
 
 }
 
@@ -289,7 +307,15 @@ function updateGUI(pinsLeft) {
 
 
 
-//unused FUNCTIONS--------------------------------------------------
+//--------------------------------------------------
+function NextMonthButton() {
+    var nextMonth = document.createElement("button");
+    nextMonth.id = "nextMonth";
+    nextMonth.className = "btn";
+    nextMonth.innerHTML = "Next month";
+    $("#game").append(nextMonth);
+}
+
 function createInitialDivs() {
     var game = document.getElementById("game");
     var upperStuff = document.getElementById("upperStuff");
@@ -341,12 +367,6 @@ function createInitialDivs() {
     nextRound.innerHTML = "Next round";
     gameButtons.appendChild(nextRound);
 
-    var nextMonth = document.createElement("button");
-    nextMonth.id = "nextMonth";
-    nextMonth.className = "btn";
-    nextMonth.innerHTML = "Next month";
-    gameButtons.appendChild(nextMonth);
-
 
 }
 
@@ -370,7 +390,7 @@ var ALERT_BUTTON_TEXT = "Ok";
 function createCustomAlert(txt) {
     d = document;
 
-    if(d.getElementById("modalContainer")) return;
+    if (d.getElementById("modalContainer")) return;
 
     mObj = d.getElementsByTagName("body")[0].appendChild(d.createElement("div"));
     mObj.id = "modalContainer";
@@ -378,9 +398,9 @@ function createCustomAlert(txt) {
 
     alertObj = mObj.appendChild(d.createElement("div"));
     alertObj.id = "alertBox";
-    if(d.all && !window.opera) alertObj.style.top = document.documentElement.scrollTop + "px";
-    alertObj.style.left = (d.documentElement.scrollWidth - alertObj.offsetWidth)/2 + "px";
-    alertObj.style.visiblity="visible";
+    if (d.all && !window.opera) alertObj.style.top = document.documentElement.scrollTop + "px";
+    alertObj.style.left = (d.documentElement.scrollWidth - alertObj.offsetWidth) / 2 + "px";
+    alertObj.style.visiblity = "visible";
 
     h1 = alertObj.appendChild(d.createElement("h1"));
     h1.appendChild(d.createTextNode(ALERT_TITLE));
@@ -394,7 +414,10 @@ function createCustomAlert(txt) {
     btn.appendChild(d.createTextNode(ALERT_BUTTON_TEXT));
     btn.href = "#";
     btn.focus();
-    btn.onclick = function() { removeCustomAlert();return false; }
+    btn.onclick = function() {
+        removeCustomAlert();
+        return false;
+    }
 
     alertObj.style.display = "block";
 
