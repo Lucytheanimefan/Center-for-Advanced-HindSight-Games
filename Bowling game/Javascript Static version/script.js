@@ -9,8 +9,8 @@ var currDay = 1;
 var currDayString = currDay.toString();
 
 //storage variables for data keeping purposes
-var monthlyWealth = []
-var moneyEarned = [];
+var monthlyWealth = {};
+var moneyEarned = {};
 var option = "";
 
 
@@ -29,8 +29,10 @@ for (var i = 0; i < 10; i++) {
     circlePositions.push(i);
 }
 /*---------------------------------------FUNCTIONS--------------------------------------*/
-function timeStamp() {
+function timestamp() {
     var d = new Date();
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    var days = ['Mon', 'Tue', 'Wed', 'Thurs', 'Fri', 'Sat', 'Sun'];
     var day = days[d.getDay()];
     var hr = d.getHours();
     var min = d.getMinutes();
@@ -272,8 +274,9 @@ function NextRound(payFirst) {
             var current_month = document.getElementById("month");
 
             if (currentMonth == 1) {
-                monthlyWealth.push(myWealth); //store the data
-                moneyEarned.push(totalScore);
+                monthlyWealth[timestamp()] = myWealth; //store the data
+                moneyEarned[timestamp()] = totalScore;
+                //moneyEarned.push(totalScore);
                 //monthlyUpdate(currentMonth, myWealth); //NOT WORKING?
 
                 current_month.innerHTML = "Month: September - <b>October</b> - November - December";
@@ -285,8 +288,8 @@ function NextRound(payFirst) {
                     spendFirstIncome();
                 };
             } else if (currentMonth == 2) {
-                monthlyWealth.push(myWealth);
-                moneyEarned.push(totalScore);
+                monthlyWealth[timestamp()] = myWealth;
+                moneyEarned[timestamp()] = totalScore;
 
                 current_month.innerHTML = "Month: September - October - <b>November</b> - December";
                 if (payFirst) {
@@ -295,8 +298,8 @@ function NextRound(payFirst) {
                     spendFirstIncome();
                 };
             } else if (currentMonth == 3) {
-                monthlyWealth.push(myWealth);
-                moneyEarned.push(totalScore);
+                monthlyWealth[timestamp()] = myWealth;
+                moneyEarned[timestamp()] = totalScore;
 
                 current_month.innerHTML = "Month: September - October - November - <b>December</b>";
                 if (payFirst) {
@@ -306,8 +309,8 @@ function NextRound(payFirst) {
                 };
             } else if (currentMonth > 4) {
                 createCustomAlert("GAME OVER");
-                monthlyWealth.push(myWealth);
-                moneyEarned.push(totalScore);
+                monthlyWealth[timestamp()] = myWealth;
+                moneyEarned[timestamp()] = totalScore;
                 createFile();
             }
 
@@ -319,7 +322,7 @@ function NextRound(payFirst) {
 }
 
 
-
+/*
 function monthlyUpdate(month, wealth) {
     var currentWealth = monthlyWealth[month];
     var currentEarning = moneyEarned[month];
@@ -332,7 +335,7 @@ function monthlyUpdate(month, wealth) {
     createCustomAlert("This month you spent a total of " + spent + " and earned a total of" + currentEarning + "Total earnings so far: " + totalScore + " Total wealth so far: " + myWealth);
 
 }
-
+*/
 
 function updateTotalScore(knockedDown) {
     totalScore = totalScore + knockedDown;
