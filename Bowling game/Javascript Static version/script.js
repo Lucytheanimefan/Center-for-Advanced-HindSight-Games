@@ -317,7 +317,9 @@ function NextRound(payFirst) {
             //reset total balls and rounds
             totalBalls = 15;
             totalRounds = 10;
+            $("#nextMonth").remove();
         });
+
     }
 }
 
