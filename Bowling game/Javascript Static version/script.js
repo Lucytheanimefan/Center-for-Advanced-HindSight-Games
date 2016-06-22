@@ -5,6 +5,8 @@ var totalPins = 10; //changes
 var totalScore = 0;
 var currentMonth = 0;
 var myWealth = 0;
+var currDay = 1;
+var currDayString = currDay.toString();
 
 //storage variables for data keeping purposes
 var monthlyWealth = []
@@ -174,8 +176,9 @@ function drawPins(dataset, ballcolor) { //currently just circles
 
 }
 
+
 function RollBall() {
-    if (myWealth<=-15){
+    if (myWealth <= -15) {
         createCustomAlert("DEBT CAN'T BE MORE THAN 15 FRANCS. Please proceed to next round");
 
         //can't proceed to roll again
@@ -212,7 +215,6 @@ function generatePinsKnockedDown(pinsLeft) {
 
 function NextRound(payFirst) {
     totalRounds = totalRounds - 1;
-    //console.log(totalRounds);
     totalPins = 10; //reset total number of pins
 
     //reset GUI
@@ -220,14 +222,18 @@ function NextRound(payFirst) {
     for (var i = 0; i < 10; i++) {
         circlePositions.push(i);
     }
-    //d3.select('#all_balls').remove();
     drawPins(circlePositions, 'blue');
-
     var roundsLeft = document.getElementById("RoundsLeft");
     roundsLeft.innerHTML = "Rounds Left: " + totalRounds.toString();
 
+    //set current day
+    currDay = currDay + 3;
+    currDayString = currDayString + "    " + currDay.toString();
+    console.log('Days: ' + currDayString);
+    $('#day').html("Day of the month: " + currDayString);
+
     //out of rounds for the month
-    if (totalRounds == 0) {
+    if (payFirst && totalRounds == 0) {
         createCustomAlert("You have reached 10 games. The month is now over");
 
         console.log("MONTHLY UPDATE")
@@ -235,18 +241,33 @@ function NextRound(payFirst) {
         //monthlyUpdate(currentMonth, myWealth);
 
         currentMonth = currentMonth + 1;
+        //NextMonthButton();
 
+    } else if (!payFirst && totalRounds == 0) { //spend first option
+        console.log("Spend first");
+        createCustomAlert('You pay 8 Francs for your bowling membership bill');
+        myWealth = myWealth - 8;
+        wealth.innerHTML = "Wealth: " + myWealth + " Francs";
+        fontFlash(wealth, "red", "bold", function() {
+            createCustomAlert("You have reached 10 games. The month is now over");
+
+            console.log("MONTHLY UPDATE")
+            console.log(myWealth);
+            //monthlyUpdate(currentMonth, myWealth);
+
+            currentMonth = currentMonth + 1;
+            //NextMonthButton();
+        });
+    }
+
+    if (totalRounds == 0) {
         NextMonthButton();
-
         $("#nextMonth").click(function() {
+            //reset to day 1
+            currDay = 1;
+            currDayString = currDay.toString();
+            $('#day').html("Day of the month: " + currDayString);
 
-            //spend first option
-            if (!payFirst) {
-                console.log("Spend first");
-                createCustomAlert('You pay 8 Francs for your bowling membership bill');
-                myWealth = myWealth - 8;
-                wealth.innerHTML = "Wealth: " + myWealth + " Francs";
-            }
 
             var current_month = document.getElementById("month");
 
@@ -295,8 +316,9 @@ function NextRound(payFirst) {
             totalRounds = 10;
         });
     }
-
 }
+
+
 
 function monthlyUpdate(month, wealth) {
     var currentWealth = monthlyWealth[month];
@@ -348,6 +370,11 @@ function createInitialDivs() {
     month.id = "month";
     month.innerHTML = "Month: <b>September</b> - October - November - December"
     upperStuff.appendChild(month);
+
+    var day = document.createElement("div");
+    day.id = "day";
+    day.innerHTML = "Day of the month: 1";
+    upperStuff.appendChild(day);
 
     wealth = document.createElement("div");
     wealth.id = "wealth";

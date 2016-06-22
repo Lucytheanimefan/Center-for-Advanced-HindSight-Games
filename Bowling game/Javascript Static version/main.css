@@ -95,10 +95,12 @@ a{
 #month,
 #wealth,
 #RoundsLeft,
-#TotalScore {
+#TotalScore,
+#day {
     text-align: center;
 }
 
+#day,
 #month {
     font-family: Arial;
     font-size: 25px;
