@@ -14,8 +14,7 @@ var moneyEarned = {};
 var option = "";
 
 
-var circlePositions = [];
-//var originalCirclePositions = [];
+
 var margin = {
         top: 50,
         right: 100,
@@ -25,9 +24,6 @@ var margin = {
     width = 960 - margin.left - margin.right,
     height = 600 - margin.top - margin.bottom;
 
-for (var i = 0; i < 10; i++) {
-    circlePositions.push(i);
-}
 /*---------------------------------------FUNCTIONS--------------------------------------*/
 function timestamp() {
     var d = new Date();
@@ -81,7 +77,7 @@ function popitup(url) {
 }
 
 
-drawPins(circlePositions, 'blue');
+drawPins();
 
 function firstPayments() {
     var gameUpdates = document.getElementById("gameUpdates");
@@ -152,13 +148,13 @@ function spendFirst() {
     }
 }
 
-function drawPins(dataset, ballcolor) { //currently just circles
+function drawPins() { //currently just circles
     var gameGUI = document.getElementById("gameGUI");
     if ($("#pins").length == 0) {
         var pins = document.createElement("div");
         pins.id = "pins";
         gameGUI.appendChild(pins);
-    } else{
+    } else {
         var pins = document.getElementById("pins");
     }
 
@@ -257,7 +253,7 @@ function NextRound(payFirst) {
     }
 
     $("#pins").empty();
-    drawPins(circlePositions, 'blue');
+    drawPins();
     var roundsLeft = document.getElementById("RoundsLeft");
     roundsLeft.innerHTML = "Rounds Left: " + totalRounds.toString();
 
@@ -544,3 +540,5 @@ function createCustomAlert(txt) {
 function removeCustomAlert() {
     document.getElementsByTagName("body")[0].removeChild(document.getElementById("modalContainer"));
 }
+
+
