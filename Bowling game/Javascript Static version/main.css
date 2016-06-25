@@ -8,7 +8,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(141, 179, 216, 0.5);
+    background: rgba(141, 179, 216, 1);
 }
 
 
@@ -125,6 +125,13 @@ a{
 
 #TotalScore {}
 
+#gameUpdates{
+    height: 100%;
+    text-align: center;
+    border-top:5px solid blue;
+    border-bottom:5px solid blue;
+}
+
 /*-------------------------alert box -------------------*/
 #modalContainer {
     background-color:rgba(0, 0, 0, 0.3);
@@ -183,4 +190,13 @@ a{
     border-radius: 3px;
     text-decoration:none;
 
+}
+
+#pins{
+    margin-top: 30px;
+}
+
+.bowlingPins{
+    margin-left: 5px;
+    margin-right: 5px;
 }
