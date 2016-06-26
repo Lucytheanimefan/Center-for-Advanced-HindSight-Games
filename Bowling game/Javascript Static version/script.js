@@ -5,7 +5,7 @@ var totalPins = 10; //changes
 var totalScore = 0;
 var currentMonth = 0;
 var myWealth = 0;
-var currDay = 1;
+var currDay = "<b style='color:blue;'>1</b> 4 7 10 13 16 19 22 25 28 31";
 var currDayString = currDay.toString();
 
 //storage variables for data keeping purposes
@@ -265,9 +265,25 @@ function NextRound(payFirst) {
     roundsLeft.innerHTML = "Rounds Left: " + totalRounds.toString();
 
     //set current day
+    currDay = 1;
+    currDayString = currDay.toString();
+    for (var j = 1; j <= 10; j++) {
+        if (j == 10 - totalRounds) {
+            currDay = currDay + 3;
+            var tempString = "<b style='color:blue;'>" + currDay.toString() + "</b>";
+        } else {
+            currDay = currDay + 3;
+            var tempString = currDay.toString();
+        }
+        
+        currDayString = currDayString + " " + tempString;
+    }
+    /*
     currDay = currDay + 3;
     currDayString = currDayString + "    " + currDay.toString();
     console.log('Days: ' + currDayString);
+    */
+
     $('#day').html("Day of the month: " + currDayString);
 
     //out of rounds for the month
@@ -302,9 +318,22 @@ function NextRound(payFirst) {
     if (totalRounds == 0) {
         NextMonthButton();
         $("#nextMonth").click(function() {
-            //reset to day 1
+            //reset to months
+            totalRounds = 10;
+
+            //set current day
             currDay = 1;
             currDayString = currDay.toString();
+            for (var j = 0; j < 10; j++) {
+                currDay = currDay + 3;
+                if (j == 10 - totalRounds) {
+                    var tempString = "<b style='color:blue;'>" + currDay.toString() + "</b>";
+                } else {
+                    var tempString = currDay.toString();
+                }
+
+                currDayString = currDayString + " " + tempString;
+            }
             $('#day').html("Day of the month: " + currDayString);
 
 
@@ -354,7 +383,7 @@ function NextRound(payFirst) {
 
             //reset total balls and rounds
             totalBalls = 15;
-            totalRounds = 10;
+
             $("#nextMonth").remove();
         });
 
@@ -455,7 +484,7 @@ function createInitialDivs() {
 
     var day = document.createElement("div");
     day.id = "day";
-    day.innerHTML = "Day of the month: 1";
+    day.innerHTML = "Day of the month: " + currDayString;
     upperStuff.appendChild(day);
 
     wealth = document.createElement("div");
