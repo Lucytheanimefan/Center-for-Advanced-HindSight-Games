@@ -48,17 +48,19 @@ function timestamp() {
 function fontFlash(targetText, color, fontWeight, callback) {
     targetText.style.color = color;
     targetText.style.fontWeight = fontWeight;
-    $("#closeBtn").click(function() {
+    // $("#closeBtn").click(function() {
+    //targetText.style.color = "black";
+    //targetText.style.fontWeight = "normal";
+
+    setTimeout(function() {
         targetText.style.color = "black";
         targetText.style.fontWeight = "normal";
+        if (callback) {
+            callback();
+        }
+    }, 1500);
 
-        setTimeout(function() {
-            if (callback) {
-                callback();
-            }
-        }, 1500);
-
-    });
+    //});
     /*
     setTimeout(function() {
         targetText.style.color = "black";
@@ -81,20 +83,25 @@ drawPins();
 
 function firstPayments() {
     var gameUpdates = document.getElementById("gameUpdates");
-    gameUpdates.innerHTML = "You receive 23 Francs in income this month";
+    gameUpdates.innerHTML = "You <span style='color:green;'>receive</span> 23 Francs in income this month";
 
-    createCustomAlert("You receive 23 Francs in income this month");
+    //createCustomAlert("You receive 23 Francs in income this month");
     myWealth = myWealth + 23;
     wealth.innerHTML = "Wealth: " + myWealth + " Francs";
     fontFlash(wealth, "green", "bold", function() {
 
         //setTimeout(function() {
-        gameUpdates.innerHTML = 'You pay 8 Francs for your bowling membership bill';
-        createCustomAlert('You pay 8 Francs for your bowling membership bill')
+        gameUpdates.innerHTML = 'You <span style="color:red;"">pay</span> 8 Francs for your bowling membership bill';
+        //createCustomAlert('You pay 8 Francs for your bowling membership bill')
         myWealth = myWealth - 8;
         wealth.innerHTML = "Wealth: " + myWealth + " Francs";
         fontFlash(wealth, "red", "bold");
         //}, 2500);
+
+        setTimeout(function() {
+            gameUpdates.innerHTML = "You may begin.";
+        }, 1500);
+
     });
 
 }
@@ -103,7 +110,7 @@ function spendFirstIncome() {
     var gameUpdates = document.getElementById("gameUpdates");
     gameUpdates.innerHTML = "You receive 23 Francs in income this month";
 
-    createCustomAlert("You receive 23 Francs in income this month");
+    //createCustomAlert("You receive 23 Francs in income this month");
     myWealth = myWealth + 23;
     wealth.innerHTML = "Wealth: " + myWealth + " Francs";
     fontFlash(wealth, "green", "bold");
@@ -204,7 +211,7 @@ function drawPins() { //currently just circles
 function RollBall() {
     var gameUpdates = document.getElementById("gameUpdates");
     if (myWealth <= -15) {
-        createCustomAlert("DEBT CAN'T BE MORE THAN 15 FRANCS. Please proceed to next round");
+        //createCustomAlert("DEBT CAN'T BE MORE THAN 15 FRANCS. Please proceed to next round");
         gameUpdates.innerHTML = "DEBT CAN'T BE MORE THAN 15 FRANCS. Please proceed to next round";
 
         //can't proceed to roll again
@@ -236,7 +243,7 @@ function generatePinsKnockedDown(pinsLeft) {
         console.log("You did something wrong in your code");
     }
     if (totalPins == 0) {
-        createCustomAlert("You've knocked down all the pins, please proceed to the next round");
+        //createCustomAlert("You've knocked down all the pins, please proceed to the next round");
         gameUpdates.innerHTML = "You've knocked down all the pins, please proceed to the next round";
     }
 }
@@ -265,7 +272,7 @@ function NextRound(payFirst) {
 
     //out of rounds for the month
     if (payFirst && totalRounds == 0) {
-        createCustomAlert("You have reached 10 games. The month is now over");
+        //createCustomAlert("You have reached 10 games. The month is now over");
         gameUpdates.innerHTML = "You have reached 10 games. The month is now over";
         console.log("MONTHLY UPDATE")
         console.log(myWealth);
@@ -276,12 +283,12 @@ function NextRound(payFirst) {
 
     } else if (!payFirst && totalRounds == 0) { //spend first option
         console.log("Spend first");
-        createCustomAlert('You pay 8 Francs for your bowling membership bill');
+        //createCustomAlert('You pay 8 Francs for your bowling membership bill');
         gameUpdates.innerHTML = 'You pay 8 Francs for your bowling membership bill';
         myWealth = myWealth - 8;
         wealth.innerHTML = "Wealth: " + myWealth + " Francs";
         fontFlash(wealth, "red", "bold", function() {
-            createCustomAlert("You have reached 10 games. The month is now over");
+            //createCustomAlert("You have reached 10 games. The month is now over");
             gamesUpdates.innerHTML = "You have reached 10 games. The month is now over";
             console.log("MONTHLY UPDATE")
             console.log(myWealth);
@@ -338,8 +345,8 @@ function NextRound(payFirst) {
                     spendFirstIncome();
                 };
             } else if (currentMonth > 4) {
-                createCustomAlert("GAME OVER");
-                gamesUpdates.innerHTML = "GAME OVER";
+                //createCustomAlert("GAME OVER");
+                gamesUpdates.innerHTML = "<b>GAME OVER</b>";
                 monthlyWealth[timestamp()] = myWealth;
                 moneyEarned[timestamp()] = totalScore;
                 createFile();
@@ -426,9 +433,20 @@ function createInitialDivs() {
     var game = document.getElementById("game");
     var upperStuff = document.getElementById("upperStuff");
 
+    var updateArea = document.createElement("div");
+    updateArea.id = "updateArea";
+    upperStuff.appendChild(updateArea);
+
+    var updateTitle = document.createElement("div");
+    updateTitle.id = "updateTitle";
+    updateArea.appendChild(updateTitle);
+    updateTitle.innerHTML = "Game Updates";
+
     var gameUpdates = document.createElement("div");
     gameUpdates.id = "gameUpdates";
-    upperStuff.appendChild(gameUpdates);
+    updateArea.appendChild(gameUpdates);
+
+
 
     var month = document.createElement("div");
     month.id = "month";
@@ -540,5 +558,3 @@ function createCustomAlert(txt) {
 function removeCustomAlert() {
     document.getElementsByTagName("body")[0].removeChild(document.getElementById("modalContainer"));
 }
-
-
