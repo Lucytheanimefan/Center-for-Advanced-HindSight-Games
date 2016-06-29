@@ -12,6 +12,11 @@
 }
 
 
+#personalInfo{
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
 /* centering stuff */
 
 #gameGUI,
@@ -136,7 +141,7 @@ a {
 #updateTitle {
     text-align: center;
     margin-top: 2.5%;
-    margin-bottom: 5%;
+    margin-bottom: 2.5%;
     text-shadow: 1px 1px 1px rgba(30, 103, 186, 1);
     font-weight: normal;
     color: #000000;

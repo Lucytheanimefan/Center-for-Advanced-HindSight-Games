@@ -12,7 +12,7 @@ var currDayString = currDay.toString();
 var monthlyWealth = {};
 var moneyEarned = {};
 var option = "";
-var name="No name";
+var name = "No name";
 
 var margin = {
         top: 50,
@@ -24,27 +24,48 @@ var margin = {
     height = 600 - margin.top - margin.bottom;
 
 /*------------get info from form-------------*/
-function searchKeyPress(e){
-    e=e||window.event;
-    if (e.keyCode==13){
+function searchKeyPress(e) {
+    e = e || window.event;
+    if (e.keyCode == 13) {
         document.getElementById('btnGo').click();
         return false;
     }
     return true;
 }
 
-function submitData(){
-    name=document.getElementById("name").value;
+function submitData() {
+    name = document.getElementById("name").value;
 
-    document.getElementById("name").value="Successfully submitted";
+    document.getElementById("name").value = "Successfully submitted";
 
     console.log(name);
 
 }
 
+function clearData() {
+    localStorage.clear();
+}
 
+function getData() {
+    var form = document.getElementById("personalInfo");
+    var getdata = document.createElement("input");
+    getdata.id = "getData";
+    getdata.type = "button";
+    getdata.value = "Get data";
+    getdata.setAttribute("onclick", "returnData()");
+    form.appendChild(getdata);
+}
 
-
+function returnData() {
+    var toRet="";
+    //print everything in localStorage
+    for (var i = 0; i < localStorage.length; i++) {
+        toRet=toRet + localStorage.getItem(localStorage.key(i))
+    }
+    console.log("returned data (toRet):");
+    console.log(toRet);
+    createFile(toRet);
+}
 /*---------------------------------------FUNCTIONS--------------------------------------*/
 
 function timestamp() {
@@ -384,21 +405,23 @@ function NextRound(payFirst) {
                 console.log(monthlyWealth);
                 console.log(moneyEarned);
 
-                var endWealth=JSON.stringify({"monthlyWealth":monthlyWealth});
-                var endEarned=JSON.stringify({"moneyEarned": totalScore});
+                var endWealth = JSON.stringify({
+                    "monthlyWealth": monthlyWealth
+                });
+                var endEarned = JSON.stringify({
+                    "moneyEarned": moneyEarned
+                });
 
                 //add everything to localStorage:
-                localStorage.setItem(1, [name,endWealth, endEarned]);
+                localStorage.setItem(1, [name, option, endWealth, endEarned]);
 
                 //print everything in localStorage
-                for (var i=0; i<localStorage.length; i++){
+                for (var i = 0; i < localStorage.length; i++) {
                     console.log(localStorage.getItem(localStorage.key(i)));
                 }
 
                 killGame();
-                //createFile();
-                //writeEmail();
-                //console.log("WROTE EMAIL");
+                getData();
 
             }
 
@@ -573,15 +596,13 @@ function killGame() {
     })
 }
 /*------------------Write results---------------------*/
-function createFile() {
-
-    var textToSave = 'this is a test';
+function createFile(text) {
 
     var hiddenElement = document.createElement('a');
 
-    hiddenElement.href = 'data:attachment/text,' + encodeURI(option + ": \n") + encodeURI("Monthly wealth: " + JSON.stringify(monthlyWealth)) + "\n" + encodeURI("Money earned: " + JSON.stringify(moneyEarned));
+    hiddenElement.href = 'data:attachment/text,' + encodeURI(text);
     hiddenElement.target = '_blank';
-    hiddenElement.download = 'bowlingInfo2.txt';
+    hiddenElement.download = 'bowlingInfo.txt';
     hiddenElement.click();
 
 }
