@@ -25,6 +25,7 @@ var margin = {
     height = 600 - margin.top - margin.bottom;
 
 /*---------------------------------------FUNCTIONS--------------------------------------*/
+
 function timestamp() {
     var d = new Date();
     var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -41,7 +42,7 @@ function timestamp() {
     var year = d.getFullYear();
     var seconds = d.getSeconds();
 
-    var timestamp = day + " " + hr + ":" + min +":"+seconds + ampm + " " + date + " " + month + " " + year;
+    var timestamp = day + " " + hr + ":" + min + ":" + seconds + ampm + " " + date + " " + month + " " + year;
 
     return timestamp;
 }
@@ -49,9 +50,7 @@ function timestamp() {
 function fontFlash(targetText, color, fontWeight, callback) {
     targetText.style.color = color;
     targetText.style.fontWeight = fontWeight;
-    // $("#closeBtn").click(function() {
-    //targetText.style.color = "black";
-    //targetText.style.fontWeight = "normal";
+
 
     setTimeout(function() {
         targetText.style.color = "black";
@@ -60,14 +59,6 @@ function fontFlash(targetText, color, fontWeight, callback) {
             callback();
         }
     }, 1500);
-
-    //});
-    /*
-    setTimeout(function() {
-        targetText.style.color = "black";
-        targetText.style.fontWeight = "normal";
-    }, 1500);
-    */
 
 }
 
@@ -86,18 +77,16 @@ function firstPayments() {
     var gameUpdates = document.getElementById("gameUpdates");
     gameUpdates.innerHTML = "You <span style='color:green;'>receive</span> 23 Francs in income this month";
 
-    //createCustomAlert("You receive 23 Francs in income this month");
     myWealth = myWealth + 23;
     wealth.innerHTML = "Wealth: " + myWealth + " Francs";
     fontFlash(wealth, "green", "bold", function() {
 
-        //setTimeout(function() {
         gameUpdates.innerHTML = 'You <span style="color:red;"">pay</span> 8 Francs for your bowling membership bill';
-        //createCustomAlert('You pay 8 Francs for your bowling membership bill')
+
         myWealth = myWealth - 8;
         wealth.innerHTML = "Wealth: " + myWealth + " Francs";
         fontFlash(wealth, "red", "bold");
-        //}, 2500);
+
 
         setTimeout(function() {
             gameUpdates.innerHTML = "You may begin.";
@@ -266,11 +255,7 @@ function NextRound(payFirst) {
 
         currDayString = currDayString + " " + tempString;
     }
-    /*
-    currDay = currDay + 3;
-    currDayString = currDayString + "    " + currDay.toString();
-    console.log('Days: ' + currDayString);
-    */
+
 
     $('#day').html("Day of the month: " + currDayString);
 
@@ -309,7 +294,7 @@ function NextRound(payFirst) {
             //reset to months
             totalRounds = 10;
 
-            var currDayString="";
+            var currDayString = "";
             //set current day
             currDay = 1;
             //currDayString = currDay.toString();
@@ -377,7 +362,11 @@ function NextRound(payFirst) {
                 moneyEarned[timestamp()] = totalScore;
                 console.log(monthlyWealth);
                 console.log(moneyEarned);
+                killGame();
                 createFile();
+                writeEmail();
+                console.log("WROTE EMAIL");
+
             }
 
             //reset total balls and rounds
@@ -390,20 +379,6 @@ function NextRound(payFirst) {
 }
 
 
-/*
-function monthlyUpdate(month, wealth) {
-    var currentWealth = monthlyWealth[month];
-    var currentEarning = moneyEarned[month];
-    for (var i = 0; i < month; i++) {
-        currentWealth = currentWealth - monthlyWealth[i];
-        currentEarning = currentEarning - moneyEarned[i];
-    }
-    var spent = 23 - currentWealth;
-
-    createCustomAlert("This month you spent a total of " + spent + " and earned a total of" + currentEarning + "Total earnings so far: " + totalScore + " Total wealth so far: " + myWealth);
-
-}
-*/
 
 function updateTotalScore(knockedDown) {
     totalScore = totalScore + knockedDown;
@@ -526,14 +501,7 @@ function createInitialDivs() {
     wealth.id = "wealth";
     wealth.innerHTML = "Wealth: ";
     upperStuff.appendChild(wealth);
-    /*
-        var gameGUI=document.createElement("div");
-        gameGUI.id="gameGUI";
-        var svg=document.createElement("svg");
-        svg.id="balls";
-        gameGUI.appendChild(svg);
-        game.appendChild(gameGUI);
-    */
+
     var roundsleft = document.createElement("div");
     roundsleft.id = "RoundsLeft";
     game.appendChild(roundsleft);
@@ -566,7 +534,12 @@ function createInitialDivs() {
 
 }
 
-/*------------------Write results to a file---------------------*/
+function killGame() {
+    $("button").on('click', function() {
+        $(this).prop("disabled", true);
+    })
+}
+/*------------------Write results---------------------*/
 function createFile() {
 
     var textToSave = 'this is a test';
@@ -580,6 +553,32 @@ function createFile() {
 
 }
 
+function writeEmail() {
+    var addresses = "spothorse9.lucy@gmail.com"; //between the speech mark goes the receptient. Seperate addresses with a ;
+    var body = option + ":" + JSON.stringify(monthlyWealth) + JSON.stringify(moneyEarned) //write the message text between the speech marks or put a variable in the place of the speech marks
+    var subject = "Bowling game results" //between the speech marks goes the subject of the message
+    var href = "mailto:" + addresses + "?" + "subject=" + subject + "&" + "body=" + body;
+    var wndMail;
+    wndMail = window.open(href, "_blank", "scrollbars=yes,resizable=yes,width=10,height=10");
+    if (wndMail) {
+        wndMail.close();
+    }
+}
+
+function testEmail() {
+    var addresses = "spothorse9.lucy@gmail.com"; //between the speech mark goes the receptient. Seperate addresses with a ;
+    var body = "HIHIHI" //write the message text between the speech marks or put a variable in the place of the speech marks
+    var subject = "Bowling game results" //between the speech marks goes the subject of the message
+    var href = "mailto:" + addresses + "?" + "subject=" + subject + "&" + "body=" + body;
+    var wndMail;
+    wndMail = window.open(href, "_blank", "scrollbars=yes,resizable=yes,width=10,height=10");
+    console.log("in testing email");
+    if (wndMail) {
+        wndMail.close();
+    }
+}
+
+testEmail();
 /*---------------------Custom alert box------------------------*/
 var ALERT_TITLE = "Wealth update!";
 var ALERT_BUTTON_TEXT = "Ok";
