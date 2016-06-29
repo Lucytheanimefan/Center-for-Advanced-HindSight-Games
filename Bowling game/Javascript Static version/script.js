@@ -12,8 +12,7 @@ var currDayString = currDay.toString();
 var monthlyWealth = {};
 var moneyEarned = {};
 var option = "";
-
-
+var name="No name";
 
 var margin = {
         top: 50,
@@ -23,6 +22,28 @@ var margin = {
     },
     width = 960 - margin.left - margin.right,
     height = 600 - margin.top - margin.bottom;
+
+/*------------get info from form-------------*/
+function searchKeyPress(e){
+    e=e||window.event;
+    if (e.keyCode==13){
+        document.getElementById('btnGo').click();
+        return false;
+    }
+    return true;
+}
+
+function submitData(){
+    name=document.getElementById("name").value;
+
+    document.getElementById("name").value="Successfully submitted";
+
+    console.log(name);
+
+}
+
+
+
 
 /*---------------------------------------FUNCTIONS--------------------------------------*/
 
@@ -362,10 +383,22 @@ function NextRound(payFirst) {
                 moneyEarned[timestamp()] = totalScore;
                 console.log(monthlyWealth);
                 console.log(moneyEarned);
+
+                var endWealth=JSON.stringify({"monthlyWealth":monthlyWealth});
+                var endEarned=JSON.stringify({"moneyEarned": totalScore});
+
+                //add everything to localStorage:
+                localStorage.setItem(1, [name,endWealth, endEarned]);
+
+                //print everything in localStorage
+                for (var i=0; i<localStorage.length; i++){
+                    console.log(localStorage.getItem(localStorage.key(i)));
+                }
+
                 killGame();
-                createFile();
-                writeEmail();
-                console.log("WROTE EMAIL");
+                //createFile();
+                //writeEmail();
+                //console.log("WROTE EMAIL");
 
             }
 
@@ -465,7 +498,7 @@ function NextMonthButton() {
     nextMonth.id = "nextMonth";
     nextMonth.className = "btn";
     nextMonth.innerHTML = "Next month";
-    $("#game").append(nextMonth);
+    $("#gameButtons").append(nextMonth);
 }
 
 function createInitialDivs() {
@@ -578,7 +611,7 @@ function testEmail() {
     }
 }
 
-testEmail();
+//testEmail();
 /*---------------------Custom alert box------------------------*/
 var ALERT_TITLE = "Wealth update!";
 var ALERT_BUTTON_TEXT = "Ok";
