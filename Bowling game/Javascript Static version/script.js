@@ -591,7 +591,7 @@ function createInitialDivs() {
 }
 
 function killGame() {
-    $("button").on('click', function() {
+    $(":button").on('click', function() {
         $(this).prop("disabled", true);
     })
 }
