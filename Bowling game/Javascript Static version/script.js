@@ -39,8 +39,9 @@ function timestamp() {
     var date = d.getDate();
     var month = months[d.getMonth()];
     var year = d.getFullYear();
+    var seconds = d.getSeconds();
 
-    var timestamp = day + " " + hr + ":" + min + ampm + " " + date + " " + month + " " + year;
+    var timestamp = day + " " + hr + ":" + min +":"+seconds + ampm + " " + date + " " + month + " " + year;
 
     return timestamp;
 }
@@ -157,7 +158,7 @@ function spendFirst() {
 
 function drawPins() { //currently just circles
     var gameGUI = document.getElementById("gameGUI");
-    if (document.getElementById("pins")==null) {
+    if (document.getElementById("pins") == null) {
         var pins = document.createElement("div");
         pins.id = "pins";
         gameGUI.appendChild(pins);
@@ -308,18 +309,21 @@ function NextRound(payFirst) {
             //reset to months
             totalRounds = 10;
 
+            var currDayString="";
             //set current day
             currDay = 1;
-            currDayString = currDay.toString();
+            //currDayString = currDay.toString();
             for (var j = 0; j < 10; j++) {
-                currDay = currDay + 3;
+                //currDay = currDay + 3;
                 if (j == 10 - totalRounds) {
                     var tempString = "<b style='color:blue;'>" + currDay.toString() + "</b>";
+                    //currDay = currDay + 3;
                 } else {
                     var tempString = currDay.toString();
+                    //currDay = currDay + 3;
                 }
-
                 currDayString = currDayString + " " + tempString;
+                currDay = currDay + 3;
             }
             $('#day').html("Day of the month: " + currDayString);
 
@@ -329,6 +333,8 @@ function NextRound(payFirst) {
             if (currentMonth == 1) {
                 monthlyWealth[timestamp()] = myWealth; //store the data
                 moneyEarned[timestamp()] = totalScore;
+                console.log(monthlyWealth);
+                console.log(moneyEarned);
                 //moneyEarned.push(totalScore);
                 //monthlyUpdate(currentMonth, myWealth); //NOT WORKING?
 
@@ -343,6 +349,8 @@ function NextRound(payFirst) {
             } else if (currentMonth == 2) {
                 monthlyWealth[timestamp()] = myWealth;
                 moneyEarned[timestamp()] = totalScore;
+                console.log(monthlyWealth);
+                console.log(moneyEarned);
 
                 current_month.innerHTML = "Month: September - October - <b>November</b> - December";
                 if (payFirst) {
@@ -353,6 +361,8 @@ function NextRound(payFirst) {
             } else if (currentMonth == 3) {
                 monthlyWealth[timestamp()] = myWealth;
                 moneyEarned[timestamp()] = totalScore;
+                console.log(monthlyWealth);
+                console.log(moneyEarned);
 
                 current_month.innerHTML = "Month: September - October - November - <b>December</b>";
                 if (payFirst) {
@@ -362,9 +372,11 @@ function NextRound(payFirst) {
                 };
             } else if (currentMonth > 4) {
                 //createCustomAlert("GAME OVER");
-                gamesUpdates.innerHTML = "<b>GAME OVER</b>";
+                gameUpdates.innerHTML = "<b>GAME OVER</b>";
                 monthlyWealth[timestamp()] = myWealth;
                 moneyEarned[timestamp()] = totalScore;
+                console.log(monthlyWealth);
+                console.log(moneyEarned);
                 createFile();
             }
 
@@ -449,7 +461,7 @@ function updateGUI(pinsLeft) {
             pinsRow2.appendChild(bowlingPinGrey);
         }
 
-        for (var j = 0; j < 5-pinsLeft; j++) {
+        for (var j = 0; j < 5 - pinsLeft; j++) {
             var bowlingPinGrey = document.createElement("img");
             bowlingPinGrey.src = "bowling_pin_transparent.png";
             bowlingPinGrey.style = "width:25px;height:60px";
@@ -556,11 +568,12 @@ function createInitialDivs() {
 
 /*------------------Write results to a file---------------------*/
 function createFile() {
+
     var textToSave = 'this is a test';
 
     var hiddenElement = document.createElement('a');
 
-    hiddenElement.href = 'data:attachment/text,' + encodeURI(option + ": \n") + encodeURI("Monthly wealth: " + monthlyWealth) + "\n" + encodeURI("Money earned: " + moneyEarned);
+    hiddenElement.href = 'data:attachment/text,' + encodeURI(option + ": \n") + encodeURI("Monthly wealth: " + JSON.stringify(monthlyWealth)) + "\n" + encodeURI("Money earned: " + JSON.stringify(moneyEarned));
     hiddenElement.target = '_blank';
     hiddenElement.download = 'bowlingInfo2.txt';
     hiddenElement.click();
