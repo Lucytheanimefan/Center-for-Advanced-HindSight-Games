@@ -157,54 +157,41 @@ function spendFirst() {
 
 function drawPins() { //currently just circles
     var gameGUI = document.getElementById("gameGUI");
-    if ($("#pins").length == 0) {
+    if (document.getElementById("pins")==null) {
         var pins = document.createElement("div");
         pins.id = "pins";
         gameGUI.appendChild(pins);
+        var pinsRow1 = document.createElement("div");
+        pinsRow1.id = "pinsRow1";
+        var pinsRow2 = document.createElement("div");
+        pinsRow2.id = "pinsRow2";
+        pins.appendChild(pinsRow1);
+        pins.appendChild(pinsRow2);
     } else {
-        var pins = document.getElementById("pins");
+        var pinsRow1 = document.getElementById("pinsRow1");
+        var pinsRow2 = document.getElementById("pinsRow2");
     }
 
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < 5; i++) {
         var bowlingPin = document.createElement("img");
         bowlingPin.src = "bowling_pin_solid.png";
         bowlingPin.style = "width:25px;height:60px";
         bowlingPin.id = "bowlingPin_" + i.toString();
         bowlingPin.className = "bowlingPins";
 
-        pins.appendChild(bowlingPin);
+        pinsRow1.appendChild(bowlingPin);
     }
 
-    /*
-        var svgContainer = d3.select("#balls").append("svg")
-            .attr("id", "all_balls")
-            .attr("width", 600)
-            .attr("height", 100);
+    for (var j = 0; j < 5; j++) {
+        var bowlingPin = document.createElement("img");
+        bowlingPin.src = "bowling_pin_solid.png";
+        bowlingPin.style = "width:25px;height:60px";
+        bowlingPin.id = "bowlingPin_" + i.toString();
+        bowlingPin.className = "bowlingPins";
 
-        var circles = svgContainer.selectAll("circle")
-            .data(dataset)
-            .enter()
-            .append("circle")
+        pinsRow2.appendChild(bowlingPin);
+    }
 
-        var circleAttributes = circles
-            .attr("cx", function(d) {
-                if (d < 5) {
-                    return d * 30 + margin.left;
-                } else {
-                    return (d - 5) * 30 + margin.left;
-                }
-
-            })
-            .attr("cy", function(d) {
-                if (d < 5) {
-                    return 50;
-                } else {
-                    return 80;
-                }
-            })
-            .attr("r", 10)
-            .style("fill", ballcolor);
-    */
 }
 
 
@@ -259,7 +246,7 @@ function NextRound(payFirst) {
         circlePositions.push(i);
     }
 
-    $("#pins").empty();
+    document.getElementById("pins").remove();
     drawPins();
     var roundsLeft = document.getElementById("RoundsLeft");
     roundsLeft.innerHTML = "Rounds Left: " + totalRounds.toString();
@@ -275,7 +262,7 @@ function NextRound(payFirst) {
             currDay = currDay + 3;
             var tempString = currDay.toString();
         }
-        
+
         currDayString = currDayString + " " + tempString;
     }
     /*
@@ -413,37 +400,73 @@ function updateTotalScore(knockedDown) {
 }
 
 function updateGUI(pinsLeft) {
-    /*
-    circlePositions = [];
-    for (var i = 0; i < 10 - pinsLeft; i++) {
-        circlePositions.push(i);
-    }
 
-
-    drawPins(circlePositions, 'grey');
-*/
     var gameGUI = document.getElementById("gameGUI");
-    $("#pins").empty();
-    var pins = document.getElementById("pins")
+    $("#pinsRow1").empty();
+    $("#pinsRow2").empty();
+    var pinsRow1 = document.getElementById("pinsRow1");
+    var pinsRow2 = document.getElementById("pinsRow2");
 
-    for (var i = 0; i < 10 - pinsLeft; i++) {
-        var bowlingPinGrey = document.createElement("img");
-        bowlingPinGrey.src = "bowling_pin_transparent.png";
-        bowlingPinGrey.style = "width:25px;height:60px";
-        bowlingPinGrey.id = "bowlingPinGrey_" + i.toString();
-        bowlingPinGrey.className = "bowlingPins";
+    if (pinsLeft >= 5) {
+        var knockedOver = 10 - pinsLeft;
+        //normal not knocked down pins
+        for (var j = 0; j < 5; j++) {
+            var bowlingPin = document.createElement("img");
+            bowlingPin.src = "bowling_pin_solid.png";
+            bowlingPin.style = "width:25px;height:60px";
+            bowlingPin.id = "bowlingPin_" + j.toString();
+            bowlingPin.className = "bowlingPins";
+            pinsRow1.appendChild(bowlingPin);
+        }
 
-        pins.appendChild(bowlingPinGrey);
-    }
+        for (var k = 0; k < pinsLeft - 5; k++) {
+            var bowlingPin = document.createElement("img");
+            bowlingPin.src = "bowling_pin_solid.png";
+            bowlingPin.style = "width:25px;height:60px";
+            bowlingPin.id = "bowlingPin_" + j.toString();
+            bowlingPin.className = "bowlingPins";
+            pinsRow2.appendChild(bowlingPin);
+        }
 
-    for (var j = 0; j < pinsLeft; j++) {
-        var bowlingPin = document.createElement("img");
-        bowlingPin.src = "bowling_pin_solid.png";
-        bowlingPin.style = "width:25px;height:60px";
-        bowlingPin.id = "bowlingPin_" + j.toString();
-        bowlingPin.className = "bowlingPins";
+        //knocked down pins
+        for (var i = 0; i < knockedOver; i++) {
+            var bowlingPinGrey = document.createElement("img");
+            bowlingPinGrey.src = "bowling_pin_transparent.png";
+            bowlingPinGrey.style = "width:25px;height:60px";
+            bowlingPinGrey.id = "bowlingPinGrey_" + i.toString();
+            bowlingPinGrey.className = "bowlingPins";
 
-        pins.appendChild(bowlingPin);
+            pinsRow2.appendChild(bowlingPinGrey);
+        }
+
+    } else { //if number of pinsleft is less than 5
+        for (var i = 0; i < 5; i++) {
+            var bowlingPinGrey = document.createElement("img");
+            bowlingPinGrey.src = "bowling_pin_transparent.png";
+            bowlingPinGrey.style = "width:25px;height:60px";
+            bowlingPinGrey.id = "bowlingPinGrey_" + i.toString();
+            bowlingPinGrey.className = "bowlingPins";
+            pinsRow2.appendChild(bowlingPinGrey);
+        }
+
+        for (var j = 0; j < 5-pinsLeft; j++) {
+            var bowlingPinGrey = document.createElement("img");
+            bowlingPinGrey.src = "bowling_pin_transparent.png";
+            bowlingPinGrey.style = "width:25px;height:60px";
+            bowlingPinGrey.id = "bowlingPinGrey_" + i.toString();
+            bowlingPinGrey.className = "bowlingPins";
+            pinsRow1.appendChild(bowlingPinGrey);
+        }
+
+        for (var k = 0; k < pinsLeft; k++) {
+            var bowlingPin = document.createElement("img");
+            bowlingPin.src = "bowling_pin_solid.png";
+            bowlingPin.style = "width:25px;height:60px";
+            bowlingPin.id = "bowlingPin_" + j.toString();
+            bowlingPin.className = "bowlingPins";
+
+            pinsRow1.appendChild(bowlingPin);
+        }
     }
 }
 
