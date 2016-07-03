@@ -111,8 +111,12 @@ a {
     font-family: Arial;
     font-size: 25px;
     color: #fff;
-    background-color: #b8b8b8;
+    /*background-color: #b8b8b8; */
     text-shadow: #7a7a7a 4px 3px 0;
+}
+
+#day{
+    margin-bottom: 2%;
 }
 
 #wealth,
@@ -129,7 +133,9 @@ a {
     font-size: 20px;
 }
 
-#TotalScore {}
+#TotalScore {
+    border-top: 5px solid blue;
+}
 
 #updateArea {
     height: 100%;
@@ -153,6 +159,8 @@ a {
 }
 
 #gameUpdates {
+    text-align: center;
+    margin-top: 1%;
     margin-bottom: 2.5%;
     font-weight: normal;
     color: #000000;

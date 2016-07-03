@@ -365,7 +365,7 @@ function NextRound(payFirst) {
                 //moneyEarned.push(totalScore);
                 //monthlyUpdate(currentMonth, myWealth); //NOT WORKING?
 
-                current_month.innerHTML = "Month: September - <b>October</b> - November - December";
+                current_month.innerHTML = "Month: September - <b style='color:blue;>October</b> - November - December";
                 if (payFirst) {
                     console.log("pay first!");
                     firstPayments();
@@ -379,7 +379,7 @@ function NextRound(payFirst) {
                 console.log(monthlyWealth);
                 console.log(moneyEarned);
 
-                current_month.innerHTML = "Month: September - October - <b>November</b> - December";
+                current_month.innerHTML = "Month: September - October - <b style='color:blue;>November</b> - December";
                 if (payFirst) {
                     firstPayments();
                 } else {
@@ -391,7 +391,7 @@ function NextRound(payFirst) {
                 console.log(monthlyWealth);
                 console.log(moneyEarned);
 
-                current_month.innerHTML = "Month: September - October - November - <b>December</b>";
+                current_month.innerHTML = "Month: September - October - November - <b style='color:blue;>December</b>";
                 if (payFirst) {
                     firstPayments();
                 } else {
@@ -532,48 +532,46 @@ function createInitialDivs() {
     updateArea.id = "updateArea";
     upperStuff.appendChild(updateArea);
 
+    /*
     var updateTitle = document.createElement("div");
     updateTitle.id = "updateTitle";
     updateArea.appendChild(updateTitle);
     updateTitle.innerHTML = "Game Updates";
-
-    var gameUpdates = document.createElement("div");
-    gameUpdates.id = "gameUpdates";
-    updateArea.appendChild(gameUpdates);
-
-
-
+    */
     var month = document.createElement("div");
     month.id = "month";
-    month.innerHTML = "Month: <b>September</b> - October - November - December"
-    upperStuff.appendChild(month);
+    month.innerHTML = "Month: <b style='color:blue;'>September</b> - October - November - December"
+    updateArea.appendChild(month);
 
     var day = document.createElement("div");
     day.id = "day";
     day.innerHTML = "Day of the month: " + currDayString;
-    upperStuff.appendChild(day);
+    updateArea.appendChild(day);
 
     wealth = document.createElement("div");
     wealth.id = "wealth";
     wealth.innerHTML = "Wealth: ";
-    upperStuff.appendChild(wealth);
+    updateArea.appendChild(wealth);
+
+    var middleStuff = document.createElement("div");
+    middleStuff.id="middleStuff"
+    game.appendChild(middleStuff);
+
+    var gameUpdates = document.createElement("div");
+    gameUpdates.id = "gameUpdates";
+    middleStuff.appendChild(gameUpdates);
 
     var roundsleft = document.createElement("div");
     roundsleft.id = "RoundsLeft";
-    game.appendChild(roundsleft);
+    middleStuff.appendChild(roundsleft);
 
     var ballsleft = document.createElement("div");
     ballsleft.id = "BallsLeft";
-    game.appendChild(ballsleft);
-
-    var totalScore = document.createElement("div");
-    totalScore.id = "TotalScore";
-    totalScore.innerHTML = "Money earned: ";
-    game.appendChild(totalScore);
+    middleStuff.appendChild(ballsleft);
 
     var gameButtons = document.createElement("div")
     gameButtons.id = "gameButtons";
-    game.appendChild(gameButtons)
+    middleStuff.appendChild(gameButtons)
 
     var rollBall = document.createElement("button");
     rollBall.id = "rollBall";
@@ -586,6 +584,11 @@ function createInitialDivs() {
     nextRound.className = "btn";
     nextRound.innerHTML = "Next round";
     gameButtons.appendChild(nextRound);
+
+    var totalScore = document.createElement("div");
+    totalScore.id = "TotalScore";
+    totalScore.innerHTML = "Money earned: ";
+    game.appendChild(totalScore);
 
 
 }
