@@ -57,10 +57,10 @@ function getData() {
 }
 
 function returnData() {
-    var toRet="";
+    var toRet = "";
     //print everything in localStorage
     for (var i = 0; i < localStorage.length; i++) {
-        toRet=toRet + localStorage.getItem(localStorage.key(i))
+        toRet = toRet + localStorage.getItem(localStorage.key(i))
     }
     console.log("returned data (toRet):");
     console.log(toRet);
@@ -115,7 +115,16 @@ function popitup(url) {
 
 drawPins();
 
+function showButtons() {
+    $('#rollBall').show();
+    $('#nextRound').show();
+    $('#continueAfterBills').hide();
+}
+
 function firstPayments() {
+    var continueAfterBills = document.getElementById('continueAfterBills');
+    continueAfterBills.setAttribute('onclick', 'showButtons()');
+
     var gameUpdates = document.getElementById("gameUpdates");
     gameUpdates.innerHTML = "You <span style='color:green;'>receive</span> 23 Francs in income this month";
 
@@ -132,11 +141,18 @@ function firstPayments() {
 
         setTimeout(function() {
             gameUpdates.innerHTML = "You may begin.";
+
+            $('#continueAfterBills').show();
+
         }, 1500);
+
+
+        //$('#nextRound').hide();
 
     });
 
 }
+
 
 function spendFirstIncome() {
     var gameUpdates = document.getElementById("gameUpdates");
@@ -146,6 +162,12 @@ function spendFirstIncome() {
     myWealth = myWealth + 23;
     wealth.innerHTML = "Wealth: " + myWealth + " Francs";
     fontFlash(wealth, "green", "bold");
+
+    setTimeout(function() {
+        $('#rollBall').show();
+        $('#nextRound').show();
+    }, 1500);
+
 }
 
 function payFirst() {
@@ -228,6 +250,10 @@ function drawPins() { //currently just circles
 
 
 function RollBall() {
+    //hide and disable the button
+    $('#rollBall').hide();
+    $('#nextRound').hide();
+
     var gameUpdates = document.getElementById("gameUpdates");
     if (myWealth <= -15) {
         //createCustomAlert("DEBT CAN'T BE MORE THAN 15 FRANCS. Please proceed to next round");
@@ -237,6 +263,8 @@ function RollBall() {
         return;
 
     }
+
+
     //update balls left
     myWealth = myWealth - 1;
     //console.log(totalBalls);
@@ -265,9 +293,19 @@ function generatePinsKnockedDown(pinsLeft) {
         //createCustomAlert("You've knocked down all the pins, please proceed to the next round");
         gameUpdates.innerHTML = "You've knocked down all the pins, please proceed to the next round";
     }
+
+    //show/renable buttons
+    setTimeout(function() {
+        $('#rollBall').show();
+        $('#nextRound').show();
+    }, 1500);
+
 }
 
 function NextRound(payFirst) {
+    $('#rollBall').hide();
+    $('#nextRound').hide();
+
     var gameUpdates = document.getElementById("gameUpdates");
     totalRounds = totalRounds - 1;
     totalPins = 10; //reset total number of pins
@@ -280,8 +318,8 @@ function NextRound(payFirst) {
 
     document.getElementById("pins").remove();
     drawPins();
-    var roundsLeft = document.getElementById("RoundsLeft");
-    roundsLeft.innerHTML = "Rounds Left: " + totalRounds.toString();
+    //var roundsLeft = document.getElementById("RoundsLeft");
+    //roundsLeft.innerHTML = "Rounds Left: " + totalRounds.toString();
 
     //set current day
     currDay = 1;
@@ -301,16 +339,21 @@ function NextRound(payFirst) {
 
     $('#day').html("Day of the month: " + currDayString);
 
+    if (totalRounds != 0) {
+        setTimeout(function() {
+            $('#rollBall').show();
+            $('#nextRound').show();
+        }, 1500);
+    }
+
     //out of rounds for the month
     if (payFirst && totalRounds == 0) {
         //createCustomAlert("You have reached 10 games. The month is now over");
         gameUpdates.innerHTML = "You have reached 10 games. The month is now over";
         console.log("MONTHLY UPDATE")
         console.log(myWealth);
-        //monthlyUpdate(currentMonth, myWealth);
 
         currentMonth = currentMonth + 1;
-        //NextMonthButton();
 
     } else if (!payFirst && totalRounds == 0) { //spend first option
         console.log("Spend first");
@@ -331,6 +374,7 @@ function NextRound(payFirst) {
     }
 
     if (totalRounds == 0) {
+
         NextMonthButton();
         $("#nextMonth").click(function() {
             //reset to months
@@ -357,6 +401,7 @@ function NextRound(payFirst) {
 
             var current_month = document.getElementById("month");
 
+            console.log(currentMonth);
             if (currentMonth == 1) {
                 monthlyWealth[timestamp()] = myWealth; //store the data
                 moneyEarned[timestamp()] = totalScore;
@@ -365,21 +410,22 @@ function NextRound(payFirst) {
                 //moneyEarned.push(totalScore);
                 //monthlyUpdate(currentMonth, myWealth); //NOT WORKING?
 
-                current_month.innerHTML = "Month: September - <b style='color:blue;>October</b> - November - December";
+                current_month.innerHTML = "Month: September - <b style='color:blue;'>October</b> - November - December";
+                console.log("Month string: "+current_month.innerHTML);
                 if (payFirst) {
                     console.log("pay first!");
                     firstPayments();
                 } else {
                     console.log("spend first");
                     spendFirstIncome();
-                };
+                }
             } else if (currentMonth == 2) {
                 monthlyWealth[timestamp()] = myWealth;
                 moneyEarned[timestamp()] = totalScore;
                 console.log(monthlyWealth);
                 console.log(moneyEarned);
 
-                current_month.innerHTML = "Month: September - October - <b style='color:blue;>November</b> - December";
+                current_month.innerHTML = "Month: September - October - <b style='color:blue;'>November</b> - December";
                 if (payFirst) {
                     firstPayments();
                 } else {
@@ -391,7 +437,7 @@ function NextRound(payFirst) {
                 console.log(monthlyWealth);
                 console.log(moneyEarned);
 
-                current_month.innerHTML = "Month: September - October - November - <b style='color:blue;>December</b>";
+                current_month.innerHTML = "Month: September - October - November - <b style='color:blue;'>December</b>";
                 if (payFirst) {
                     firstPayments();
                 } else {
@@ -532,12 +578,6 @@ function createInitialDivs() {
     updateArea.id = "updateArea";
     upperStuff.appendChild(updateArea);
 
-    /*
-    var updateTitle = document.createElement("div");
-    updateTitle.id = "updateTitle";
-    updateArea.appendChild(updateTitle);
-    updateTitle.innerHTML = "Game Updates";
-    */
     var month = document.createElement("div");
     month.id = "month";
     month.innerHTML = "Month: <b style='color:blue;'>September</b> - October - November - December"
@@ -554,7 +594,7 @@ function createInitialDivs() {
     updateArea.appendChild(wealth);
 
     var middleStuff = document.createElement("div");
-    middleStuff.id="middleStuff"
+    middleStuff.id = "middleStuff"
     game.appendChild(middleStuff);
 
     var gameUpdates = document.createElement("div");
@@ -576,7 +616,7 @@ function createInitialDivs() {
     var rollBall = document.createElement("button");
     rollBall.id = "rollBall";
     rollBall.className = "btn";
-    rollBall.innerHTML = 'Roll ball'
+    rollBall.innerHTML = 'Throw ball'
     gameButtons.appendChild(rollBall);
 
     var nextRound = document.createElement("button");
@@ -585,11 +625,20 @@ function createInitialDivs() {
     nextRound.innerHTML = "Next round";
     gameButtons.appendChild(nextRound);
 
+    var continueAfterBills = document.createElement("button");
+    continueAfterBills.id = "continueAfterBills";
+    continueAfterBills.className = "btn";
+    continueAfterBills.innerHTML = "continue";
+    gameButtons.appendChild(continueAfterBills);
+
     var totalScore = document.createElement("div");
     totalScore.id = "TotalScore";
     totalScore.innerHTML = "Money earned: ";
     game.appendChild(totalScore);
 
+    $('#rollBall').hide();
+    $('#nextRound').hide();
+    $('#continueAfterBills').hide();
 
 }
 
