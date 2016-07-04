@@ -5,7 +5,7 @@ var totalPins = 10; //changes
 var totalScore = 0;
 var currentMonth = 0;
 var myWealth = 0;
-var currDay = "<b style='color:blue;'>1</b> 4 7 10 13 16 19 22 25 28 31";
+var currDay = "<b style='color:blue;'>1</b>...4...7...10...13...16...19...22...25...28";
 var currDayString = currDay.toString();
 
 //storage variables for data keeping purposes
@@ -89,6 +89,11 @@ function timestamp() {
     return timestamp;
 }
 
+//format money
+function format2(n, currency) {
+    return currency + " " + n.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+}
+
 function fontFlash(targetText, color, fontWeight, callback) {
     targetText.style.color = color;
     targetText.style.fontWeight = fontWeight;
@@ -100,7 +105,7 @@ function fontFlash(targetText, color, fontWeight, callback) {
         if (callback) {
             callback();
         }
-    }, 1500);
+    }, 1000);
 
 }
 
@@ -113,9 +118,9 @@ function popitup(url) {
 }
 
 
-drawPins();
-
 function showButtons() {
+    $("#pins").remove();
+    drawPins();
     $('#rollBall').show();
     $('#nextRound').show();
     $('#continueAfterBills').hide();
@@ -144,7 +149,7 @@ function firstPayments() {
 
             $('#continueAfterBills').show();
 
-        }, 1500);
+        }, 1000);
 
 
         //$('#nextRound').hide();
@@ -155,6 +160,8 @@ function firstPayments() {
 
 
 function spendFirstIncome() {
+    var continueAfterBills = document.getElementById('continueAfterBills');
+    continueAfterBills.setAttribute('onclick', 'showButtons()');
     var gameUpdates = document.getElementById("gameUpdates");
     gameUpdates.innerHTML = "You receive 23 Francs in income this month";
 
@@ -164,9 +171,8 @@ function spendFirstIncome() {
     fontFlash(wealth, "green", "bold");
 
     setTimeout(function() {
-        $('#rollBall').show();
-        $('#nextRound').show();
-    }, 1500);
+        $('#continueAfterBills').show();
+    }, 1000);
 
 }
 
@@ -267,10 +273,9 @@ function RollBall() {
 
     //update balls left
     myWealth = myWealth - 1;
-    //console.log(totalBalls);
-    //var ballsLeft = document.getElementById("BallsLeft");
-    wealth.innerHTML = "Wealth: " + myWealth.toString() + " Francs";
 
+    wealth.innerHTML = "Wealth: " + myWealth.toString() + " Francs";
+    fontFlash(wealth, 'red', 'bold');
     generatePinsKnockedDown(totalPins);
 
 }
@@ -298,7 +303,8 @@ function generatePinsKnockedDown(pinsLeft) {
     setTimeout(function() {
         $('#rollBall').show();
         $('#nextRound').show();
-    }, 1500);
+        $('#gameUpdates').html("");
+    }, 1000);
 
 }
 
@@ -333,9 +339,8 @@ function NextRound(payFirst) {
             var tempString = currDay.toString();
         }
 
-        currDayString = currDayString + " " + tempString;
+        currDayString = currDayString + "..." + tempString;
     }
-
 
     $('#day').html("Day of the month: " + currDayString);
 
@@ -343,34 +348,35 @@ function NextRound(payFirst) {
         setTimeout(function() {
             $('#rollBall').show();
             $('#nextRound').show();
-        }, 1500);
-    }
-
-    //out of rounds for the month
-    if (payFirst && totalRounds == 0) {
-        //createCustomAlert("You have reached 10 games. The month is now over");
-        gameUpdates.innerHTML = "You have reached 10 games. The month is now over";
-        console.log("MONTHLY UPDATE")
-        console.log(myWealth);
-
-        currentMonth = currentMonth + 1;
-
-    } else if (!payFirst && totalRounds == 0) { //spend first option
-        console.log("Spend first");
-        //createCustomAlert('You pay 8 Francs for your bowling membership bill');
-        gameUpdates.innerHTML = 'You pay 8 Francs for your bowling membership bill';
-        myWealth = myWealth - 8;
-        wealth.innerHTML = "Wealth: " + myWealth + " Francs";
-        fontFlash(wealth, "red", "bold", function() {
+        }, 1000);
+    } else {
+        $('#pins').hide();
+        //out of rounds for the month
+        if (payFirst) {
             //createCustomAlert("You have reached 10 games. The month is now over");
-            gamesUpdates.innerHTML = "You have reached 10 games. The month is now over";
+            gameUpdates.innerHTML = "You have reached 10 games. The month is now over";
             console.log("MONTHLY UPDATE")
             console.log(myWealth);
-            //monthlyUpdate(currentMonth, myWealth);
 
             currentMonth = currentMonth + 1;
-            //NextMonthButton();
-        });
+
+        } else if (!payFirst) { //spend first option
+            console.log("Spend first");
+            //createCustomAlert('You pay 8 Francs for your bowling membership bill');
+            gameUpdates.innerHTML = 'You pay 8 Francs for your bowling membership bill';
+            myWealth = myWealth - 8;
+            wealth.innerHTML = "Wealth: " + myWealth + " Francs";
+            fontFlash(wealth, "red", "bold", function() {
+                //createCustomAlert("You have reached 10 games. The month is now over");
+                gamesUpdates.innerHTML = "You have reached 10 games. The month is now over";
+                console.log("MONTHLY UPDATE")
+                console.log(myWealth);
+                //monthlyUpdate(currentMonth, myWealth);
+
+                currentMonth = currentMonth + 1;
+
+            });
+        }
     }
 
     if (totalRounds == 0) {
@@ -411,7 +417,7 @@ function NextRound(payFirst) {
                 //monthlyUpdate(currentMonth, myWealth); //NOT WORKING?
 
                 current_month.innerHTML = "Month: September - <b style='color:blue;'>October</b> - November - December";
-                console.log("Month string: "+current_month.innerHTML);
+                console.log("Month string: " + current_month.innerHTML);
                 if (payFirst) {
                     console.log("pay first!");
                     firstPayments();
@@ -475,6 +481,12 @@ function NextRound(payFirst) {
             totalBalls = 15;
 
             $("#nextMonth").remove();
+
+            setTimeout(function() {
+                $('#pins').show();
+            }, 1700);
+
+
         });
 
     }
@@ -485,7 +497,7 @@ function NextRound(payFirst) {
 function updateTotalScore(knockedDown) {
     totalScore = totalScore + knockedDown;
     var score = document.getElementById("TotalScore");
-    score.innerHTML = "Money earned: " + totalScore.toString() + '&#162';
+    score.innerHTML = "Money earned: " + format2(totalScore/100.0, "$");
 }
 
 function updateGUI(pinsLeft) {
@@ -505,7 +517,7 @@ function updateGUI(pinsLeft) {
             bowlingPin.style = "width:25px;height:60px";
             bowlingPin.id = "bowlingPin_" + j.toString();
             bowlingPin.className = "bowlingPins";
-            pinsRow1.appendChild(bowlingPin);
+            pinsRow2.appendChild(bowlingPin);
         }
 
         for (var k = 0; k < pinsLeft - 5; k++) {
@@ -514,7 +526,7 @@ function updateGUI(pinsLeft) {
             bowlingPin.style = "width:25px;height:60px";
             bowlingPin.id = "bowlingPin_" + j.toString();
             bowlingPin.className = "bowlingPins";
-            pinsRow2.appendChild(bowlingPin);
+            pinsRow1.appendChild(bowlingPin);
         }
 
         //knocked down pins
@@ -525,7 +537,7 @@ function updateGUI(pinsLeft) {
             bowlingPinGrey.id = "bowlingPinGrey_" + i.toString();
             bowlingPinGrey.className = "bowlingPins";
 
-            pinsRow2.appendChild(bowlingPinGrey);
+            pinsRow1.appendChild(bowlingPinGrey);
         }
 
     } else { //if number of pinsleft is less than 5
@@ -535,16 +547,16 @@ function updateGUI(pinsLeft) {
             bowlingPinGrey.style = "width:25px;height:60px";
             bowlingPinGrey.id = "bowlingPinGrey_" + i.toString();
             bowlingPinGrey.className = "bowlingPins";
-            pinsRow2.appendChild(bowlingPinGrey);
+            pinsRow1.appendChild(bowlingPinGrey);
         }
 
-        for (var j = 0; j < 5 - pinsLeft; j++) {
+        for (var j = 5 - pinsLeft; j > 0; j--) {
             var bowlingPinGrey = document.createElement("img");
             bowlingPinGrey.src = "bowling_pin_transparent.png";
             bowlingPinGrey.style = "width:25px;height:60px";
             bowlingPinGrey.id = "bowlingPinGrey_" + i.toString();
             bowlingPinGrey.className = "bowlingPins";
-            pinsRow1.appendChild(bowlingPinGrey);
+            pinsRow2.appendChild(bowlingPinGrey);
         }
 
         for (var k = 0; k < pinsLeft; k++) {
@@ -554,7 +566,7 @@ function updateGUI(pinsLeft) {
             bowlingPin.id = "bowlingPin_" + j.toString();
             bowlingPin.className = "bowlingPins";
 
-            pinsRow1.appendChild(bowlingPin);
+            pinsRow2.appendChild(bowlingPin);
         }
     }
 }
@@ -622,13 +634,13 @@ function createInitialDivs() {
     var nextRound = document.createElement("button");
     nextRound.id = "nextRound";
     nextRound.className = "btn";
-    nextRound.innerHTML = "Next round";
+    nextRound.innerHTML = "Play another day";
     gameButtons.appendChild(nextRound);
 
     var continueAfterBills = document.createElement("button");
     continueAfterBills.id = "continueAfterBills";
     continueAfterBills.className = "btn";
-    continueAfterBills.innerHTML = "continue";
+    continueAfterBills.innerHTML = "Continue";
     gameButtons.appendChild(continueAfterBills);
 
     var totalScore = document.createElement("div");

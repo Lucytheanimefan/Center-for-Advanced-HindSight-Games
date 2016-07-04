@@ -25,6 +25,10 @@
     margin: auto;
 }
 
+#gameGUI, #middleStuff{
+    height: 20%;
+}
+
 
 /* Buttons */
 
