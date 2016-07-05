@@ -498,6 +498,7 @@ function updateTotalScore(knockedDown) {
     totalScore = totalScore + knockedDown;
     var score = document.getElementById("TotalScore");
     score.innerHTML = "Money earned: " + format2(totalScore/100.0, "$");
+    fontFlash(score, 'green', 'bold');
 }
 
 function updateGUI(pinsLeft) {
