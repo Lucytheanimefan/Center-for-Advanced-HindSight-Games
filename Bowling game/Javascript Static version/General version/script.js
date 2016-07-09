@@ -13,6 +13,8 @@ var monthlyWealth = {};
 var moneyEarned = {};
 var option = "";
 var name = "No name";
+//var pinStack=[];
+
 
 var margin = {
         top: 50,
@@ -246,7 +248,7 @@ function drawPins() { //currently just circles
         var bowlingPin = document.createElement("img");
         bowlingPin.src = "bowling_pin_solid.png";
         bowlingPin.style = "width:25px;height:60px";
-        bowlingPin.id = "bowlingPin_" + i.toString();
+        bowlingPin.id = "bowlingPin_" + (j + 5).toString();
         bowlingPin.className = "bowlingPins";
 
         pinsRow2.appendChild(bowlingPin);
@@ -273,40 +275,120 @@ function RollBall() {
 
     //update balls left
     myWealth = myWealth - 1;
-    fontFlash(wealth, 'darkblue', 'bold', function(){
+    fontFlash(wealth, 'darkblue', 'bold', function() {
         wealth.innerHTML = "Wealth: " + myWealth.toString() + " Francs";
         fontFlash(wealth, 'red', 'bold');
     });
-    
+
     generatePinsKnockedDown(totalPins);
 
 }
 
+function createList(start, end, start1, end1, callback) {
+    console.log("Start: " + start.toString());
+    console.log("End: " + end.toString());
+
+    console.log("Start1: " + start1.toString());
+    console.log("End1: " + end1.toString());
+    var ints = [];
+    for (var i = start; i < end; i++) {
+        console.log(i);
+        ints.push(i);
+    }
+
+    if (start1 != 0 && end1 !== 0) {
+        for (var j = start1; j < end1; j++) {
+            console.log(j);
+            ints.push(j);
+        }
+    }
+    console.log(ints);
+    callback(ints);
+}
+
+function blink(start, end, start1 = 0, end1 = 0, callback = function() {}) {
+    createList(start, end, start1, end1, function(ints) {
+        console.log(ints);
+        var c = 0;
+        var interval = setInterval(function() {
+            if (c >= ints.length - 1) {
+                console.log("Cleared interval");
+                clearInterval(interval);
+                console.log("Doing callback");
+                callback();
+            }
+            console.log("IN INTERVAL");
+            var pin = document.getElementById("bowlingPin_" + ints[c].toString());
+            console.log(pin.id);
+            //if (pin.style.visibility == 'hidden') {
+            pin.style.visibility = 'hidden';
+            //} else {
+            setTimeout(function() {
+                pin.style.visibility = 'visible';
+            }, 250);
+            //}
+            c++;
+        }, 500);
+    })
+}
+
+
+function flashPins(pinsLeft, callback) {
+    console.log("flashing pins");
+    //drawPins();
+    if (pinsLeft > 5 && pinsLeft != 10) {
+        blink(0, 5 - pinsLeft, 5, 10, function() {
+            callback();
+        });
+    } else if (pinsLeft < 5) {
+        console.log("Pins left less than 5");
+        blink(pinsLeft + 4, 10, 0, 0, function() {
+            callback();
+        });
+    } else if (pinsLeft == 5) {
+        blink(5, 10, 0, 0, function() {
+            callback();
+        });
+    } else if (pinsLeft == 10) {
+        blink(0, 10, 0, 0, function() {
+            console.log("IN CALLBACK IN FLASHPINS");
+            callback();
+        });
+    }
+
+    console.log("finished blinking, but this shouldn't print so soon");
+    //callback();
+}
+
 function generatePinsKnockedDown(pinsLeft) {
     var gameUpdates = document.getElementById("gameUpdates");
-    //generate random number of pins knocked down
-    var knockedDown = Math.floor((Math.random() * (pinsLeft + 1)));
-    //console.log("Knocked down: " + knockedDown);
-    if (totalPins >= knockedDown) { //can't knock down more pins than are still standing
-        totalPins = totalPins - knockedDown; //update total Pins count
-        //console.log("Pins left: " + totalPins);
 
-        updateTotalScore(knockedDown);
-        updateGUI(totalPins);
-    } else { //do it again
-        console.log("You did something wrong in your code");
-    }
-    if (totalPins == 0) {
-        //createCustomAlert("You've knocked down all the pins, please proceed to the next round");
-        gameUpdates.innerHTML = "You've knocked down all the pins, please proceed to the next round";
-    }
+    flashPins(pinsLeft, function() {
+        console.log("IN CALLBACK");
+        //generate random number of pins knocked down
+        var knockedDown = Math.floor((Math.random() * (pinsLeft + 1)));
+        //console.log("Knocked down: " + knockedDown);
+        if (totalPins >= knockedDown) { //can't knock down more pins than are still standing
+            totalPins = totalPins - knockedDown; //update total Pins count
+            //console.log("Pins left: " + totalPins);
 
-    //show/renable buttons
-    setTimeout(function() {
-        $('#rollBall').show();
-        $('#nextRound').show();
-        $('#gameUpdates').html("");
-    }, 1000);
+            updateTotalScore(knockedDown);
+            updateGUI(totalPins);
+        } else { //do it again
+            console.log("You did something wrong in your code");
+        }
+        if (totalPins == 0) {
+            //createCustomAlert("You've knocked down all the pins, please proceed to the next round");
+            gameUpdates.innerHTML = "You've knocked down all the pins, please proceed to the next round";
+        }
+
+        //show/renable buttons
+        setTimeout(function() {
+            $('#rollBall').show();
+            $('#nextRound').show();
+            $('#gameUpdates').html("");
+        }, 1000);
+    });
 
 }
 
@@ -499,9 +581,10 @@ function NextRound(payFirst) {
 function updateTotalScore(knockedDown) {
     totalScore = totalScore + knockedDown;
     var score = document.getElementById("TotalScore");
-    score.innerHTML = "Money earned: " + format2(totalScore/100.0, "$");
+    score.innerHTML = "Money earned: " + format2(totalScore / 100.0, "$");
     fontFlash(score, 'green', 'bold');
 }
+
 
 function updateGUI(pinsLeft) {
 
@@ -509,16 +592,19 @@ function updateGUI(pinsLeft) {
     $("#pinsRow1").empty();
     $("#pinsRow2").empty();
     var pinsRow1 = document.getElementById("pinsRow1");
+    //pinsRow1.innerHTML="";
     var pinsRow2 = document.getElementById("pinsRow2");
+    //pinsRow2.innerHTML="";
 
     if (pinsLeft >= 5) {
         var knockedOver = 10 - pinsLeft;
-        //normal not knocked down pins
+
+        //if number of knoecked down pins is less than 5
         for (var j = 0; j < 5; j++) {
             var bowlingPin = document.createElement("img");
             bowlingPin.src = "bowling_pin_solid.png";
             bowlingPin.style = "width:25px;height:60px";
-            bowlingPin.id = "bowlingPin_" + j.toString();
+            bowlingPin.id = "bowlingPin_" + (j + 5).toString();
             bowlingPin.className = "bowlingPins";
             pinsRow2.appendChild(bowlingPin);
         }
@@ -527,7 +613,7 @@ function updateGUI(pinsLeft) {
             var bowlingPin = document.createElement("img");
             bowlingPin.src = "bowling_pin_solid.png";
             bowlingPin.style = "width:25px;height:60px";
-            bowlingPin.id = "bowlingPin_" + j.toString();
+            bowlingPin.id = "bowlingPin_" + k.toString();
             bowlingPin.className = "bowlingPins";
             pinsRow1.appendChild(bowlingPin);
         }
@@ -537,36 +623,39 @@ function updateGUI(pinsLeft) {
             var bowlingPinGrey = document.createElement("img");
             bowlingPinGrey.src = "bowling_pin_transparent.png";
             bowlingPinGrey.style = "width:25px;height:60px";
-            bowlingPinGrey.id = "bowlingPinGrey_" + i.toString();
+            bowlingPinGrey.id = "bowlingPin_" + (pinsLeft - 5 + i).toString();
             bowlingPinGrey.className = "bowlingPins";
 
             pinsRow1.appendChild(bowlingPinGrey);
         }
 
     } else { //if number of pinsleft is less than 5
+        var knockedOver = 10 - pinsLeft;
         for (var i = 0; i < 5; i++) {
             var bowlingPinGrey = document.createElement("img");
             bowlingPinGrey.src = "bowling_pin_transparent.png";
             bowlingPinGrey.style = "width:25px;height:60px";
-            bowlingPinGrey.id = "bowlingPinGrey_" + i.toString();
+            bowlingPinGrey.id = "bowlingPin_" + i.toString();
             bowlingPinGrey.className = "bowlingPins";
             pinsRow1.appendChild(bowlingPinGrey);
         }
 
+        var x = 0;
         for (var j = 5 - pinsLeft; j > 0; j--) {
             var bowlingPinGrey = document.createElement("img");
             bowlingPinGrey.src = "bowling_pin_transparent.png";
             bowlingPinGrey.style = "width:25px;height:60px";
-            bowlingPinGrey.id = "bowlingPinGrey_" + i.toString();
+            bowlingPinGrey.id = "bowlingPin_" + (x + 5).toString();
             bowlingPinGrey.className = "bowlingPins";
             pinsRow2.appendChild(bowlingPinGrey);
+            x++;
         }
 
         for (var k = 0; k < pinsLeft; k++) {
             var bowlingPin = document.createElement("img");
             bowlingPin.src = "bowling_pin_solid.png";
             bowlingPin.style = "width:25px;height:60px";
-            bowlingPin.id = "bowlingPin_" + j.toString();
+            bowlingPin.id = "bowlingPin_" + (k + knockedOver).toString();
             bowlingPin.className = "bowlingPins";
 
             pinsRow2.appendChild(bowlingPin);
