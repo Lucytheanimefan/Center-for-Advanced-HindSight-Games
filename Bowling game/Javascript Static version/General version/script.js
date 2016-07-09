@@ -315,7 +315,9 @@ function blink(start, end, start1 = 0, end1 = 0, callback = function() {}) {
                 console.log("Cleared interval");
                 clearInterval(interval);
                 console.log("Doing callback");
-                callback();
+                setTimeout(function() {
+                    callback();
+                }, 500)
             }
             console.log("IN INTERVAL");
             var pin = document.getElementById("bowlingPin_" + ints[c].toString());
@@ -325,10 +327,10 @@ function blink(start, end, start1 = 0, end1 = 0, callback = function() {}) {
             //} else {
             setTimeout(function() {
                 pin.style.visibility = 'visible';
-            }, 250);
+            }, 200);
             //}
             c++;
-        }, 500);
+        }, 400);
     })
 }
 
@@ -338,12 +340,12 @@ function flashPins(pinsLeft, callback) {
     //drawPins();
     if (pinsLeft > 5 && pinsLeft != 10) {
         console.log("Pins left greater than 5");
-        blink(0, pinsLeft-5, 5, 10, function() {
+        blink(0, pinsLeft - 5, 5, 10, function() {
             callback();
         });
     } else if (pinsLeft < 5) {
         console.log("Pins left less than 5");
-        blink(10-pinsLeft, 10, 0, 0, function() {
+        blink(10 - pinsLeft, 10, 0, 0, function() {
             callback();
         });
     } else if (pinsLeft == 5) {
