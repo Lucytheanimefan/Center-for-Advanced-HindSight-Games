@@ -273,9 +273,11 @@ function RollBall() {
 
     //update balls left
     myWealth = myWealth - 1;
-
-    wealth.innerHTML = "Wealth: " + myWealth.toString() + " Francs";
-    fontFlash(wealth, 'red', 'bold');
+    fontFlash(wealth, 'darkblue', 'bold', function(){
+        wealth.innerHTML = "Wealth: " + myWealth.toString() + " Francs";
+        fontFlash(wealth, 'red', 'bold');
+    });
+    
     generatePinsKnockedDown(totalPins);
 
 }
