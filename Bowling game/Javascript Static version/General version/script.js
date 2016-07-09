@@ -337,12 +337,13 @@ function flashPins(pinsLeft, callback) {
     console.log("flashing pins");
     //drawPins();
     if (pinsLeft > 5 && pinsLeft != 10) {
-        blink(0, 5 - pinsLeft, 5, 10, function() {
+        console.log("Pins left greater than 5");
+        blink(0, pinsLeft-5, 5, 10, function() {
             callback();
         });
     } else if (pinsLeft < 5) {
         console.log("Pins left less than 5");
-        blink(pinsLeft + 4, 10, 0, 0, function() {
+        blink(10-pinsLeft, 10, 0, 0, function() {
             callback();
         });
     } else if (pinsLeft == 5) {
