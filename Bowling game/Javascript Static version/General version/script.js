@@ -128,34 +128,40 @@ function showButtons() {
     $('#continueAfterBills').hide();
 }
 
+function showContinue(round) {
+    $("#continueAfterBills").hide();
+
+    console.log("In showContinue");
+    var gameUpdates = document.getElementById("gameUpdates");
+
+    if (round == 1) {
+        myWealth = myWealth - 8;
+        wealth.innerHTML = "Wealth: " + myWealth + " Francs";
+        fontFlash(wealth, "red", "bold", function() {
+            gameUpdates.innerHTML = 'You <span style="color:red;"">pay</span> 8 Francs for your bowling membership bill';
+            var continueAfterBills = document.getElementById('continueAfterBills');
+            continueAfterBills.setAttribute('onclick', 'showContinue(2)');
+            $('#continueAfterBills').show();
+        });
+    } else if (round == 2) {
+        gameUpdates.innerHTML = "You may begin.";
+        var continueAfterBills = document.getElementById('continueAfterBills');
+        continueAfterBills.setAttribute('onclick', 'showButtons()');
+        $('#continueAfterBills').show();
+    }
+}
+
 function firstPayments() {
     var continueAfterBills = document.getElementById('continueAfterBills');
-    continueAfterBills.setAttribute('onclick', 'showButtons()');
+    continueAfterBills.setAttribute('onclick', 'showContinue(1)');
 
     var gameUpdates = document.getElementById("gameUpdates");
     gameUpdates.innerHTML = "You <span style='color:green;'>receive</span> 23 Francs in income this month";
 
     myWealth = myWealth + 23;
     wealth.innerHTML = "Wealth: " + myWealth + " Francs";
-    fontFlash(wealth, "green", "bold", function() {
-
-        gameUpdates.innerHTML = 'You <span style="color:red;"">pay</span> 8 Francs for your bowling membership bill';
-
-        myWealth = myWealth - 8;
-        wealth.innerHTML = "Wealth: " + myWealth + " Francs";
-        fontFlash(wealth, "red", "bold");
-
-
-        setTimeout(function() {
-            gameUpdates.innerHTML = "You may begin.";
-
-            $('#continueAfterBills').show();
-
-        }, 1000);
-
-
-        //$('#nextRound').hide();
-
+    fontFlash(wealth, "green", "bold", function(){
+        $('#continueAfterBills').show();
     });
 
 }
@@ -170,11 +176,10 @@ function spendFirstIncome() {
     //createCustomAlert("You receive 23 Francs in income this month");
     myWealth = myWealth + 23;
     wealth.innerHTML = "Wealth: " + myWealth + " Francs";
-    fontFlash(wealth, "green", "bold");
-
-    setTimeout(function() {
+    fontFlash(wealth, "green", "bold", function(){
         $('#continueAfterBills').show();
-    }, 1000);
+    });
+
 
 }
 
