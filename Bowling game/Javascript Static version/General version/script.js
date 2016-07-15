@@ -160,7 +160,7 @@ function firstPayments() {
 
     myWealth = myWealth + 23;
     wealth.innerHTML = "Wealth: " + myWealth + " Francs";
-    fontFlash(wealth, "green", "bold", function(){
+    fontFlash(wealth, "green", "bold", function() {
         $('#continueAfterBills').show();
     });
 
@@ -176,7 +176,7 @@ function spendFirstIncome() {
     //createCustomAlert("You receive 23 Francs in income this month");
     myWealth = myWealth + 23;
     wealth.innerHTML = "Wealth: " + myWealth + " Francs";
-    fontFlash(wealth, "green", "bold", function(){
+    fontFlash(wealth, "green", "bold", function() {
         $('#continueAfterBills').show();
     });
 
@@ -345,7 +345,7 @@ function flashPins(pinsLeft, callback) {
     //drawPins();
     if (pinsLeft > 5 && pinsLeft != 10) {
         console.log("Pins left greater than 5");
-        blink(0, pinsLeft - 5, 5, 10, function() {
+        blink(10-pinsLeft, 5, 5, pinsLeft, function() {
             callback();
         });
     } else if (pinsLeft < 5) {
@@ -604,69 +604,82 @@ function updateGUI(pinsLeft) {
     var pinsRow2 = document.getElementById("pinsRow2");
     //pinsRow2.innerHTML="";
 
+    //create all the pin divs and their ids
+    for (var a = 0; a < 5; a++) {
+        var bowlingPin = document.createElement("img");
+        bowlingPin.style = "width:25px;height:60px";
+        bowlingPin.id = "bowlingPin_" + a.toString();
+        bowlingPin.className = "bowlingPins";
+        pinsRow1.appendChild(bowlingPin);
+    }
+
+    for (var b = 0; b < 5; b++) {
+        var bowlingPin = document.createElement("img");
+        bowlingPin.style = "width:25px;height:60px";
+        bowlingPin.id = "bowlingPin_" + (b+5).toString();
+        bowlingPin.className = "bowlingPins";
+        pinsRow2.appendChild(bowlingPin);
+    }
+
     if (pinsLeft >= 5) {
         var knockedOver = 10 - pinsLeft;
 
-        //if number of knoecked down pins is less than 5
-        for (var j = 0; j < 5; j++) {
-            var bowlingPin = document.createElement("img");
+        //if number of knocked down pins is less than 5
+        for (var j = knockedOver; j < 5; j++) {
+            var bowlingPin = document.getElementById('bowlingPin_'+j.toString());
             bowlingPin.src = "bowling_pin_solid.png";
-            bowlingPin.style = "width:25px;height:60px";
-            bowlingPin.id = "bowlingPin_" + (j + 5).toString();
-            bowlingPin.className = "bowlingPins";
-            pinsRow2.appendChild(bowlingPin);
         }
 
-        for (var k = 0; k < pinsLeft - 5; k++) {
-            var bowlingPin = document.createElement("img");
+        for (var k = 5; k < 10; k++) {
+            var bowlingPin = document.getElementById('bowlingPin_'+k.toString());
             bowlingPin.src = "bowling_pin_solid.png";
-            bowlingPin.style = "width:25px;height:60px";
-            bowlingPin.id = "bowlingPin_" + k.toString();
-            bowlingPin.className = "bowlingPins";
-            pinsRow1.appendChild(bowlingPin);
+           //bowlingPin.style = "width:25px;height:60px";
+            //bowlingPin.id = "bowlingPin_" + k.toString();
+            //bowlingPin.className = "bowlingPins";
+            //pinsRow1.appendChild(bowlingPin);
         }
 
         //knocked down pins
         for (var i = 0; i < knockedOver; i++) {
-            var bowlingPinGrey = document.createElement("img");
+            var bowlingPinGrey = document.getElementById("bowlingPin_"+i.toString());
             bowlingPinGrey.src = "bowling_pin_transparent.png";
-            bowlingPinGrey.style = "width:25px;height:60px";
-            bowlingPinGrey.id = "bowlingPin_" + (pinsLeft - 5 + i).toString();
-            bowlingPinGrey.className = "bowlingPins";
+            //bowlingPinGrey.style = "width:25px;height:60px";
+            //bowlingPinGrey.id = "bowlingPin_" + (pinsLeft - 5 + i).toString();
+            //bowlingPinGrey.className = "bowlingPins";
 
-            pinsRow1.appendChild(bowlingPinGrey);
+            //pinsRow1.appendChild(bowlingPinGrey);
         }
 
-    } else { //if number of pinsleft is less than 5
+    } else { //if number of pinsleft is less than 5, knocked over pins greater than 5
         var knockedOver = 10 - pinsLeft;
         for (var i = 0; i < 5; i++) {
-            var bowlingPinGrey = document.createElement("img");
+            var bowlingPinGrey = document.getElementById("bowlingPin_"+i.toString());
             bowlingPinGrey.src = "bowling_pin_transparent.png";
-            bowlingPinGrey.style = "width:25px;height:60px";
+            /*bowlingPinGrey.style = "width:25px;height:60px";
             bowlingPinGrey.id = "bowlingPin_" + i.toString();
             bowlingPinGrey.className = "bowlingPins";
             pinsRow1.appendChild(bowlingPinGrey);
+            */
         }
 
-        var x = 0;
-        for (var j = 5 - pinsLeft; j > 0; j--) {
-            var bowlingPinGrey = document.createElement("img");
+        for (var j = 5; j < knockedOver; j++) {
+            console.log("bowlingPin_"+j.toString());
+            var bowlingPinGrey = document.getElementById("bowlingPin_"+j.toString());
             bowlingPinGrey.src = "bowling_pin_transparent.png";
-            bowlingPinGrey.style = "width:25px;height:60px";
+            /*bowlingPinGrey.style = "width:25px;height:60px";
             bowlingPinGrey.id = "bowlingPin_" + (x + 5).toString();
             bowlingPinGrey.className = "bowlingPins";
-            pinsRow2.appendChild(bowlingPinGrey);
-            x++;
+            pinsRow2.appendChild(bowlingPinGrey);*/
         }
 
-        for (var k = 0; k < pinsLeft; k++) {
-            var bowlingPin = document.createElement("img");
+        for (var k = knockedOver; k < 10; k++) {
+            var bowlingPin = document.getElementById("bowlingPin_"+k.toString());
             bowlingPin.src = "bowling_pin_solid.png";
-            bowlingPin.style = "width:25px;height:60px";
+            /*bowlingPin.style = "width:25px;height:60px";
             bowlingPin.id = "bowlingPin_" + (k + knockedOver).toString();
             bowlingPin.className = "bowlingPins";
 
-            pinsRow2.appendChild(bowlingPin);
+            pinsRow2.appendChild(bowlingPin);*/
         }
     }
 }
