@@ -5,7 +5,13 @@ var totalPins = 10; //changes
 var totalScore = 0;
 var currentMonth = 0;
 var myWealth = 0;
-var currDay = "<b style='color:blue;'>1</b>...4...7...10...13...16...19...22...25...28";
+
+var rectangle="<span style='padding-left:17px; padding-top:5px; background:#DFE4EA; display: inline-block;height: 10px;'></span>";
+
+var currDay = dayBorder('#5481C1','1')+rectangle+dayBorder('#C3D0DC','4')+rectangle+dayBorder('#C3D0DC','7')+
+rectangle+dayBorder('#C3D0DC','10')+rectangle+dayBorder('#C3D0DC','13')+rectangle+
+dayBorder('#C3D0DC','16')+rectangle+dayBorder('#C3D0DC','19')+rectangle+
+dayBorder('#C3D0DC','22')+rectangle+dayBorder('#C3D0DC','25')+rectangle+dayBorder('#C3D0DC','28');
 var currDayString = currDay.toString();
 
 //storage variables for data keeping purposes
@@ -24,6 +30,11 @@ var margin = {
     },
     width = 960 - margin.left - margin.right,
     height = 600 - margin.top - margin.bottom;
+
+function dayBorder(color, number){
+    var dayBorder = "<span style='background:"+color+"; padding:5px 8px 5px 8px;'>"+number+"</span>";
+    return dayBorder;
+}
 
 /*------------get info from form-------------*/
 function searchKeyPress(e) {
@@ -102,7 +113,7 @@ function fontFlash(targetText, color, fontWeight, callback) {
 
 
     setTimeout(function() {
-        targetText.style.color = "black";
+        targetText.style.color = "white";
         targetText.style.fontWeight = "normal";
         if (callback) {
             callback();
@@ -136,7 +147,7 @@ function showContinue(round) {
 
     if (round == 1) {
         myWealth = myWealth - 8;
-        wealth.innerHTML = "Wealth: " + myWealth + " Francs";
+        wealth.innerHTML = "<span style='background:#5481C1; padding:5px 8px 5px 8px;'>Wealth: " + myWealth + " Francs</span>";
         fontFlash(wealth, "red", "bold", function() {
             gameUpdates.innerHTML = 'You <span style="color:red;"">pay</span> 8 Francs for your bowling membership bill';
             var continueAfterBills = document.getElementById('continueAfterBills');
@@ -159,7 +170,7 @@ function firstPayments() {
     gameUpdates.innerHTML = "You <span style='color:green;'>receive</span> 23 Francs in income this month";
 
     myWealth = myWealth + 23;
-    wealth.innerHTML = "Wealth: " + myWealth + " Francs";
+    wealth.innerHTML = "<span style='background:#5481C1; padding:5px 8px 5px 8px;'>Wealth: " + myWealth + " Francs</span>";
     fontFlash(wealth, "green", "bold", function() {
         $('#continueAfterBills').show();
     });
@@ -175,7 +186,7 @@ function spendFirstIncome() {
 
     //createCustomAlert("You receive 23 Francs in income this month");
     myWealth = myWealth + 23;
-    wealth.innerHTML = "Wealth: " + myWealth + " Francs";
+    wealth.innerHTML = "<span style='background:#5481C1; padding:5px 8px 5px 8px;'>Wealth: " + myWealth + " Francs</span>";
     fontFlash(wealth, "green", "bold", function() {
         $('#continueAfterBills').show();
     });
@@ -445,7 +456,7 @@ function NextRound(payFirst) {
         currDayString = currDayString + "..." + tempString;
     }
 
-    $('#day').html("Day of the month: " + currDayString);
+    $('#day').html(currDayString);
 
     if (totalRounds != 0) {
         setTimeout(function() {
@@ -505,7 +516,7 @@ function NextRound(payFirst) {
                 currDayString = currDayString + " " + tempString;
                 currDay = currDay + 3;
             }
-            $('#day').html("Day of the month: " + currDayString);
+            $('#day').html(currDayString);
 
 
             var current_month = document.getElementById("month");
@@ -519,7 +530,7 @@ function NextRound(payFirst) {
                 //moneyEarned.push(totalScore);
                 //monthlyUpdate(currentMonth, myWealth); //NOT WORKING?
 
-                current_month.innerHTML = "Month: September - <b style='color:blue;'>October</b> - November - December";
+                current_month.innerHTML = "<span style='background:#C3D0DC;'>SEPT</span> <span style='background:#5481C1;'>OCT</span> <span style='background:#C3D0DC;'>NOV</span> <span style='background:#C3D0DC;'>DEC</span>";
                 console.log("Month string: " + current_month.innerHTML);
                 if (payFirst) {
                     console.log("pay first!");
@@ -534,7 +545,7 @@ function NextRound(payFirst) {
                 console.log(monthlyWealth);
                 console.log(moneyEarned);
 
-                current_month.innerHTML = "Month: September - October - <b style='color:blue;'>November</b> - December";
+                current_month.innerHTML = "<span style='background:#C3D0DC;'>SEPT</span> <span style='background:#C3D0DC;'>OCT</span> <span style='background:#5481C1;'>NOV</span> <span style='background:#C3D0DC;'>DEC</span>";
                 if (payFirst) {
                     firstPayments();
                 } else {
@@ -546,7 +557,7 @@ function NextRound(payFirst) {
                 console.log(monthlyWealth);
                 console.log(moneyEarned);
 
-                current_month.innerHTML = "Month: September - October - November - <b style='color:blue;'>December</b>";
+                current_month.innerHTML = "<span style='background:#C3D0DC;'>SEPT</span> <span style='background:#C3D0DC;'>OCT</span> <span style='background:#C3D0DC;'>NOV</span> <span style='background:#5481C1;'>DEC</span>";
                 if (payFirst) {
                     firstPayments();
                 } else {
@@ -716,12 +727,12 @@ function createInitialDivs() {
 
     var month = document.createElement("div");
     month.id = "month";
-    month.innerHTML = "Month: <b style='color:blue;'>September</b> - October - November - December"
+    month.innerHTML = "<span style='background:#5481C1;'>SEPT</span> <span style='background:#C3D0DC;'>OCT</span> <span style='background:#C3D0DC;'>NOV</span> <span style='background:#C3D0DC;'>DEC</span>";
     updateArea.appendChild(month);
 
     var day = document.createElement("div");
     day.id = "day";
-    day.innerHTML = "Day of the month: " + currDayString;
+    day.innerHTML = currDayString;
     updateArea.appendChild(day);
 
     wealth = document.createElement("div");

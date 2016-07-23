@@ -1,20 +1,32 @@
 /* whole screen */
+body{
+    background: #5481C1;
+    text-align: center;
 
+}
 #game {
-    position: fixed;
+    vertical-align: middle;
     padding: 0;
-    margin: 0;
+    margin-left: 15%;
+    margin-top: 15%
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(141, 179, 216, 1);
+    width: 70%;
+    height: 70%;
+    background: white;
 }
 
 
 #personalInfo{
     margin-left: 20px;
     margin-top: 20px;
+}
+
+#pins{
+    background: #5481C1;
+    border-radius: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 /* centering stuff */
@@ -102,6 +114,19 @@ a {
     margin: 10px;
 }
 
+#month{
+    margin-top:10px;
+    width: 100% !important;
+}
+
+#month span{
+    width:25% !important;
+    padding-left: 7%;
+    padding-right: 7%;
+    padding-top: 1%;
+    padding-bottom: 1%
+}
+
 #month,
 #wealth,
 #RoundsLeft,
@@ -111,18 +136,19 @@ a {
 }
 
 #day,
-#month {
-    font-family: Arial;
-    font-size: 25px;
+#month, #wealth, #TotalScore {
+    font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+    font-size: 15px;
+    font-weight: bold;
     color: #fff;
-    /*background-color: #b8b8b8; */
-    text-shadow: #7a7a7a 4px 3px 0;
 }
 
 #day{
+    margin-top: 20px;
     margin-bottom: 2%;
 }
 
+/*
 #wealth,
 #TotalScore {
     font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
@@ -131,6 +157,7 @@ a {
     padding: 2;
     text-shadow: 1px 1px 1px #A1A1A1;
 }
+*/
 
 #RoundsLeft {
     font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
@@ -138,29 +165,29 @@ a {
 }
 
 #TotalScore {
-    border-top: 5px solid blue;
+    border-top: 5px solid #A5BCDE;
 }
 
 #updateArea {
     height: 100%;
     text-align: center;
-    border-top: 5px solid blue;
-    border-bottom: 5px solid blue;
+    border-top: 5px solid #A5BCDE;
+    border-bottom: 5px solid #A5BCDE;
 }
+
 
 #wealth {
     text-align: center;
-    margin-top: 2.5%;
+    margin-top: 20px;
     margin-bottom: 2.5%;
-    text-shadow: 1px 1px 1px rgba(30, 103, 186, 1);
-    font-weight: normal;
+    font-weight: bold;
     color: #000000;
     letter-spacing: 1pt;
     word-spacing: 2pt;
-    font-size: 25px;
-    font-family: impact, sans-serif;
+    font-size: 20px;
     line-height: 1;
 }
+
 
 #gameUpdates {
     text-align: center;
