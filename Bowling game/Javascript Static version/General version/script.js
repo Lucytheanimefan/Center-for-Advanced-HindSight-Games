@@ -6,8 +6,8 @@ var totalScore = 0;
 var currentMonth = 0;
 var myWealth = 0;
 
-var rectangle = makeRectangle("#DFE4EA", '17px', '5px',0,true); //day & month rectangle
-var wealthRect = makeRectangle("#DFE4EA", '25%', '5px', '5px',false);
+var rectangle = makeRectangle("#DFE4EA", '17px', '5px', 0, true); //day & month rectangle
+var wealthRect = makeRectangle("#DFE4EA", '25%', '5px', '5px', false);
 
 var currDay = dayBorder('#5481C1', '1') + rectangle + dayBorder('#C3D0DC', '4') + rectangle + dayBorder('#C3D0DC', '7') +
     rectangle + dayBorder('#C3D0DC', '10') + rectangle + dayBorder('#C3D0DC', '13') + rectangle +
@@ -37,7 +37,7 @@ function makeRectangle(color, leftpadding, toppadding, botpadding = 0, inlineBlo
         var rect = "<span style='padding-left:" + leftpadding + "; padding-top:" + toppadding + ";padding-bottom:" + botpadding + "; background:" + color + "; display: inline-block;height: 10px;'></span>";
         return rect;
     } else {
-        var rect = "<span style='padding-left:" + leftpadding+ "; padding-top:" + toppadding + ";padding-bottom:" + botpadding+ "; background:" + color + ";height: 10px;'></span>";
+        var rect = "<span style='padding-left:" + leftpadding + "; padding-top:" + toppadding + ";padding-bottom:" + botpadding + "; background:" + color + ";height: 10px;'></span>";
         return rect;
     }
 }
@@ -432,7 +432,8 @@ function generatePinsKnockedDown(pinsLeft) {
     });
 
 }
-var gameUpdates; 
+var gameUpdates;
+
 function NextRound(payFirst) {
     $('#rollBall').hide();
     $('#nextRound').hide();
@@ -454,17 +455,17 @@ function NextRound(payFirst) {
 
     //set current day
     currDay = 1;
-    currDayString = dayBorder('#C3D0DC',currDay.toString());
+    currDayString = dayBorder('#C3D0DC', currDay.toString());
     for (var j = 1; j <= 10; j++) {
         if (j == 10 - totalRounds) {
             currDay = currDay + 3;
-            var tempString =  dayBorder('#5481C1', currDay.toString());
+            var tempString = dayBorder('#5481C1', currDay.toString());
         } else {
             currDay = currDay + 3;
-            var tempString = dayBorder('#C3D0DC',currDay.toString());
+            var tempString = dayBorder('#C3D0DC', currDay.toString());
         }
 
-        currDayString = currDayString +rectangle+ tempString;
+        currDayString = currDayString + rectangle + tempString;
     }
 
     $('#day').html(currDayString);
@@ -511,22 +512,21 @@ function NextRound(payFirst) {
             //reset to months
             totalRounds = 10;
 
-            var currDayString = "";
-            //set current day
+
             currDay = 1;
-            //currDayString = currDay.toString();
-            for (var j = 0; j < 10; j++) {
-                //currDay = currDay + 3;
+            currDayString = dayBorder('#C3D0DC', currDay.toString());
+            for (var j = 1; j <= 10; j++) {
                 if (j == 10 - totalRounds) {
-                    var tempString = "<b style='color:blue;'>" + currDay.toString() + "</b>";
-                    //currDay = currDay + 3;
+                    currDay = currDay + 3;
+                    var tempString = dayBorder('#5481C1', currDay.toString());
                 } else {
-                    var tempString = currDay.toString();
-                    //currDay = currDay + 3;
+                    currDay = currDay + 3;
+                    var tempString = dayBorder('#C3D0DC', currDay.toString());
                 }
-                currDayString = currDayString + " " + tempString;
-                currDay = currDay + 3;
+
+                currDayString = currDayString + rectangle + tempString;
             }
+
             $('#day').html(currDayString);
 
 
