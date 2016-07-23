@@ -6,12 +6,13 @@ var totalScore = 0;
 var currentMonth = 0;
 var myWealth = 0;
 
-var rectangle="<span style='padding-left:17px; padding-top:5px; background:#DFE4EA; display: inline-block;height: 10px;'></span>";
+var rectangle = makeRectangle("#DFE4EA", '17px', '5px',0,true); //day & month rectangle
+var wealthRect = makeRectangle("#DFE4EA", '25%', '5px', '5px',false);
 
-var currDay = dayBorder('#5481C1','1')+rectangle+dayBorder('#C3D0DC','4')+rectangle+dayBorder('#C3D0DC','7')+
-rectangle+dayBorder('#C3D0DC','10')+rectangle+dayBorder('#C3D0DC','13')+rectangle+
-dayBorder('#C3D0DC','16')+rectangle+dayBorder('#C3D0DC','19')+rectangle+
-dayBorder('#C3D0DC','22')+rectangle+dayBorder('#C3D0DC','25')+rectangle+dayBorder('#C3D0DC','28');
+var currDay = dayBorder('#5481C1', '1') + rectangle + dayBorder('#C3D0DC', '4') + rectangle + dayBorder('#C3D0DC', '7') +
+    rectangle + dayBorder('#C3D0DC', '10') + rectangle + dayBorder('#C3D0DC', '13') + rectangle +
+    dayBorder('#C3D0DC', '16') + rectangle + dayBorder('#C3D0DC', '19') + rectangle +
+    dayBorder('#C3D0DC', '22') + rectangle + dayBorder('#C3D0DC', '25') + rectangle + dayBorder('#C3D0DC', '28');
 var currDayString = currDay.toString();
 
 //storage variables for data keeping purposes
@@ -31,8 +32,18 @@ var margin = {
     width = 960 - margin.left - margin.right,
     height = 600 - margin.top - margin.bottom;
 
-function dayBorder(color, number){
-    var dayBorder = "<span style='background:"+color+"; padding:5px 8px 5px 8px;'>"+number+"</span>";
+function makeRectangle(color, leftpadding, toppadding, botpadding = 0, inlineBlock) {
+    if (inlineBlock) {
+        var rect = "<span style='padding-left:" + leftpadding + "; padding-top:" + toppadding + ";padding-bottom:" + botpadding + "; background:" + color + "; display: inline-block;height: 10px;'></span>";
+        return rect;
+    } else {
+        var rect = "<span style='padding-left:" + leftpadding+ "; padding-top:" + toppadding + ";padding-bottom:" + botpadding+ "; background:" + color + ";height: 10px;'></span>";
+        return rect;
+    }
+}
+
+function dayBorder(color, number) {
+    var dayBorder = "<span style='background:" + color + "; padding:5px 8px 5px 8px;'>" + number + "</span>";
     return dayBorder;
 }
 
@@ -147,7 +158,7 @@ function showContinue(round) {
 
     if (round == 1) {
         myWealth = myWealth - 8;
-        wealth.innerHTML = "<span style='background:#5481C1; padding:5px 8px 5px 8px;'>Wealth: " + myWealth + " Francs</span>";
+        wealth.innerHTML = wealthRect + "<span style='background:#5481C1; padding:5px 8px 5px 8px;'>Wealth: " + myWealth + " Francs</span>" + wealthRect;
         fontFlash(wealth, "red", "bold", function() {
             gameUpdates.innerHTML = 'You <span style="color:red;"">pay</span> 8 Francs for your bowling membership bill';
             var continueAfterBills = document.getElementById('continueAfterBills');
@@ -170,7 +181,7 @@ function firstPayments() {
     gameUpdates.innerHTML = "You <span style='color:green;'>receive</span> 23 Francs in income this month";
 
     myWealth = myWealth + 23;
-    wealth.innerHTML = "<span style='background:#5481C1; padding:5px 8px 5px 8px;'>Wealth: " + myWealth + " Francs</span>";
+    wealth.innerHTML = wealthRect + "<span style='background:#5481C1; padding:5px 8px 5px 8px;'>Wealth: " + myWealth + " Francs</span>" + wealthRect;
     fontFlash(wealth, "green", "bold", function() {
         $('#continueAfterBills').show();
     });
@@ -186,7 +197,7 @@ function spendFirstIncome() {
 
     //createCustomAlert("You receive 23 Francs in income this month");
     myWealth = myWealth + 23;
-    wealth.innerHTML = "<span style='background:#5481C1; padding:5px 8px 5px 8px;'>Wealth: " + myWealth + " Francs</span>";
+    wealth.innerHTML = wealthRect + "<span style='background:#5481C1; padding:5px 8px 5px 8px;'>Wealth: " + myWealth + " Francs</span>" + wealthRect;
     fontFlash(wealth, "green", "bold", function() {
         $('#continueAfterBills').show();
     });
@@ -421,7 +432,7 @@ function generatePinsKnockedDown(pinsLeft) {
     });
 
 }
-
+var gameUpdates; 
 function NextRound(payFirst) {
     $('#rollBall').hide();
     $('#nextRound').hide();
@@ -443,17 +454,17 @@ function NextRound(payFirst) {
 
     //set current day
     currDay = 1;
-    currDayString = currDay.toString();
+    currDayString = dayBorder('#C3D0DC',currDay.toString());
     for (var j = 1; j <= 10; j++) {
         if (j == 10 - totalRounds) {
             currDay = currDay + 3;
-            var tempString = "<b style='color:blue;'>" + currDay.toString() + "</b>";
+            var tempString =  dayBorder('#5481C1', currDay.toString());
         } else {
             currDay = currDay + 3;
-            var tempString = currDay.toString();
+            var tempString = dayBorder('#C3D0DC',currDay.toString());
         }
 
-        currDayString = currDayString + "..." + tempString;
+        currDayString = currDayString +rectangle+ tempString;
     }
 
     $('#day').html(currDayString);
@@ -482,7 +493,7 @@ function NextRound(payFirst) {
             wealth.innerHTML = "Wealth: " + myWealth + " Francs";
             fontFlash(wealth, "red", "bold", function() {
                 //createCustomAlert("You have reached 10 games. The month is now over");
-                gamesUpdates.innerHTML = "You have reached 10 games. The month is now over";
+                gameUpdates.innerHTML = "You have reached 10 games. The month is now over";
                 console.log("MONTHLY UPDATE")
                 console.log(myWealth);
                 //monthlyUpdate(currentMonth, myWealth);
