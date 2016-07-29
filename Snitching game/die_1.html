@@ -2,14 +2,9 @@
 <html>
 
 <head>
-    <style>
-    img,
-    form,
-    head,
-    body {
-        text-align: center;
-    }
-    </style>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Montserrat">
     <script>
     //preload the six images first
     var face0 = new Image()
@@ -25,12 +20,22 @@
     var face5 = new Image()
     face5.src = "images/die_6.png"
     </script>
-    <img src="images/die_1.png" name="mydice">
-    <form>
-        <input type="button" value="Throw dice!" onClick="throwdice()">
-    </form>
+    <title>Simply roll the dice</title>
+
+    <body>
+        <header>
+            <h1>Simply roll the dice</h1>
+            <h3>And play the game of chance</h3>
+        </header>
+        <img src="images/die_1.png" name="mydice">
+        <form>
+            <input type="button" value="Throw dice!" onClick="throwdice()">
+        </form>
+    </body>
+
+
     <script>
-    var timeTracking={};
+    var timeTracking = {};
 
     var nums = [1, 5, 1, 2, 3, 4, 6, 6, 1, 4, 3];
 
@@ -47,7 +52,7 @@
         document.images["mydice"].src = "images/die_" + randomdice.toString() + ".png";
         count++;
 
-        timeTracking[count, "die roll: "+randomdice.toString()]=timestamp();
+        timeTracking[count, "die roll: " + randomdice.toString()] = timestamp();
         console.log(timeTracking);
     }
 
