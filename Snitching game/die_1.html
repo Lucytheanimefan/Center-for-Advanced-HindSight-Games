@@ -4,7 +4,9 @@
 <head>
     <style>
     img,
-    form, head,body {
+    form,
+    head,
+    body {
         text-align: center;
     }
     </style>
@@ -30,11 +32,18 @@
     <script>
     var nums = [1, 5, 1, 2, 3, 4, 6, 6, 1, 4, 3];
 
-    function throwdice() {
+    var count = 0;
 
+    function throwdice() {
+        var randomdice;
         //create a random integer between 0 and 5
-        var randomdice = nums.shift();
+        if (count < 9) {
+            randomdice = nums[count+1];
+        }else{
+            randomdice = nums[count%10];
+        }
         document.images["mydice"].src = "images/d" + randomdice.toString() + ".gif";
+        count++;
     }
     </script>
 </head>
