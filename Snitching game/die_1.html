@@ -5,7 +5,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <script type='text/javascript' src='d6.js'></script>
     <script>
+    D6.setBaseUrl('images/');
     //preload the six images first
     var face0 = new Image()
     face0.src = "images/die_1.png"
@@ -19,6 +21,8 @@
     face4.src = "images/die_5.png"
     var face5 = new Image()
     face5.src = "images/die_6.png"
+
+    D6.dice(1);
     </script>
     <title>Simply roll the dice</title>
 
@@ -27,10 +31,14 @@
             <h1>Simply roll the dice</h1>
             <h3>And play the game of chance</h3>
         </header>
+
+
+        <!--
         <img src="images/die_1.png" name="mydice">
         <form>
             <input type="button" value="Throw dice!" onClick="throwdice()">
         </form>
+        -->
     </body>
 
 
