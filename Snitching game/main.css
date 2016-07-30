@@ -1,0 +1,19 @@
+ img,
+ form,
+ head,
+ body {
+     text-align: center;
+ }
+
+ body{
+ 	height: 100%;
+ 	margin: 0;
+ 	background-color: black;
+ 	vertical-align: middle;
+ 	color: white;
+ 	font-family: 'Montserrat', serif;
+ }
+
+input{
+	font-family: 'Montserrat', serif;
+}
