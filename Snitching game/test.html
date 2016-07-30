@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Montserrat">
+
+    <body>
+        <header>
+            <h1>Simply roll the dice</h1>
+            <h3>And play the game of chance</h3>
+        </header>
+        <img src="images/die_1.png" style="width: 50px; height:50px;" name="mydice">
+        <form>
+            <input type="button" value="Throw dice!" onClick="throwdice()">
+        </form>
+    </body>
+    <script>
+    //preload the six images first
+
+    /*
+    var face0 = new Image()
+    face0.src = "images/d1.gif"
+    var face1 = new Image()
+    face1.src = "images/d2.gif"
+    var face2 = new Image()
+    face2.src = "images/d3.gif"
+    var face3 = new Image()
+    face3.src = "images/d4.gif"
+    var face4 = new Image()
+    face4.src = "images/d5.gif"
+    var face5 = new Image()
+    face5.src = "images/d6.gif"
+    */
+
+    var nums = [1, 5, 1, 2, 3, 4, 6, 6, 1, 4, 3];
+
+    function throwdice() {
+
+        //create a random integer between 0 and 5
+        var randomdice = nums.shift();
+        document.images["mydice"].src = "images/animated-dice-image.gif";
+        document.images["mydice"].style.height = '50px';
+        document.images["mydice"].style.width = '50px';
+        setTimeout(function() {
+            document.images["mydice"].src = "images/die_" + randomdice.toString() + ".png";
+            document.images["mydice"].style.height = '50px';
+            document.images["mydice"].style.width = '50px';
+        }, 3000);
+    }
+    </script>
+</head>
+
+</html>
