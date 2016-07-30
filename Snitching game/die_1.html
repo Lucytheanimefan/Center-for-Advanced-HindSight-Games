@@ -6,24 +6,6 @@
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Montserrat">
     <script type='text/javascript' src='d6.js'></script>
-    <script>
-    D6.setBaseUrl('images/');
-    //preload the six images first
-    var face0 = new Image()
-    face0.src = "images/die_1.png"
-    var face1 = new Image()
-    face1.src = "images/die_2.png"
-    var face2 = new Image()
-    face2.src = "images/die_3.png"
-    var face3 = new Image()
-    face3.src = "images/die_4.png"
-    var face4 = new Image()
-    face4.src = "images/die_5.png"
-    var face5 = new Image()
-    face5.src = "images/die_6.png"
-
-    D6.dice(1);
-    </script>
     <title>Simply roll the dice</title>
 
     <body>
@@ -41,31 +23,12 @@
         -->
     </body>
 
-
     <script>
+    var nums = [1, 5, 1, 2, 3, 4, 6, 6, 1, 4, 3];
+    var count = 0;
     var timeTracking = {};
 
-    var nums = [1, 5, 1, 2, 3, 4, 6, 6, 1, 4, 3];
-
-    var count = 0;
-
-    function throwdice() {
-        var randomdice;
-        //create a random integer between 0 and 5
-        if (count < 9) {
-            randomdice = nums[count + 1];
-        } else {
-            randomdice = nums[count % 10];
-        }
-        document.images["mydice"].src = "images/die_" + randomdice.toString() + ".png";
-        count++;
-
-        timeTracking[count, "die roll: " + randomdice.toString()] = timestamp();
-        console.log(timeTracking);
-    }
-
-
-    function timestamp() {
+     function timestamp() {
         var d = new Date();
         var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         var days = ['Mon', 'Tue', 'Wed', 'Thurs', 'Fri', 'Sat', 'Sun'];
@@ -85,7 +48,36 @@
 
         return timestamp;
     }
+
+    function throwdice() {
+        var randomdice;
+        //create a random integer between 0 and 5
+        if (count < 9) {
+            randomdice = nums[count + 1];
+        } else {
+            randomdice = nums[count % 10];
+        }
+        count++;
+
+        timeTracking[timestamp()] = {"Count":count,"die number":randomdice};
+        console.log(timeTracking);
+
+        //return randomdice;
+
+        var anim = new D6AnimGroup();
+        console.log(anim);
+        anim.start(randomdice);
+    }
+
+
+    D6.setBaseUrl('images/');
+    
+
+    D6.dice(1, throwdice);
+
     </script>
+    
+
 </head>
 
 </html>
