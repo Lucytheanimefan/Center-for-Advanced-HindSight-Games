@@ -25,14 +25,14 @@
 
     <body>
         <header>
-            <img src="images/Die1.png" width="45px" height="45px"> SimplyRollTheDie.com
+            <img src="images/Die1.png" width="45px" height="45px"> SimplyRollTheDice.com
             <img src="images/Die2.png" width="45px" height="45px">
         </header>
         <h1>Simply roll the dice</h1>
-        <h3>And play the game of chance</h3>
+        <h3>Easy and always available dice</h3>
         <img src="images/die_1.png" style="width: 50px; height: 50px;" name="mydice">
         <form>
-            <input type="button" value="THROW DICE!" onClick="throwdice()">
+            <input type="button" value="ROLL IT" onClick="throwdice()">
         </form>
 
         <button style="visibility: hidden; color: white;" onclick="clearLocalStorage()">Clear localStorage</button>
@@ -66,7 +66,7 @@
 
         setTimeout(function() {
             document.images["mydice"].src = "images/die_" + randomdice.toString() + ".png";
-        }, 3000);
+        }, 1000);
 
     }
 
