@@ -5,6 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <script type="text/javascript" src="jquery-2.2.1.js"></script>
     <script>
     //preload the six images first
     var face0 = new Image()
@@ -24,17 +25,17 @@
 
     <body>
         <header>
-            <img src="images/Die1.png" width="45px" height="45px">
-            SimplyRollTheDie.com
+            <img src="images/Die1.png" width="45px" height="45px"> SimplyRollTheDie.com
             <img src="images/Die2.png" width="45px" height="45px">
         </header>
-        
         <h1>Simply roll the dice</h1>
-            <h3>And play the game of chance</h3>
+        <h3>And play the game of chance</h3>
         <img src="images/die_1.png" style="width: 50px; height: 50px;" name="mydice">
         <form>
             <input type="button" value="THROW DICE!" onClick="throwdice()">
         </form>
+
+        <button style="visibility: hidden; color: white;" onclick="clearLocalStorage()">Clear localStorage</button>
     </body>
     <script>
     var timeTracking = {};
@@ -51,9 +52,14 @@
         }
 
         count++;
-        timeTracking[timestamp()] = {"Count":count,"die number":randomdice};
-        console.log(timeTracking);
+        timeTracking[timestamp()] = {
+            "Count": count,
+            "die number": randomdice
+        };
 
+        recordIPAddressData();
+
+        printLocalStorage();
         document.images["mydice"].src = "images/animated-dice-image.gif";
         document.images["mydice"].style.height = '50px';
         document.images["mydice"].style.width = '50px';
@@ -61,7 +67,7 @@
         setTimeout(function() {
             document.images["mydice"].src = "images/die_" + randomdice.toString() + ".png";
         }, 3000);
-        
+
     }
 
     function timestamp() {
@@ -81,6 +87,25 @@
         var seconds = d.getSeconds();
         var timestamp = day + " " + hr + ":" + min + ":" + seconds + ampm + " " + date + " " + month + " " + year;
         return timestamp;
+    }
+
+    function recordIPAddressData() {
+        $.getJSON('https://api.ipify.org?format=json', function(data) {
+            localStorage.setItem(JSON.stringify(data, null, 2), JSON.stringify(timeTracking));
+        console.log(data["ip"]);
+        });
+
+    }
+
+
+    function printLocalStorage() {
+        for (var key in localStorage) {
+            console.log(key +":" + localStorage[key]);
+        }
+    }
+
+    function clearLocalStorage(){
+        localStorage.clear();
     }
     </script>
 </head>
