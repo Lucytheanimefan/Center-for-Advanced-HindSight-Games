@@ -10,25 +10,17 @@
 
     <body>
         <header>
-            <h1>Simply roll the dice</h1>
-            <h3>And play the game of chance</h3>
+            <img src="images/Die1.png" width="30%" height="30%">SimplyRollTheDie.com<img src="images/Die2.png">
         </header>
-
-
-        <!--
-        <img src="images/die_1.png" name="mydice">
-        <form>
-            <input type="button" value="Throw dice!" onClick="throwdice()">
-        </form>
-        -->
+        <h2>Simply roll the dice</h2>
+        <h3>Nothing more, nothing less</h3>
     </body>
-
     <script>
     var nums = [1, 5, 1, 2, 3, 4, 6, 6, 1, 4, 3];
     var count = 0;
     var timeTracking = {};
 
-     function timestamp() {
+    function timestamp() {
         var d = new Date();
         var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         var days = ['Mon', 'Tue', 'Wed', 'Thurs', 'Fri', 'Sat', 'Sun'];
@@ -59,7 +51,10 @@
         }
         count++;
 
-        timeTracking[timestamp()] = {"Count":count,"die number":randomdice};
+        timeTracking[timestamp()] = {
+            "Count": count,
+            "die number": randomdice
+        };
         console.log(timeTracking);
 
         //return randomdice;
@@ -71,13 +66,10 @@
 
 
     D6.setBaseUrl('images/');
-    
+
 
     D6.dice(1, throwdice);
-
     </script>
-    
-
 </head>
 
 </html>

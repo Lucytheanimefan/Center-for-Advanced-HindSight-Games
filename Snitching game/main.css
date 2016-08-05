@@ -4,16 +4,42 @@
  body {
      text-align: center;
  }
-
- body{
- 	height: 100%;
- 	margin: 0;
- 	background-color: black;
- 	vertical-align: middle;
- 	color: white;
- 	font-family: 'Montserrat', serif;
+ 
+ body {
+     height: 100%;
+     margin: 0;
+     background-color: black;
+     vertical-align: middle;
+     color: white;
+     font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
  }
+ 
+ input {
 
-input{
-	font-family: 'Montserrat', serif;
-}
+ }
+ 
+ h3 {
+     font-weight: normal;
+ }
+ 
+ input[type=button] {
+     margin-top: 20px;
+     background: none;
+     border: 3px solid white;
+     color: white;
+     border-radius: 30px;
+     padding-top: 15px;
+     padding-bottom: 15px;
+     padding-left: 20px;
+     padding-right: 20px;
+ }
+ 
+ header {
+     background: white;
+     padding-top: 15px;
+     padding-bottom: 15px;
+     color: black;
+     font-size: 50px;
+     font-weight: bold;
+     font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+ }
