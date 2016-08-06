@@ -1,0 +1,26 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>The HTML5 Herald</title>
+  <meta name="description" content="Snitching Game">
+
+</head>
+
+<body>
+<a href="test_1.html">test_1.html</a>
+<script>
+
+for (var i=0; i<10; i++){
+	var div = document.createElement("div");
+	var link = document.createElement("a");
+	link.href="die_"+(i+1).toString()+".html";
+	link.innerHTML="Die version "+(i+1).toString();
+	div.appendChild(link);
+	document.body.appendChild(div);
+}
+</script>
+</body>
+</html>
