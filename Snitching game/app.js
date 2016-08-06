@@ -10,9 +10,17 @@ var serveIndex = require('serve-index');
 var path = require('path');
 
 var express = require('express')
-var app = express()
+var app = express();
+var bodyParser = require('body-parser')
 
-console.log("What's going on?");
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
+
+
 app.use("/",serveIndex("public"));
 
 
@@ -21,7 +29,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/sendDataToBackend', function(req,res){
 	console.log("In the backend");
-	console.log(req.body);
+	//console.log(res);
+	console.log(req._parsedOriginalUrl.query);
+	//console.log(res);
 	//console.log("Backend: "+JSON.stringify(req.body));
 })
 /*

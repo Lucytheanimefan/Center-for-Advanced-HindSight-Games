@@ -98,7 +98,7 @@
             //localStorage.setItem(jsonData);
 
             sendDataToBackend(jsonData)
-            console.log(data["ip"]);
+            //console.log(data["ip"]);
         });
 
     }
@@ -115,11 +115,12 @@
     }
 
     function sendDataToBackend(jsonData) {
+        console.log(jsonData);
         $.ajax({
-            type: 'POST', // added,
+            type: 'GET', // added,
             url: '/sendDataToBackend',
             data: jsonData,
-            //dataType: 'jsonp' - removed
+            contentType: "application/json; charset=utf-8",
             //jsonpCallback: 'callback' - removed
             success: function(data) {
                 console.log("success on client side");

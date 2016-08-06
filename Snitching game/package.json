@@ -9,6 +9,7 @@
   "author": "Lucy Zhang",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.15.2",
     "connect": "^3.4.1",
     "express": "^4.14.0",
     "file-system": "^2.2.1",
