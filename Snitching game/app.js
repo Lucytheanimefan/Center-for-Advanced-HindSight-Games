@@ -17,28 +17,21 @@ app.use("/",serveIndex("public"));
 
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+
+app.get('/sendDataToBackend', function(req,res){
+	console.log("In the backend");
+	console.log(req.body);
+	//console.log("Backend: "+JSON.stringify(req.body));
+})
+/*
+app.post('/sendDataToBackend', function(req,res){
+	console.log("In the backend");
+	console.log("Backend: "+JSON.stringify(req.body));
+})
+*/
+
 console.log("Finished serving");
 
-/*
-connect().use(serveStatic('./public')).listen(8080, function() {
-    console.log('Server running on 8080...');
-});
-
-
-var router = Router();
-
-
-router.get('/', function (req, res) {
-  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-  res.end('Hello World!');
-})
- 
-var server = http.createServer(function(req, res) {
-  router(req, res, finalhandler(req, res))
-})
- 
-server.listen(3000);
-
-*/
 
 app.listen(3000);

@@ -34,7 +34,6 @@
         <form>
             <input type="button" value="ROLL IT" onClick="throwdice()">
         </form>
-
         <button style="visibility: hidden; color: white;" onclick="clearLocalStorage()">Clear localStorage</button>
     </body>
     <script>
@@ -59,7 +58,7 @@
 
         recordIPAddressData();
 
-        printLocalStorage();
+       // printLocalStorage();
         document.images["mydice"].src = "images/animated-dice-image.gif";
         document.images["mydice"].style.height = '50px';
         document.images["mydice"].style.width = '50px';
@@ -91,8 +90,15 @@
 
     function recordIPAddressData() {
         $.getJSON('https://api.ipify.org?format=json', function(data) {
-            localStorage.setItem(JSON.stringify(data, null, 2), JSON.stringify(timeTracking));
-        console.log(data["ip"]);
+            var jsonData = JSON.stringify({
+                data,
+                timeTracking
+            });
+
+            //localStorage.setItem(jsonData);
+
+            sendDataToBackend(jsonData)
+            console.log(data["ip"]);
         });
 
     }
@@ -100,17 +106,26 @@
 
     function printLocalStorage() {
         for (var key in localStorage) {
-            console.log(key +":" + localStorage[key]);
+            console.log(key + ":" + localStorage[key]);
         }
     }
 
-    function clearLocalStorage(){
+    function clearLocalStorage() {
         localStorage.clear();
     }
 
+    function sendDataToBackend(jsonData) {
+        $.ajax({
+            type: 'POST', // added,
+            url: '/sendDataToBackend',
+            data: jsonData,
+            //dataType: 'jsonp' - removed
+            //jsonpCallback: 'callback' - removed
+            success: function(data) {
+                console.log("success on client side");
+            }
+        });
 
-    function sendDataToBackend(){
-        
     }
     </script>
 </head>
