@@ -30,16 +30,21 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/sendDataToBackend', function(req,res){
 	console.log("In the backend");
 	//console.log(res);
-	console.log(req._parsedOriginalUrl.query);
-	//console.log(res);
+	//console.log(req._parsedOriginalUrl.query);
+	var tempJson = req._parsedOriginalUrl.query;
+	var json = replaceAll(tempJson, '%22','"');
+	json=replaceAll(json,"%20"," ");
+	console.log(json);
 	//console.log("Backend: "+JSON.stringify(req.body));
 })
-/*
-app.post('/sendDataToBackend', function(req,res){
-	console.log("In the backend");
-	console.log("Backend: "+JSON.stringify(req.body));
-})
-*/
+
+function replaceAll(str, find, replace) {
+  return str.replace(new RegExp(find, 'g'), replace);
+}
+
+function writeDataToFile(data){
+	
+}
 
 console.log("Finished serving");
 
