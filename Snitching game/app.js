@@ -46,7 +46,7 @@ function replaceAll(str, find, replace) {
 var stream = fs.createWriteStream("data.txt");
 
 function writeDataToFile(data) {
-    fs.appendFile('data.txt', data, function(err) {
+    fs.appendFile('data.txt', data + "\n", function(err) {
     	console.log(err);
     });
 }
