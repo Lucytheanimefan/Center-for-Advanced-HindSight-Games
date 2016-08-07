@@ -88,7 +88,7 @@ function returnData() {
     }
     console.log("returned data (toRet):");
     console.log(toRet);
-    createFile(toRet);
+    return toRet;
 }
 /*---------------------------------------FUNCTIONS--------------------------------------*/
 
@@ -574,7 +574,7 @@ function NextRound(payFirst) {
                 } else {
                     spendFirstIncome();
                 };
-            } else if (currentMonth > 4) {
+            } else if (currentMonth >= 4) {
                 //createCustomAlert("GAME OVER");
                 gameUpdates.innerHTML = "<b>GAME OVER</b>";
                 monthlyWealth[timestamp()] = myWealth;
@@ -597,8 +597,21 @@ function NextRound(payFirst) {
                     console.log(localStorage.getItem(localStorage.key(i)));
                 }
 
+                var data = returnData();
+
+                $.ajax({
+                    type: 'GET', // added,
+                    url: '/sendDataToBackend',
+                    data: JSON.stringify(returnData()),
+                    contentType: "application/json; charset=utf-8",
+                    //jsonpCallback: 'callback' - removed
+                    success: function(data) {
+                        console.log("success on client side");
+                    }
+                });
+
                 killGame();
-                getData();
+                //getData();
 
             }
 
