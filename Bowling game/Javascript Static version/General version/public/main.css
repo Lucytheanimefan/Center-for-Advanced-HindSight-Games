@@ -44,35 +44,28 @@ body{
 
 /* Buttons */
 
-button {
-    background: #d3e6f2;
-    background-image: -webkit-linear-gradient(top, #d3e6f2, #8bc4e8);
-    background-image: -moz-linear-gradient(top, #d3e6f2, #8bc4e8);
-    background-image: -ms-linear-gradient(top, #d3e6f2, #8bc4e8);
-    background-image: -o-linear-gradient(top, #d3e6f2, #8bc4e8);
-    background-image: linear-gradient(to bottom, #d3e6f2, #8bc4e8);
-    -webkit-border-radius: 11;
-    -moz-border-radius: 11;
+
+
+button,.btn {
+    background: #E28564; /*orange color*/
     border-radius: 11px;
-    font-family: Arial;
+    font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
     color: #ffffff;
     font-size: 22px;
-    padding: 4px 13px 4px 15px;
-    border: solid #1f628d 2px;
+    padding: 10px 20px 10px 20px;
+    border: none;
     text-decoration: none;
     margin-left: 15px;
+    width: 40%;
 }
 
-button:hover {
+button:hover, .btn:hover {
     background: #076aa8;
-    background-image: -webkit-linear-gradient(top, #076aa8, #3498db);
-    background-image: -moz-linear-gradient(top, #076aa8, #3498db);
-    background-image: -ms-linear-gradient(top, #076aa8, #3498db);
-    background-image: -o-linear-gradient(top, #076aa8, #3498db);
-    background-image: linear-gradient(to bottom, #076aa8, #3498db);
     text-decoration: none;
 }
 
+
+/*
 .btn {
     background: #aed1e8;
     background-image: -webkit-linear-gradient(top, #aed1e8, #2980b9);
@@ -101,6 +94,7 @@ button:hover {
     background-image: linear-gradient(to bottom, #076aa8, #3498db);
     text-decoration: none;
 }
+*/
 
 
 /*Text*/
