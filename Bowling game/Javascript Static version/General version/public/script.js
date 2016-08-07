@@ -303,7 +303,7 @@ function RollBall() {
     //update balls left
     myWealth = myWealth - 1;
     fontFlash(wealth, 'darkblue', 'bold', function() {
-        wealth.innerHTML = "Wealth: " + myWealth.toString() + " Francs";
+        wealth.innerHTML = wealthRect + "<span style='background:#5481C1; padding:5px 8px 5px 8px;'>Wealth: " + myWealth.toString() + " Francs</span>" + wealthRect;
         fontFlash(wealth, 'red', 'bold');
     });
 
@@ -491,7 +491,7 @@ function NextRound(payFirst) {
             //createCustomAlert('You pay 8 Francs for your bowling membership bill');
             gameUpdates.innerHTML = 'You pay 8 Francs for your bowling membership bill';
             myWealth = myWealth - 8;
-            wealth.innerHTML = "Wealth: " + myWealth + " Francs";
+            wealth.innerHTML = wealthRect + "<span style='background:#5481C1; padding:5px 8px 5px 8px;'>Wealth: " + myWealth + " Francs</span>" + wealthRect;
             fontFlash(wealth, "red", "bold", function() {
                 //createCustomAlert("You have reached 10 games. The month is now over");
                 gameUpdates.innerHTML = "You have reached 10 games. The month is now over";

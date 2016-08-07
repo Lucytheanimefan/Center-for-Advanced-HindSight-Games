@@ -14,3 +14,8 @@
 {"Time":"Mon 11:03:48am 7 Aug 2016","Session id":"5MyQD","Count":4,"die number":3,"IP Address":"108.217.162.42"}
 {"Time":"Mon 11:03:50am 7 Aug 2016","Session id":"5MyQD","Count":5,"die number":4,"IP Address":"108.217.162.42"}
 {"Time":"Mon 11:03:52am 7 Aug 2016","Session id":"5MyQD","Count":6,"die number":6,"IP Address":"108.217.162.42"}
+{"Time":"Mon 11:03:48am 7 Aug 2016","Session id":"5MyQD","Count":4,"die number":3,"IP Address":"108.217.162.42"}
+{"Time":"Mon 11:03:50am 7 Aug 2016","Session id":"5MyQD","Count":5,"die number":4,"IP Address":"108.217.162.42"}
+{"Time":"Mon 11:03:47am 7 Aug 2016","Session id":"5MyQD","Count":3,"die number":2,"IP Address":"108.217.162.42"}
+{"Time":"Mon 11:03:45am 7 Aug 2016","Session id":"5MyQD","Count":2,"die number":1,"IP Address":"108.217.162.42"}
+{"Time":"Mon 11:03:43am 7 Aug 2016","Session id":"5MyQD","Count":1,"die number":5,"IP Address":"108.217.162.42"}
