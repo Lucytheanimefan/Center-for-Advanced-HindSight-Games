@@ -2,41 +2,132 @@
 <html>
 
 <head>
-    <style>
-    img,
-    form,
-    head,
-    body {
-        text-align: center;
-    }
-    </style>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <script type="text/javascript" src="jquery-2.2.1.js"></script>
     <script>
     //preload the six images first
     var face0 = new Image()
-    face0.src = "images/d1.gif"
+    face0.src = "images/die_1.png"
     var face1 = new Image()
-    face1.src = "images/d2.gif"
+    face1.src = "images/die_2.png"
     var face2 = new Image()
-    face2.src = "images/d3.gif"
+    face2.src = "images/die_3.png"
     var face3 = new Image()
-    face3.src = "images/d4.gif"
+    face3.src = "images/die_4.png"
     var face4 = new Image()
-    face4.src = "images/d5.gif"
+    face4.src = "images/die_5.png"
     var face5 = new Image()
-    face5.src = "images/d6.gif"
+    face5.src = "images/die_6.png"
     </script>
-    <img src="images/d1.gif" name="mydice">
-    <form>
-        <input type="button" value="Throw dice!" onClick="throwdice()">
-    </form>
+    <title>Simply roll the dice</title>
+
+    <body>
+        <header>
+            <img src="images/Die1.png" width="45px" height="45px"> SimplyRollTheDice.com
+            <img src="images/Die2.png" width="45px" height="45px">
+        </header>
+        <h1>Simply roll the dice</h1>
+        <h3>Easy and always available dice</h3>
+        <img src="images/die_1.png" style="width: 50px; height: 50px;" name="mydice">
+        <form>
+            <input type="button" value="ROLL IT" onClick="throwdice()">
+        </form>
+        <button style="visibility: hidden; color: white;" onclick="clearLocalStorage()">Clear localStorage</button>
+    </body>
     <script>
+    var timeTracking = {};
     var nums = [1,6,3,5,2,4,1,4,1,6,2];
+    var count = 0;
 
     function throwdice() {
-
+        timeTracking={};
+        var randomdice;
         //create a random integer between 0 and 5
-        var randomdice = nums.shift();
-        document.images["mydice"].src = "images/d" + randomdice.toString() + ".gif";
+        if (count < 9) {
+            randomdice = nums[count + 1];
+        } else {
+            randomdice = nums[count % 10];
+        }
+
+        count++;
+        timeTracking[timestamp()] = {
+            "Count": count,
+            "die number": randomdice
+        };
+
+        recordIPAddressData();
+
+       // printLocalStorage();
+        document.images["mydice"].src = "images/animated-dice-image.gif";
+        document.images["mydice"].style.height = '50px';
+        document.images["mydice"].style.width = '50px';
+
+        setTimeout(function() {
+            document.images["mydice"].src = "images/die_" + randomdice.toString() + ".png";
+        }, 1000);
+
+    }
+
+    function timestamp() {
+        var d = new Date();
+        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        var days = ['Mon', 'Tue', 'Wed', 'Thurs', 'Fri', 'Sat', 'Sun'];
+        var day = days[d.getDay()];
+        var hr = d.getHours();
+        var min = d.getMinutes();
+        if (min < 10) {
+            min = "0" + min;
+        }
+        var ampm = hr < 12 ? "am" : "pm";
+        var date = d.getDate();
+        var month = months[d.getMonth()];
+        var year = d.getFullYear();
+        var seconds = d.getSeconds();
+        var timestamp = day + " " + hr + ":" + min + ":" + seconds + ampm + " " + date + " " + month + " " + year;
+        return timestamp;
+    }
+
+    function recordIPAddressData() {
+        $.getJSON('https://api.ipify.org?format=json', function(data) {
+            var jsonData = JSON.stringify({
+                data,
+                timeTracking
+            });
+
+            //localStorage.setItem(jsonData);
+
+            sendDataToBackend(jsonData)
+            //console.log(data["ip"]);
+        });
+
+    }
+
+
+    function printLocalStorage() {
+        for (var key in localStorage) {
+            console.log(key + ":" + localStorage[key]);
+        }
+    }
+
+    function clearLocalStorage() {
+        localStorage.clear();
+    }
+
+    function sendDataToBackend(jsonData) {
+        console.log(jsonData);
+        $.ajax({
+            type: 'GET', // added,
+            url: '/sendDataToBackend',
+            data: jsonData,
+            contentType: "application/json; charset=utf-8",
+            //jsonpCallback: 'callback' - removed
+            success: function(data) {
+                console.log("success on client side");
+            }
+        });
+
     }
     </script>
 </head>
