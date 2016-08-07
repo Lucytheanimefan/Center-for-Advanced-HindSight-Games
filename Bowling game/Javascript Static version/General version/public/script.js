@@ -66,9 +66,6 @@ function submitData() {
 
 }
 
-function clearData() {
-    localStorage.clear();
-}
 
 function getData() {
     var form = document.getElementById("personalInfo");
@@ -80,16 +77,6 @@ function getData() {
     form.appendChild(getdata);
 }
 
-function returnData() {
-    var toRet = "";
-    //print everything in localStorage
-    for (var i = 0; i < localStorage.length; i++) {
-        toRet = toRet + localStorage.getItem(localStorage.key(i))
-    }
-    console.log("returned data (toRet):");
-    console.log(toRet);
-    return toRet;
-}
 /*---------------------------------------FUNCTIONS--------------------------------------*/
 
 function timestamp() {
@@ -129,7 +116,7 @@ function fontFlash(targetText, color, fontWeight, callback) {
         if (callback) {
             callback();
         }
-    }, 1000);
+    }, 500);
 
 }
 
@@ -428,7 +415,7 @@ function generatePinsKnockedDown(pinsLeft) {
             $('#rollBall').show();
             $('#nextRound').show();
             $('#gameUpdates').html("");
-        }, 1000);
+        }, 500);
     });
 
 }
@@ -474,7 +461,7 @@ function NextRound(payFirst) {
         setTimeout(function() {
             $('#rollBall').show();
             $('#nextRound').show();
-        }, 1000);
+        }, 500);
     } else {
         $('#pins').hide();
         //out of rounds for the month
@@ -582,27 +569,19 @@ function NextRound(payFirst) {
                 console.log(monthlyWealth);
                 console.log(moneyEarned);
 
-                var endWealth = JSON.stringify({
+                var endWealth = {
                     "monthlyWealth": monthlyWealth
-                });
-                var endEarned = JSON.stringify({
+                };
+                var endEarned = {
                     "moneyEarned": moneyEarned
-                });
+                };
 
-                //add everything to localStorage:
-                localStorage.setItem(1, [name, option, endWealth, endEarned]);
-
-                //print everything in localStorage
-                for (var i = 0; i < localStorage.length; i++) {
-                    console.log(localStorage.getItem(localStorage.key(i)));
-                }
-
-                var data = returnData();
-
+            
+                var data = [option, endWealth, endEarned];
                 $.ajax({
                     type: 'GET', // added,
                     url: '/sendDataToBackend',
-                    data: JSON.stringify(returnData()),
+                    data: JSON.stringify(data),
                     contentType: "application/json; charset=utf-8",
                     //jsonpCallback: 'callback' - removed
                     success: function(data) {
