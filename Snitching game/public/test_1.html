@@ -41,8 +41,16 @@
     var nums = [1, 5, 1, 2, 3, 4, 6, 6, 1, 4, 3];
     var count = 0;
 
+    //get session id
+    var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var stringLength = 5;
+
+    var sessionID = Array.apply(null, new Array(stringLength)).map(function() {
+        return possible[Math.floor(Math.random() * possible.length)];
+    }).join('');
+
     function throwdice() {
-        timeTracking={};
+        timeTracking = {};
         var randomdice;
         //create a random integer between 0 and 5
         if (count < 9) {
@@ -52,14 +60,16 @@
         }
 
         count++;
-        timeTracking[timestamp()] = {
+        timeTracking = {
+            "Time":timestamp(),
+            "Session id":sessionID,
             "Count": count,
             "die number": randomdice
         };
 
         recordIPAddressData();
 
-       // printLocalStorage();
+        // printLocalStorage();
         document.images["mydice"].src = "images/animated-dice-image.gif";
         document.images["mydice"].style.height = '50px';
         document.images["mydice"].style.width = '50px';
@@ -91,15 +101,13 @@
 
     function recordIPAddressData() {
         $.getJSON('https://api.ipify.org?format=json', function(data) {
-            var jsonData = JSON.stringify({
-                data,
-                timeTracking
-            });
+            timeTracking["IP Address"]=data["ip"];
+            var jsonData = JSON.stringify(timeTracking);
 
             //localStorage.setItem(jsonData);
 
             sendDataToBackend(jsonData)
-            //console.log(data["ip"]);
+                //console.log(data["ip"]);
         });
 
     }
