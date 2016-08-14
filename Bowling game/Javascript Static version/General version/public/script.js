@@ -16,13 +16,17 @@ var currDay = dayBorder('#5481C1', '1') + rectangle + dayBorder('#C3D0DC', '4') 
 var currDayString = currDay.toString();
 
 //storage variables for data keeping purposes
+var alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
 var monthlyWealth = {};
 var moneyEarned = {};
 var option = "";
 var name = "No name";
-//var pinStack=[];
+var IPaddress = "";
+var jsonData = {}; //json Data to return 
 
-
+recordIPAddressData(); //get IP address for each game played
+jsonData["start_game"] = timestamp();
+jsonData["game_0"] = {};
 var margin = {
         top: 50,
         right: 100,
@@ -100,6 +104,17 @@ function timestamp() {
     return timestamp;
 }
 
+function recordIPAddressData() {
+    $.getJSON('https://api.ipify.org?format=json', function(data) {
+        var IPaddress = JSON.stringify({
+            data
+        });
+
+        jsonData["ip"] = IPaddress;
+    });
+
+}
+
 //format money
 function format2(n, currency) {
     return currency + " " + n.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
@@ -116,7 +131,7 @@ function fontFlash(targetText, color, fontWeight, callback) {
         if (callback) {
             callback();
         }
-    }, 500);
+    }, 250);
 
 }
 
@@ -194,6 +209,7 @@ function spendFirstIncome() {
 
 function payFirst() {
     option = "pay first";
+    jsonData["condition"] = option;
     createInitialDivs();
     //drawPins(originalCirclePositions, 'blue');
     firstPayments();
@@ -213,6 +229,7 @@ function payFirst() {
 
 function spendFirst() {
     option = "spend first";
+    jsonData["condition"] = option;
     createInitialDivs();
 
     spendFirstIncome();
@@ -272,6 +289,7 @@ function drawPins() { //currently just circles
 
 
 function RollBall() {
+    var timeHit = timestamp();
     //hide and disable the button
     $('#rollBall').hide();
     $('#nextRound').hide();
@@ -295,6 +313,13 @@ function RollBall() {
     });
 
     generatePinsKnockedDown(totalPins);
+    //record data
+    jsonData["game_" + currentMonth]["round_"+totalRounds.toString()+alphabet.pop()] = {
+        "time": timeHit,
+        "choice": "throw",
+        "wealth_francs": myWealth,
+        "money_dollars": totalScore
+    };
 
 }
 
@@ -415,19 +440,30 @@ function generatePinsKnockedDown(pinsLeft) {
             $('#rollBall').show();
             $('#nextRound').show();
             $('#gameUpdates').html("");
-        }, 500);
+        }, 250);
     });
 
 }
 var gameUpdates;
 
-function NextRound(payFirst) {
+function NextRound(payFirst) { 
+    alphabet = 'abcdefghijklmnopqrstuvwxyz'.split(''); //reset alphabet 
+    var timeHit = timestamp();
+
     $('#rollBall').hide();
     $('#nextRound').hide();
 
     var gameUpdates = document.getElementById("gameUpdates");
     totalRounds = totalRounds - 1;
     totalPins = 10; //reset total number of pins
+
+    //record data
+    jsonData["game_" + currentMonth]["round_"+totalRounds.toString()] = {
+        "time": timeHit,
+        "choice": "next",
+        "wealth_francs": myWealth,
+        "money_dollars": totalScore
+    };
 
     //reset GUI
     circlePositions = [];
@@ -461,7 +497,7 @@ function NextRound(payFirst) {
         setTimeout(function() {
             $('#rollBall').show();
             $('#nextRound').show();
-        }, 500);
+        }, 250);
     } else {
         $('#pins').hide();
         //out of rounds for the month
@@ -521,6 +557,7 @@ function NextRound(payFirst) {
 
             console.log(currentMonth);
             if (currentMonth == 1) {
+                jsonData["game_1"] = {};
                 monthlyWealth[timestamp()] = myWealth; //store the data
                 moneyEarned[timestamp()] = totalScore;
                 console.log(monthlyWealth);
@@ -538,6 +575,7 @@ function NextRound(payFirst) {
                     spendFirstIncome();
                 }
             } else if (currentMonth == 2) {
+                jsonData["game_2"] = {};
                 monthlyWealth[timestamp()] = myWealth;
                 moneyEarned[timestamp()] = totalScore;
                 console.log(monthlyWealth);
@@ -550,6 +588,7 @@ function NextRound(payFirst) {
                     spendFirstIncome();
                 };
             } else if (currentMonth == 3) {
+                jsonData["game_3"] = {};
                 monthlyWealth[timestamp()] = myWealth;
                 moneyEarned[timestamp()] = totalScore;
                 console.log(monthlyWealth);
@@ -576,12 +615,13 @@ function NextRound(payFirst) {
                     "moneyEarned": moneyEarned
                 };
 
-            
-                var data = [option, endWealth, endEarned];
+
+
+                //var data = [option, endWealth, endEarned];
                 $.ajax({
                     type: 'GET', // added,
                     url: '/sendDataToBackend',
-                    data: JSON.stringify(data),
+                    data: JSON.stringify(jsonData),
                     contentType: "application/json; charset=utf-8",
                     //jsonpCallback: 'callback' - removed
                     success: function(data) {
