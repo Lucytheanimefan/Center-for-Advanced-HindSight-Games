@@ -325,6 +325,8 @@ function drawPins() { //currently just circles
 
 
 function RollBall() {
+    console.log("jsonData in throwball function:");
+    console.log(jsonData);
     var timeHit = timestamp();
     //hide and disable the button
     $('#rollBall').hide();
@@ -359,6 +361,12 @@ function RollBall() {
     console.log(jsonData["game_" + currentMonth]["round_" + (10 - totalRounds).toString()]);
     console.log('jsonData["game_" + currentMonth]:');
     console.log(jsonData["game_" + currentMonth]);
+
+    console.log({"time": timeHit,
+        "choice": "roll",
+        "wealth_francs": myWealth,
+        "money_dollars": totalScore});
+
     jsonData["game_" + currentMonth]["round_" + (10 - totalRounds).toString()] = jsonData["game_" + currentMonth]["round_" + (10 - totalRounds).toString()].push({
         "time": timeHit,
         "choice": "roll",
@@ -394,7 +402,6 @@ function createList(start, end, start1, end1, callback) {
     callback(ints);
 }
 
-//var loopSpeeds = [200, 100, 50, 50]
 var allpins = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 /**
  * creates blinks such that it blinks all the pins at once, that takes a pin away and blinks that until
@@ -402,9 +409,6 @@ var allpins = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
  */
 function blink(start, end, start1 = 0, end1 = 0, callback = function() {}) {
     createList(start, end, start1, end1, function(ints) {
-        console.log(ints);
-        var c = 0;
-        var loops = 0;
         var interval = setInterval(function() {
             if (ints.length == 0) {
                 clearInterval(interval);
@@ -414,19 +418,16 @@ function blink(start, end, start1 = 0, end1 = 0, callback = function() {}) {
             }
 
             for (var i = 0; i < allpins.length; i++) {
-                console.log("Hidden: bowlingPin_" + allpins[i].toString());
                 document.getElementById("bowlingPin_" + allpins[i].toString()).style.visibility = 'hidden';
             }
             setTimeout(function() {
 
                 for (var i = 0; i < ints.length; i++) {
-                    console.log("Visible pin: bowlingPin_" + ints[i].toString());
                     document.getElementById("bowlingPin_" + ints[i].toString()).style.visibility = 'visible';
                 }
             }, 150);
 
-            ints.pop()
-            console.log("Ints length: " + ints.length.toString());
+            ints.pop();
         }, 300);
     })
 }
@@ -475,7 +476,6 @@ function generatePinsKnockedDown(pinsLeft) {
             console.log("You did something wrong in your code");
         }
         if (totalPins == 0) {
-            //createCustomAlert("You've knocked down all the pins, please proceed to the next round");
             gameUpdates.innerHTML = "You've knocked down all the pins, please proceed to the next round";
         }
 
@@ -505,7 +505,7 @@ function NextRound(payFirst) {
         jsonData["game_" + currentMonth]["round_" + (10 - totalRounds).toString()] = [];
     }
 
-    console.log('jsonData["game_" + currentMonth]["round_" + (10 - totalRounds).toString()]:');
+    console.log('jsonData["game_"' + currentMonth+']["round_"' + (10 - totalRounds).toString()+']:');
     console.log(jsonData["game_" + currentMonth]["round_" + (10 - totalRounds).toString()]);
 
     jsonData["game_" + currentMonth]["round_" + (10 - totalRounds).toString()] = jsonData["game_" + currentMonth]["round_" + (10 - totalRounds).toString()].push({
