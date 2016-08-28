@@ -24,6 +24,8 @@ var name = "No name";
 var IPaddress = "";
 var jsonData = {}; //json Data to return 
 
+var uniqueCodeSent;
+
 recordIPAddressData(); //get IP address for each game played
 jsonData["start_game"] = timestamp();
 jsonData["game_0"] = {};
@@ -205,44 +207,81 @@ function spendFirstIncome() {
 }
 
 function payFirst() {
-    option = "pay first";
-    jsonData["condition"] = option;
-    createInitialDivs();
-    //drawPins(originalCirclePositions, 'blue');
-    firstPayments();
+    createUniqueCode(function() {
+        console.log("in callback first");
 
-    var rollBall = document.getElementById('rollBall');
+        option = "pay first";
+        jsonData["condition"] = option;
 
-    rollBall.onclick = function() {
-        RollBall();
-    }
+        createInitialDivs();
+        //drawPins(originalCirclePositions, 'blue');
+        firstPayments();
 
-    var nextRound = document.getElementById('nextRound');
-    nextRound.onclick = function() {
-        NextRound(true);
-    }
+        var rollBall = document.getElementById('rollBall');
 
+        rollBall.onclick = function() {
+            RollBall();
+        }
+
+        var nextRound = document.getElementById('nextRound');
+        nextRound.onclick = function() {
+            NextRound(true);
+        }
+    });
 }
 
 function spendFirst() {
-    option = "spend first";
-    jsonData["condition"] = option;
-    createInitialDivs();
+    createUniqueCode(function() {
 
-    spendFirstIncome();
+        option = "spend first";
+        jsonData["condition"] = option;
 
-    totalBalls = 23;
+        createInitialDivs();
 
-    var rollBall = document.getElementById('rollBall');
+        spendFirstIncome();
 
-    rollBall.onclick = function() {
-        RollBall();
+        totalBalls = 23;
+
+        var rollBall = document.getElementById('rollBall');
+
+        rollBall.onclick = function() {
+            RollBall();
+        }
+
+        var nextRound = document.getElementById('nextRound');
+        nextRound.onclick = function() {
+            NextRound(false);
+        }
+    });
+}
+
+function createUniqueCode(callback) {
+    var code = document.getElementById("uniqueCode");
+    var input = document.createElement("input");
+    input.setAttribute("type", "text");
+    input.id = "uniqueCodeID";
+    var button = document.createElement("input");
+    button.setAttribute("type", "button");
+    button.setAttribute("value", "Go");
+    button.setAttribute("onclick", "getUniqueCode(" + callback + ")");
+    code.appendChild(input);
+    code.appendChild(button);
+
+}
+
+function getUniqueCode(callback) {
+
+    var input = document.getElementById("uniqueCodeID");
+    var uniqueCode = input.value;
+    console.log("Unique code: " + uniqueCode);
+    //record the code
+    jsonData["unique_code"] = uniqueCode;
+
+    if (uniqueCode) {
+        console.log("doing callback");
+        callback();
     }
 
-    var nextRound = document.getElementById('nextRound');
-    nextRound.onclick = function() {
-        NextRound(false);
-    }
 }
 
 function drawPins() { //currently just circles
@@ -373,29 +412,11 @@ function blink(start, end, start1 = 0, end1 = 0, callback = function() {}) {
                     callback();
                 }, 50);
             }
-            /*
-            if (loops == ints.length-1) {
-                clearInterval(interval);
-                //console.log("Doing callback");
-                setTimeout(function() {
-                    callback();
-                }, 50)
-            }
-            */
-
-            /*
-            setTimeout(function() {
-                for (var i = 0; i < allpins.length; i++) {
-                    console.log("Hidden: bowlingPin_" + allpins[i].toString());
-                    document.getElementById("bowlingPin_" + allpins[i].toString()).style.visibility = 'hidden';
-                }
-            }, 300);
-            */
 
             for (var i = 0; i < allpins.length; i++) {
-                    console.log("Hidden: bowlingPin_" + allpins[i].toString());
-                    document.getElementById("bowlingPin_" + allpins[i].toString()).style.visibility = 'hidden';
-                }
+                console.log("Hidden: bowlingPin_" + allpins[i].toString());
+                document.getElementById("bowlingPin_" + allpins[i].toString()).style.visibility = 'hidden';
+            }
             setTimeout(function() {
 
                 for (var i = 0; i < ints.length; i++) {
@@ -404,33 +425,9 @@ function blink(start, end, start1 = 0, end1 = 0, callback = function() {}) {
                 }
             }, 150);
 
-
-            /*
-            var pin = document.getElementById("bowlingPin_" + ints[c].toString());
-
-            pin.style.visibility = 'hidden';
-    */
-            /*
-            setTimeout(function() {
-                for (var i = 0; i < ints.length; i++) {
-                    document.getElementById("bowlingPin_" + ints[i].toString()).style.visibility = 'visible';
-                }
-                //pin.style.visibility = 'visible';
-                //console.log("Speed: " + loopSpeeds[loops].toString());
-            }, 600);
-*/
-            /*
-            c++;
-            if (c > ints.length - 1) {
-                //console.log("Cleared interval");
-                loops++;
-                //clearInterval(interval);
-                c = 0;
-            }
-            */
             ints.pop()
             console.log("Ints length: " + ints.length.toString());
-        }, /* loopSpeeds[loops] */ 300);
+        }, 300);
     })
 }
 
@@ -458,9 +455,6 @@ function flashPins(pinsLeft, callback) {
             callback();
         });
     }
-
-    console.log("finished blinking, but this shouldn't print so soon");
-    //callback();
 }
 
 function generatePinsKnockedDown(pinsLeft) {
