@@ -357,6 +357,7 @@ function createList(start, end, start1, end1, callback) {
 
 var loopSpeeds = [200, 100, 50, 50]
 
+//creates blinks
 function blink(start, end, start1 = 0, end1 = 0, callback = function() {}) {
     createList(start, end, start1, end1, function(ints) {
         console.log(ints);
