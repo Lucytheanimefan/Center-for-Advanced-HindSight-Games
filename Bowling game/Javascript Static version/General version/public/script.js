@@ -106,10 +106,7 @@ function timestamp() {
 
 function recordIPAddressData() {
     $.getJSON('https://api.ipify.org?format=json', function(data) {
-        var IPaddress = JSON.stringify({
-            data
-        });
-
+        var IPaddress = data["ip"];
         jsonData["ip"] = IPaddress;
     });
 
@@ -314,15 +311,28 @@ function RollBall() {
 
     generatePinsKnockedDown(totalPins);
     //record data
-    jsonData["game_" + currentMonth]["round_"+totalRounds.toString()+alphabet.pop()] = {
+    //record data
+    if (jsonData["game_" + currentMonth]["round_"+(10-totalRounds).toString()]==null){
+        jsonData["game_" + currentMonth]["round_"+(10-totalRounds).toString()]=[];
+    }
+
+    console.log('jsonData["game_" + currentMonth]["round_" + (10 - totalRounds).toString()]:');
+    console.log(jsonData["game_" + currentMonth]["round_" + (10 - totalRounds).toString()]);
+    console.log('jsonData["game_" + currentMonth]:');
+    console.log(jsonData["game_" + currentMonth]);
+    jsonData["game_" + currentMonth]["round_" + (10 - totalRounds).toString()] = jsonData["game_" + currentMonth]["round_" + (10 - totalRounds).toString()].push({
         "time": timeHit,
-        "choice": "throw",
+        "choice": "roll",
         "wealth_francs": myWealth,
         "money_dollars": totalScore
-    };
+    });
 
 }
 
+/**
+* returns an array of integers of the starting to ending pins (as pin ids are labeled by number)
+* so all the pins in this array need to be knocked down in the blink function
+*/
 function createList(start, end, start1, end1, callback) {
     console.log("Start: " + start.toString());
     console.log("End: " + end.toString());
@@ -331,7 +341,7 @@ function createList(start, end, start1, end1, callback) {
     console.log("End1: " + end1.toString());
     var ints = [];
     for (var i = start; i < end; i++) {
-        console.log(i);
+        //console.log(i);
         ints.push(i);
     }
 
@@ -355,26 +365,26 @@ function blink(start, end, start1 = 0, end1 = 0, callback = function() {}) {
         var interval = setInterval(function() {
             if (loops == 3) {
                 clearInterval(interval);
-                console.log("Doing callback");
+                //console.log("Doing callback");
                 setTimeout(function() {
                     callback();
                 }, 50)
             }
 
-            console.log("IN INTERVAL");
+            //console.log("IN INTERVAL");
             var pin = document.getElementById("bowlingPin_" + ints[c].toString());
-            console.log(pin.id);
+            //console.log(pin.id);
 
             pin.style.visibility = 'hidden';
 
             setTimeout(function() {
                 pin.style.visibility = 'visible';
-                console.log("Speed: " + loopSpeeds[loops].toString());
+                //console.log("Speed: " + loopSpeeds[loops].toString());
             }, loopSpeeds[loops]);
 
             c++;
             if (c > ints.length - 1) {
-                console.log("Cleared interval");
+                //console.log("Cleared interval");
                 loops++;
                 //clearInterval(interval);
                 c = 0;
@@ -389,12 +399,12 @@ function flashPins(pinsLeft, callback) {
     console.log("flashing pins");
     //drawPins();
     if (pinsLeft > 5 && pinsLeft != 10) {
-        console.log("Pins left greater than 5");
+        //console.log("Pins left greater than 5");
         blink(10 - pinsLeft, 5, 5, 10, function() {
             callback();
         });
     } else if (pinsLeft < 5) {
-        console.log("Pins left less than 5");
+       // console.log("Pins left less than 5");
         blink(10 - pinsLeft, 10, 0, 0, function() {
             callback();
         });
@@ -404,7 +414,7 @@ function flashPins(pinsLeft, callback) {
         });
     } else if (pinsLeft == 10) {
         blink(0, 10, 0, 0, function() {
-            console.log("IN CALLBACK IN FLASHPINS");
+            //console.log("IN CALLBACK IN FLASHPINS");
             callback();
         });
     }
@@ -417,7 +427,7 @@ function generatePinsKnockedDown(pinsLeft) {
     var gameUpdates = document.getElementById("gameUpdates");
 
     flashPins(pinsLeft, function() {
-        console.log("IN CALLBACK");
+        //console.log("IN CALLBACK");
         //generate random number of pins knocked down
         var knockedDown = Math.floor((Math.random() * (pinsLeft + 1)));
         //console.log("Knocked down: " + knockedDown);
@@ -446,8 +456,7 @@ function generatePinsKnockedDown(pinsLeft) {
 }
 var gameUpdates;
 
-function NextRound(payFirst) { 
-    alphabet = 'abcdefghijklmnopqrstuvwxyz'.split(''); //reset alphabet 
+function NextRound(payFirst) {
     var timeHit = timestamp();
 
     $('#rollBall').hide();
@@ -458,12 +467,19 @@ function NextRound(payFirst) {
     totalPins = 10; //reset total number of pins
 
     //record data
-    jsonData["game_" + currentMonth]["round_"+totalRounds.toString()] = {
+    if (jsonData["game_" + currentMonth]["round_"+(10-totalRounds).toString()]==null){
+        jsonData["game_" + currentMonth]["round_"+(10-totalRounds).toString()]=[];
+    }
+
+    console.log('jsonData["game_" + currentMonth]["round_" + (10 - totalRounds).toString()]:');
+    console.log(jsonData["game_" + currentMonth]["round_" + (10 - totalRounds).toString()]);
+
+    jsonData["game_" + currentMonth]["round_" + (10 - totalRounds).toString()] = jsonData["game_" + currentMonth]["round_" + (10 - totalRounds).toString()].push({
         "time": timeHit,
         "choice": "next",
         "wealth_francs": myWealth,
         "money_dollars": totalScore
-    };
+    });
 
     //reset GUI
     circlePositions = [];
@@ -728,7 +744,7 @@ function updateGUI(pinsLeft) {
         }
 
         for (var j = 5; j < knockedOver; j++) {
-            console.log("bowlingPin_" + j.toString());
+            //console.log("bowlingPin_" + j.toString());
             var bowlingPinGrey = document.getElementById("bowlingPin_" + j.toString());
             bowlingPinGrey.src = "bowling_pin_transparent.png";
             /*bowlingPinGrey.style = "width:25px;height:60px";
