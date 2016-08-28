@@ -208,13 +208,11 @@ function spendFirstIncome() {
 
 function payFirst() {
     createUniqueCode(function() {
-        console.log("in callback first");
 
         option = "pay first";
         jsonData["condition"] = option;
 
         createInitialDivs();
-        //drawPins(originalCirclePositions, 'blue');
         firstPayments();
 
         var rollBall = document.getElementById('rollBall');
@@ -261,6 +259,7 @@ function createUniqueCode(callback) {
     input.setAttribute("type", "text");
     input.id = "uniqueCodeID";
     var button = document.createElement("input");
+    button.id="uniquecodebutton";
     button.setAttribute("type", "button");
     button.setAttribute("value", "Go");
     button.setAttribute("onclick", "getUniqueCode(" + callback + ")");
@@ -270,7 +269,7 @@ function createUniqueCode(callback) {
 }
 
 function getUniqueCode(callback) {
-
+    var button=document.getElementById("uniquecodebutton");
     var input = document.getElementById("uniqueCodeID");
     var uniqueCode = input.value;
     console.log("Unique code: " + uniqueCode);
@@ -278,7 +277,8 @@ function getUniqueCode(callback) {
     jsonData["unique_code"] = uniqueCode;
 
     if (uniqueCode) {
-        console.log("doing callback");
+        button.disabled=true;
+
         callback();
     }
 
